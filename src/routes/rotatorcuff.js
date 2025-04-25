@@ -17,17 +17,17 @@ export function loadRotatorCuff(app) {
   const style = document.createElement('style');
   document.head.appendChild(style);
 
-  document.getElementById('backToHome').addEventListener('click', (e) => {
+  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // 🧹 CLEANUP: stop animation + remove canvas
     cancelAnimationFrame(animationId);
     renderer.dispose();
     renderer.domElement.remove();
 
-    // Clear other leftover global stuff if needed here
+    window.removeEventListener('resize', resizeHandler);
+    canvasElement?.removeEventListener('pointermove', moveHandler);
+    canvasElement?.removeEventListener('pointerdown', downHandler);
 
-    // Now go back home
     history.pushState({}, '', '/');
     window.dispatchEvent(new Event('popstate'));
   });
@@ -230,10 +230,10 @@ export function loadRotatorCuff(app) {
 
     if (intersects.length > 0) {
       const clicked = intersects[0].object;
+      const name = clicked.name || 'Unnamed'; // ✅ Declare before use
 
       // Clicked the same already-selected mesh? Deselect it
       if (clicked === selectedMesh) {
-        // Reset color
         if (selectedMesh.originalColor) {
           selectedMesh.material.color.set(selectedMesh.originalColor);
         }
@@ -257,9 +257,8 @@ export function loadRotatorCuff(app) {
       clicked.material.color.set(0x00ff00); // green
 
       // Show UI
-      const name = clicked.name || 'Unnamed';
       labelEl.textContent = `🧠 Selected: ${name}`;
-      popup.innerHTML = `<strong>${name}</strong><br>${muscleInfo[name] || 'No info available.'}`;
+      popup.innerHTML = `${muscleInfo[name] || 'No info available.'}`;
       popup.style.display = 'block';
     } else {
       // Clicked empty space — clear selection

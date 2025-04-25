@@ -1,64 +1,87 @@
+/* === Base Layout === */
 body {
   margin: 0;
   overflow: hidden;
+  font-family: 'Arial', sans-serif;
 }
 
-#backToHome {
+/* === Positioning Helpers === */
+.fixed-top-left {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+}
+
+.fixed-top-right {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-family: sans-serif;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  z-index: 15;
+  top: 16px;
+  right: 16px;
+}
+
+/* === Terminal-Style Labels & Links === */
+.terminal-output {
+  font-family: monospace;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #000;
+  border: 1px dashed #000;
+  padding: 8px 12px;
+  background-color: transparent !important;
+  z-index: 9999;
+  display: inline-block;
+  user-select: none;
+  max-width: 300px;
+  word-wrap: break-word;
+  vertical-align: middle;
+}
+
+.terminal-link {
   cursor: pointer;
-  font-weight: bold;
-}
-
-#backToHome:hover {
-  background: rgba(0, 0, 0, 0.9);
-}
-
-#selectedLabel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-family: sans-serif;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
   padding: 6px 12px;
-  border-radius: 6px;
-  z-index: 10;
+  border: 1px dashed #000;
+  color: #000;
+  font-family: monospace;
+  background-color: transparent;
+  display: inline-block;
+  font-size: 0.95rem;
+  user-select: none;
+  z-index: 100;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
+.terminal-link:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* === Pop-up Info Box === */
 .popup {
+  font-family: monospace;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #000;
+  border: 1px dashed #000;
+  padding: 8px 12px;
+  background-color: transparent;
   position: absolute;
-  top: 50px;
-  left: 10px;
-  background: white;
-  color: #333;
-  padding: 12px;
-  border: 1px solid #999;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  max-width: 250px;
+  top: 64px; /* Positioned below selected label */
+  left: 16px;
+  z-index: 1000;
   display: none;
-  z-index: 20;
+  white-space: pre-wrap;
+  max-width: 300px;
 }
 
-#videoPanel {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  display: none;
-  z-index: 10;
+.popup strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
+/* === Loader === */
 #loadingScreen {
   position: absolute;
   top: 50%;
@@ -79,5 +102,17 @@ body {
 #asciiBar {
   font-size: 1.2rem;
   margin-top: 4px;
-  color: #a56b00; /* brownish/gold like in your image */
+  color: #a56b00;
+}
+
+/* === Optional Video Panel === */
+#videoPanel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  color: #000;
+  padding: 10px;
+  display: none;
+  z-index: 10;
 }
