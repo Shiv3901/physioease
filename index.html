@@ -2,56 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>PhysioEase 3D</title>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-
-      #videoPanel {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 10px;
-        display: none;
-        z-index: 10;
-      }
-
-      #selectedLabel {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-family: sans-serif;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        z-index: 10;
-      }
-
-      .popup {
-        position: absolute;
-        top: 50px;
-        left: 10px;
-        background: white;
-        color: #333;
-        padding: 12px;
-        border: 1px solid #999;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        max-width: 250px;
-        display: none;
-        z-index: 20;
-      }
-    </style>
+    <title>PhysioEase</title>
   </head>
   <body>
-    <div id="selectedLabel">🧠 Selected: None</div>
-    <div id="videoPanel"></div>
-    <div id="popup" class="popup"></div>
+    <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
