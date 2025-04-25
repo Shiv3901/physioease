@@ -8,47 +8,61 @@ console.log('🚀 PhysioEase 3D viewer loaded');
 
 export function loadRotatorCuff(app) {
   app.innerHTML = getRotatorCuffHTML();
+  let resizeHandler;
 
   // Grab elements
-  const popup = document.getElementById('popup');
-  const labelEl = document.getElementById('selectedLabel');
-  const videoLinks = document.getElementById('videoLinks');
+  const viewerArea = document.getElementById('viewerArea');
+  const modelContainer = document.getElementById('modelContainer');
+  if (!modelContainer) {
+    console.error('❌ modelContainer not found');
+  } else {
+    console.log('✅ modelContainer found, width:', modelContainer.clientWidth);
+  }
   const videoArea = document.getElementById('videoArea');
+  const videoLinks = document.getElementById('videoLinks');
   const exerciseVideo = document.getElementById('exerciseVideo');
-  const closeVideoBtn = document.getElementById('closeVideoBtn');
   const videoSource = exerciseVideo.querySelector('source');
-  const viewerArea = document.getElementById('viewerArea'); // 🆕 Where canvas will go
+  const closeVideoBtn = document.getElementById('closeVideoBtn');
+  const labelEl = document.getElementById('selectedLabel');
+  const popup = document.getElementById('popup');
+
+  console.log('🛠 Creating camera and renderer...');
 
   // 3D Setup
+  // Declare these above if needed outside:
+  let renderer, camera, animationId;
+  let hoveredMesh = null;
+  let selectedMesh = null;
+
+  // Create scene
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
 
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    viewerArea.clientWidth / viewerArea.clientHeight,
-    0.1,
-    1000
-  );
+  // Get container size
+  const width = modelContainer.clientWidth;
+  const height = modelContainer.clientHeight;
+
+  // Set up camera
+  camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
   camera.position.set(0, 1, 5);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(viewerArea.clientWidth, viewerArea.clientHeight);
+  // Set up renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.LinearToneMapping;
   renderer.toneMappingExposure = 1;
+  console.log('🎨 Appending renderer canvas to modelContainer...');
+  modelContainer.appendChild(renderer.domElement);
 
-  viewerArea.appendChild(renderer.domElement); // 🆕 append to correct div
+  // Canvas element for events
   const canvasElement = renderer.domElement;
 
+  // Set up controls
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-  let hoveredMesh = null;
-  let selectedMesh = null;
-  let animationId;
-
+  // Lighting
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
   hemiLight.position.set(0, 20, 0);
   scene.add(hemiLight);
@@ -58,12 +72,28 @@ export function loadRotatorCuff(app) {
   dirLight.castShadow = true;
   scene.add(dirLight);
 
+  dirLight.intensity = 3;
+  hemiLight.intensity = 2;
+
+  // Animation loop
   function animate() {
     animationId = requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
   }
+
   animate();
+
+  // Handle window resize
+  resizeHandler = () => {
+    const w = modelContainer.clientWidth;
+    const h = modelContainer.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  };
+
+  window.addEventListener('resize', resizeHandler);
 
   // Information data
   const muscleInfo = {
@@ -135,6 +165,9 @@ export function loadRotatorCuff(app) {
           camera.position.copy(center);
           camera.position.z += distance * 1.2;
           camera.position.y += distance * 0.2;
+          console.log('📦 Bounding box size:', size);
+
+          console.log('📸 Camera position:', camera.position);
           camera.lookAt(center);
 
           controls.target.copy(center);
@@ -165,6 +198,9 @@ export function loadRotatorCuff(app) {
     .catch((err) => {
       console.error('🚨 Failed to load model:', err);
     });
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
 
   // Handlers
   function moveHandler(event) {
@@ -219,13 +255,11 @@ export function loadRotatorCuff(app) {
 
   function downHandler(event) {
     const rect = canvasElement.getBoundingClientRect();
-
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
-    console.log('🧪 Raycasting intersects:', intersects.length);
 
     if (intersects.length > 0) {
       const clicked = intersects[0].object;
@@ -240,17 +274,23 @@ export function loadRotatorCuff(app) {
         return;
       }
 
-      if (selectedMesh && selectedMesh.originalColor)
+      if (selectedMesh && selectedMesh.originalColor) {
         selectedMesh.material.color.set(selectedMesh.originalColor);
+      }
 
       selectedMesh = clicked;
       if (!clicked.originalColor) clicked.originalColor = clicked.material.color.clone();
       clicked.material.color.set(0x00ff00);
 
+      // Update UI
       labelEl.textContent = `🧠 Selected: ${name}`;
-      popup.innerHTML = `${muscleInfo[name] || 'No info available.'}`;
+      popup.innerHTML = `
+        <strong>${name}</strong><br>${muscleInfo[name] || 'No info available.'}
+      `;
+      popup.appendChild(videoLinks);
       popup.style.display = 'block';
 
+      // Update video links (but leave video playing!)
       if (videoData[name]) {
         videoLinks.innerHTML = `
           <a href="${videoData[name].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
@@ -260,22 +300,21 @@ export function loadRotatorCuff(app) {
       } else {
         videoLinks.style.display = 'none';
       }
-
-      exerciseVideo.pause();
-      exerciseVideo.currentTime = 0;
-      videoSource.src = '';
-      videoArea.style.display = 'none';
     } else {
-      if (selectedMesh && selectedMesh.originalColor)
+      // Clicked empty space — clear selection only (not video)
+      if (selectedMesh && selectedMesh.originalColor) {
         selectedMesh.material.color.set(selectedMesh.originalColor);
+      }
       selectedMesh = null;
       labelEl.textContent = `🧠 Selected: None`;
       popup.style.display = 'none';
       videoLinks.style.display = 'none';
-      videoArea.style.display = 'none';
-      exerciseVideo.pause();
-      exerciseVideo.currentTime = 0;
-      videoSource.src = '';
+
+      // ❌ DO NOT touch video
+      // videoArea.style.display = 'none';
+      // exerciseVideo.pause();
+      // exerciseVideo.currentTime = 0;
+      // videoSource.src = '';
     }
   }
 
@@ -287,19 +326,23 @@ export function loadRotatorCuff(app) {
     if (e.target.classList.contains('video-box')) {
       e.preventDefault();
       const href = e.target.getAttribute('href');
+      if (!href || href === '#') return;
 
-      if (href && href !== '#') {
-        videoSource.src = href;
-        exerciseVideo.load();
-        exerciseVideo.muted = true; // Make sure it's muted by default
+      videoSource.src = href;
+      exerciseVideo.load();
+      exerciseVideo.muted = true;
 
-        // Show video on large screens (right side) and full screen on small screens
-        if (window.innerWidth >= 768) {
-          videoArea.style.display = 'flex'; // Show on the right side
-        } else {
-          videoArea.classList.add('full-screen');
-          videoArea.style.display = 'flex'; // Full-screen layout for small screens
-        }
+      const isOverlay = window.innerWidth <= 768 || window.innerHeight <= 600;
+
+      if (isOverlay) {
+        videoArea.style.display = 'flex';
+        videoArea.style.position = 'fixed';
+      } else {
+        modelContainer.style.width = '66.6%';
+        videoArea.style.display = 'flex';
+
+        // 👇 Trigger resize because model now shrinks
+        resizeHandler();
       }
     }
   });
@@ -308,15 +351,17 @@ export function loadRotatorCuff(app) {
     exerciseVideo.pause();
     exerciseVideo.currentTime = 0;
     videoSource.src = '';
-    videoArea.style.display = 'none'; // Hide video area when clicked
+    videoArea.style.display = 'none';
+
+    modelContainer.style.width = '100%'; // expand back
+    resizeHandler(); // 👈 trigger again
   });
 
   // Handle Resize
   // 1. Define the resizeHandler function
-  const resizeHandler = () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
+  resizeHandler = () => {
+    const width = modelContainer.clientWidth;
+    const height = modelContainer.clientHeight;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);

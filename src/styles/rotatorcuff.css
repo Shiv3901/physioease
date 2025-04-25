@@ -5,33 +5,76 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-/* === Flex Layout for 3D + Video === */
-#mainLayout {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  width: 100vw;
-}
-
+/* === Flex Layout for Main Area === */
 #viewerArea {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#modelContainer {
   position: relative;
+  flex-grow: 2;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-#viewerArea canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+#modelContainer {
+  position: relative;
+  flex-grow: 2;
+  background: #ffdddd !important; /* very light red for test */
 }
 
-/* === Positioning Helpers === */
+#modelContainer canvas {
+  background: red !important; /* ✅ PROOF of rendering */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2;
+}
+
+/* === Video Area (Right 1/3 of screen on wide viewports) === */
+#videoArea {
+  flex-basis: 33.33%;
+  background: #1a1a1a;
+  color: white;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  position: relative;
+  z-index: 20;
+}
+
+#videoArea video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+#closeVideoBtn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#closeVideoBtn:hover {
+  color: red;
+}
+
+/* === Terminal-Style Elements === */
 .fixed-top-left {
-  position: fixed;
+  position: absolute;
   top: 16px;
   left: 16px;
 }
@@ -42,22 +85,16 @@ body {
   right: 16px;
 }
 
-/* === Terminal-Style Labels & Links === */
 .terminal-output {
   font-family: monospace;
   font-size: 1rem;
-  line-height: 1.4;
   font-weight: 600;
   color: #000;
   border: 1px dashed #000;
   padding: 8px 12px;
-  background-color: transparent !important;
-  z-index: 9999;
+  background-color: transparent;
+  z-index: 5;
   display: inline-block;
-  user-select: none;
-  max-width: 300px;
-  word-wrap: break-word;
-  vertical-align: middle;
 }
 
 .terminal-link {
@@ -67,13 +104,9 @@ body {
   color: #000;
   font-family: monospace;
   background-color: transparent;
-  display: inline-block;
   font-size: 0.95rem;
+  z-index: 5;
   user-select: none;
-  z-index: 100;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
 }
 
 .terminal-link:hover {
@@ -81,31 +114,37 @@ body {
   color: #fff;
 }
 
-/* === Pop-up Info Box === */
+/* === Info Box === */
 .popup {
   font-family: monospace;
   font-size: 1rem;
   line-height: 1.4;
   color: #000;
   border: 1px dashed #000;
-  padding: 8px 12px;
   background-color: transparent;
-  position: absolute;
-  top: 64px;
-  left: 16px;
-  z-index: 1000;
-  display: none;
-  white-space: pre-wrap;
+  padding: 8px 12px;
   max-width: 300px;
+  position: absolute;
+  top: 60px;
+  left: 16px;
+  z-index: 15;
+  white-space: pre-wrap;
+  display: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.popup strong {
-  display: block;
+.popup-description {
   margin-bottom: 4px;
-  font-weight: 600;
 }
 
-/* === Loader (ASCII Style) === */
+.video-links {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* === Loading === */
 #loadingScreen {
   position: absolute;
   top: 50%;
@@ -113,31 +152,20 @@ body {
   transform: translate(-50%, -50%);
   font-family: monospace;
   text-align: center;
-  color: #000;
   z-index: 100;
-}
-
-.ascii-loader span {
-  font-size: 1rem;
-  margin-bottom: 6px;
-  display: block;
 }
 
 #asciiBar {
   font-size: 1.2rem;
-  margin-top: 4px;
   color: #a56b00;
 }
 
-/* === Video Links (Normal / Rehab) === */
-.video-links {
-  position: absolute;
-  top: 140px; /* Adjust the vertical space below the popup */
-  left: 16px;
-  display: flex;
-  gap: 12px;
-  z-index: 1000;
+.loading-text {
+  font-size: 1rem;
+  margin-bottom: 6px;
 }
+
+/* === Video Links === */
 
 .video-box {
   font-family: monospace;
@@ -148,9 +176,6 @@ body {
   padding: 8px 14px;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
 }
 
 .video-box:hover {
@@ -158,109 +183,24 @@ body {
   color: #fff;
 }
 
-/* === Optional Video Panel (Legacy/Hidden) === */
-#videoPanel {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.05);
-  color: #000;
-  padding: 10px;
-  display: none;
-  z-index: 10;
-}
-
-/* === Video Area (Right side for larger screens, full width but with padding for smaller screens) === */
-#videoArea {
-  position: fixed;
-  top: 10%;
-  right: 10px;
-  width: 40%; /* Less than a third, giving some space on the right */
-  height: 80%;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 12px;
-  z-index: 10;
-  display: none; /* Initially hidden */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* Full width but with padding on smaller devices */
-#videoArea.full-screen {
-  position: fixed;
-  top: 10%;
-  left: 10px;
-  width: 80%; /* Allow 20% space on both sides */
-  height: 70%;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 12px;
-  z-index: 10;
-  display: none; /* Initially hidden */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* Video player styles */
-#exerciseVideo {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  object-fit: contain;
-}
-
-#closeVideoBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: white;
-  z-index: 15;
-}
-
-#closeVideoBtn:hover {
-  color: red;
-}
-
-/* === Media Query for Large Screens === */
-@media screen and (min-width: 1024px) {
-  #videoArea {
-    width: 40%; /* 40% width for large screens with padding */
-    height: 80%;
-    top: 10%;
-    right: 10px;
-  }
-}
-
-/* === Media Query for Smaller Screens === */
-@media screen and (max-width: 768px) {
-  #videoArea {
-    width: 80%; /* 80% width on smaller devices */
-    height: 70%;
-    top: 10%;
-    left: 10px;
-    padding: 20px; /* Adding padding to the full screen video */
-    display: none; /* Initially hidden */
+/* === Mobile / Narrow Screens === */
+@media (max-width: 768px) {
+  #viewerLayout {
+    flex-direction: column;
   }
 
-  #exerciseVideo {
+  #modelContainer {
     width: 100%;
     height: 100%;
-    border-radius: 8px;
-    object-fit: contain;
   }
 
-  #closeVideoBtn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: white;
-    z-index: 15;
+  #videoArea {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.95);
   }
 }
