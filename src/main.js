@@ -4,6 +4,27 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 console.log("🚀 PhysioEase 3D viewer loaded");
 
+// info to display
+const muscleInfo = {
+  Supraspinatus: "The supraspinatus is part of the rotator cuff and helps with shoulder abduction.",
+  Infraspinatus: "The infraspinatus externally rotates the shoulder and stabilizes the joint.",
+  Subscapularis: "The subscapularis helps internally rotate the arm and stabilize the shoulder.",
+  TeresMinor: "The teres minor assists with external rotation of the shoulder.",
+  Humerus: "The humerus is the long bone of the upper arm, connecting the shoulder to the elbow.",
+  Clavicle: "The clavicle, or collarbone, connects the arm to the body and helps stabilize the shoulder.",
+  Scapula: "The scapula, or shoulder blade, provides attachment points for muscles and stabilizes the shoulder.",
+};
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+let hoveredMesh = null;
+let selectedMesh = null;
+
+const labelEl = document.getElementById('selectedLabel');
+const popup = document.getElementById('popup');
+
+
 // Scene setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff); // 🔁 White background
@@ -49,6 +70,13 @@ fetch(modelPath, { method: 'HEAD' })
         model.position.set(0, -1, 0);
         model.scale.set(1.5, 1.5, 1.5);
         scene.add(model);
+
+        model.traverse((child) => {
+          if (child.isMesh) {
+            console.log(`🧠 Mesh found: "${child.name}"`);
+          }
+        });
+
         // Compute model's bounding box
         const box = new THREE.Box3().setFromObject(model);
         const size = box.getSize(new THREE.Vector3());
@@ -103,16 +131,23 @@ window.addEventListener('resize', () => {
   renderer.setSize(width, height);
 });
 
-let clickCount = 0;
-const counterEl = document.getElementById('clickCounter');
-
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
 let lastHovered = null;
 
-function updateCounter() {
-  clickCount++;
-  counterEl.textContent = `Clicks: ${clickCount}`;
+function highlightMesh(mesh) {
+  if (selectedMesh && selectedMesh.material && selectedMesh.originalColor) {
+    selectedMesh.material.color.set(selectedMesh.originalColor);
+  }
+
+  if (mesh && mesh.material) {
+    if (!mesh.originalColor) {
+      mesh.originalColor = mesh.material.color.clone();
+    }
+    mesh.material.color.set(0xffff00); // highlight color
+    selectedMesh = mesh;
+
+    const name = mesh.name || 'Unnamed';
+    labelEl.textContent = `🧠 Selected: ${name}`;
+  }
 }
 
 renderer.domElement.addEventListener('pointermove', (event) => {
@@ -124,24 +159,28 @@ renderer.domElement.addEventListener('pointermove', (event) => {
 
   if (intersects.length > 0) {
     const hovered = intersects[0].object;
-    if (lastHovered !== hovered) {
-      if (lastHovered && lastHovered.material && lastHovered.originalColor) {
-        lastHovered.material.color.set(lastHovered.originalColor);
+
+    if (hovered !== hoveredMesh && hovered !== selectedMesh) {
+      if (hoveredMesh && hoveredMesh !== selectedMesh && hoveredMesh.originalColor) {
+        hoveredMesh.material.color.set(hoveredMesh.originalColor);
       }
 
-      if (hovered.material) {
-        lastHovered = hovered;
-        if (!hovered.originalColor) {
-          hovered.originalColor = hovered.material.color.clone();
-        }
-        hovered.material.color.set(0xffff00); // highlight color (yellow)
+      hoveredMesh = hovered;
+
+      if (!hovered.originalColor) {
+        hovered.originalColor = hovered.material.color.clone();
+      }
+
+      if (hovered !== selectedMesh) {
+        hovered.material.color.set(0xffff00); // yellow for hover
       }
     }
   } else {
-    if (lastHovered && lastHovered.material && lastHovered.originalColor) {
-      lastHovered.material.color.set(lastHovered.originalColor);
+    // Clear previous hover highlight if it's not the selected one
+    if (hoveredMesh && hoveredMesh !== selectedMesh && hoveredMesh.originalColor) {
+      hoveredMesh.material.color.set(hoveredMesh.originalColor);
     }
-    lastHovered = null;
+    hoveredMesh = null;
   }
 });
 
@@ -153,6 +192,45 @@ renderer.domElement.addEventListener('pointerdown', (event) => {
   const intersects = raycaster.intersectObjects(scene.children, true);
 
   if (intersects.length > 0) {
-    updateCounter();
+    const clicked = intersects[0].object;
+
+    // Clicked the same already-selected mesh? Deselect it
+    if (clicked === selectedMesh) {
+      // Reset color
+      if (selectedMesh.originalColor) {
+        selectedMesh.material.color.set(selectedMesh.originalColor);
+      }
+      selectedMesh = null;
+      labelEl.textContent = `🧠 Selected: None`;
+      popup.style.display = 'none';
+      return;
+    }
+
+    // Un-highlight previous selection
+    if (selectedMesh && selectedMesh.originalColor) {
+      selectedMesh.material.color.set(selectedMesh.originalColor);
+    }
+
+    // Select new
+    selectedMesh = clicked;
+
+    if (!clicked.originalColor) {
+      clicked.originalColor = clicked.material.color.clone();
+    }
+    clicked.material.color.set(0x00ff00); // green
+
+    // Show UI
+    const name = clicked.name || 'Unnamed';
+    labelEl.textContent = `🧠 Selected: ${name}`;
+    popup.innerHTML = `<strong>${name}</strong><br>${muscleInfo[name] || "No info available."}`;
+    popup.style.display = 'block';
+  } else {
+    // Clicked empty space — clear selection
+    if (selectedMesh && selectedMesh.originalColor) {
+      selectedMesh.material.color.set(selectedMesh.originalColor);
+    }
+    selectedMesh = null;
+    labelEl.textContent = `🧠 Selected: None`;
+    popup.style.display = 'none';
   }
 });

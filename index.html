@@ -20,22 +20,38 @@
         z-index: 10;
       }
 
-      #clickCounter {
+      #selectedLabel {
         position: absolute;
         top: 10px;
         left: 10px;
         font-family: sans-serif;
         background: rgba(0, 0, 0, 0.7);
-        color: #fff;
+        color: white;
         padding: 6px 12px;
         border-radius: 6px;
         z-index: 10;
       }
+
+      .popup {
+        position: absolute;
+        top: 50px;
+        left: 10px;
+        background: white;
+        color: #333;
+        padding: 12px;
+        border: 1px solid #999;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        max-width: 250px;
+        display: none;
+        z-index: 20;
+      }
     </style>
   </head>
   <body>
-    <div id="clickCounter">Clicks: 0</div>
+    <div id="selectedLabel">🧠 Selected: None</div>
     <div id="videoPanel"></div>
+    <div id="popup" class="popup"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
