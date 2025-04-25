@@ -64,32 +64,20 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: sans-serif;
-  color: white;
-  background: rgba(0, 0, 0, 0.85);
-  padding: 30px 40px;
-  border-radius: 12px;
+  font-family: monospace;
   text-align: center;
+  color: #000;
   z-index: 100;
 }
 
-.loading-text {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
+.ascii-loader span {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  display: block;
 }
 
-.progress-bar-bg {
-  width: 200px;
-  height: 10px;
-  background: #444;
-  border-radius: 5px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.progress-bar-fill {
-  width: 0%;
-  height: 100%;
-  background: #00ff88;
-  transition: width 0.2s ease;
+#asciiBar {
+  font-size: 1.2rem;
+  margin-top: 4px;
+  color: #a56b00; /* brownish/gold like in your image */
 }

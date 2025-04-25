@@ -1,9 +1,9 @@
 export function getRotatorCuffHTML() {
   return `
       <div id="loadingScreen">
-        <div class="loading-text">Loading rotator cuff model...</div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progressFill"></div>
+        <div class="ascii-loader">
+          <span>Loading <span id="loadingPercent">0%</span></span>
+          <pre id="asciiBar">[----------]</pre>
         </div>
       </div>
       <div id="backToHome">← Home</div>

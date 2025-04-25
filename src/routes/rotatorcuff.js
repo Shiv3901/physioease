@@ -7,6 +7,11 @@ import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';
 console.log('🚀 PhysioEase 3D viewer loaded');
 
 export function loadRotatorCuff(app) {
+  let canvasElement;
+  let resizeHandler;
+  let moveHandler;
+  let downHandler;
+
   app.innerHTML = getRotatorCuffHTML();
 
   const style = document.createElement('style');
@@ -59,7 +64,8 @@ export function loadRotatorCuff(app) {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  canvasElement = renderer.domElement;
+  document.body.appendChild(canvasElement);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.LinearToneMapping;
   renderer.toneMappingExposure = 1; // tweak if too dark/bright
@@ -143,11 +149,20 @@ export function loadRotatorCuff(app) {
         },
         (xhr) => {
           const percent = (xhr.loaded / xhr.total) * 100;
-          const fill = document.getElementById('progressFill');
-          if (fill) {
-            fill.style.width = `${percent.toFixed(0)}%`;
+          const rounded = percent.toFixed(0);
+
+          const bar = document.getElementById('asciiBar');
+          const label = document.getElementById('loadingPercent');
+
+          if (bar && label) {
+            const totalBlocks = 10;
+            const filled = Math.round((rounded / 100) * totalBlocks);
+            const empty = totalBlocks - filled;
+            const barStr = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
+
+            label.textContent = `${rounded}%`;
+            bar.textContent = barStr;
           }
-          console.log(`📦 Model loading: ${percent.toFixed(1)}%`);
         },
         (error) => {
           console.error('❌ GLTFLoader failed:', error);
@@ -162,19 +177,17 @@ export function loadRotatorCuff(app) {
       console.error('🚨 Failed to load model:', err);
     });
 
-  window.addEventListener('resize', () => {
+  resizeHandler = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
-
-    // Update camera
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-
-    // Update renderer
     renderer.setSize(width, height);
-  });
+  };
 
-  renderer.domElement.addEventListener('pointermove', (event) => {
+  window.addEventListener('resize', resizeHandler);
+
+  moveHandler = (event) => {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -206,9 +219,9 @@ export function loadRotatorCuff(app) {
       }
       hoveredMesh = null;
     }
-  });
+  };
 
-  renderer.domElement.addEventListener('pointerdown', (event) => {
+  downHandler = (event) => {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -257,5 +270,8 @@ export function loadRotatorCuff(app) {
       labelEl.textContent = `🧠 Selected: None`;
       popup.style.display = 'none';
     }
-  });
+  };
+
+  canvasElement.addEventListener('pointermove', moveHandler);
+  canvasElement.addEventListener('pointerdown', downHandler);
 }
