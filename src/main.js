@@ -102,3 +102,57 @@ window.addEventListener('resize', () => {
   // Update renderer
   renderer.setSize(width, height);
 });
+
+let clickCount = 0;
+const counterEl = document.getElementById('clickCounter');
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let lastHovered = null;
+
+function updateCounter() {
+  clickCount++;
+  counterEl.textContent = `Clicks: ${clickCount}`;
+}
+
+renderer.domElement.addEventListener('pointermove', (event) => {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (intersects.length > 0) {
+    const hovered = intersects[0].object;
+    if (lastHovered !== hovered) {
+      if (lastHovered && lastHovered.material && lastHovered.originalColor) {
+        lastHovered.material.color.set(lastHovered.originalColor);
+      }
+
+      if (hovered.material) {
+        lastHovered = hovered;
+        if (!hovered.originalColor) {
+          hovered.originalColor = hovered.material.color.clone();
+        }
+        hovered.material.color.set(0xffff00); // highlight color (yellow)
+      }
+    }
+  } else {
+    if (lastHovered && lastHovered.material && lastHovered.originalColor) {
+      lastHovered.material.color.set(lastHovered.originalColor);
+    }
+    lastHovered = null;
+  }
+});
+
+renderer.domElement.addEventListener('pointerdown', (event) => {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (intersects.length > 0) {
+    updateCounter();
+  }
+});
