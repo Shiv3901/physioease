@@ -1,5 +1,5 @@
 export function loadHomepage(app) {
-    app.innerHTML = `
+  app.innerHTML = `
       <div class="homepage">
         <h1>🧠 Welcome to PhysioEase</h1>
         <p>Select a body part to explore:</p>
@@ -9,9 +9,9 @@ export function loadHomepage(app) {
         </div>
       </div>
     `;
-  
-    const style = document.createElement('style');
-    style.innerHTML = `
+
+  const style = document.createElement('style');
+  style.innerHTML = `
       .homepage {
         font-family: sans-serif;
         text-align: center;
@@ -49,19 +49,18 @@ export function loadHomepage(app) {
         background-color: #005ac0;
       }
     `;
-    document.head.appendChild(style);
-  
-    // Button Navigation Handlers
-    document.getElementById('nav-rotator').addEventListener('click', (e) => {
-      e.preventDefault();
-      history.pushState({}, '', '/rotatorcuff');
-      window.dispatchEvent(new Event('popstate'));
-    });
-  
-    document.getElementById('nav-ankle').addEventListener('click', (e) => {
-      e.preventDefault();
-      history.pushState({}, '', '/ankle');
-      window.dispatchEvent(new Event('popstate'));
-    });
-  }
-  
+  document.head.appendChild(style);
+
+  // Button Navigation Handlers
+  document.getElementById('nav-rotator').addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState({}, '', '/rotatorcuff');
+    window.dispatchEvent(new Event('popstate'));
+  });
+
+  document.getElementById('nav-ankle').addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState({}, '', '/ankle');
+    window.dispatchEvent(new Event('popstate'));
+  });
+}

@@ -11,8 +11,6 @@ function route() {
     loadHomepage(app);
   } else if (path === '/rotatorcuff') {
     loadRotatorCuff(app);
-  } else if (path === '/knee') {
-    loadKnee(app);
   } else if (path === '/ankle') {
     loadAnkle(app);
   } else {

@@ -1,14 +1,14 @@
 export function loadAnkle(app) {
-    app.innerHTML = `
+  app.innerHTML = `
       <div class="coming-soon">
         <h1>🦶 Ankle Viewer</h1>
         <p>This module is coming soon. Stay tuned!</p>
         <a href="/">← Back to Home</a>
       </div>
     `;
-  
-    const style = document.createElement('style');
-    style.innerHTML = `
+
+  const style = document.createElement('style');
+  style.innerHTML = `
       .coming-soon {
         display: flex;
         flex-direction: column;
@@ -35,6 +35,5 @@ export function loadAnkle(app) {
         text-decoration: underline;
       }
     `;
-    document.head.appendChild(style);
-  }
-  
+  document.head.appendChild(style);
+}
