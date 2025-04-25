@@ -78,13 +78,25 @@ export function loadRotatorCuff(app) {
 
   const videoData = {
     Supraspinatus: {
-      normal: 'https://example.com/supraspinatus-normal.mp4',
-      rehab: 'https://example.com/supraspinatus-rehab.mp4',
+      normal: '/videos/demo.mp4', // Placeholder demo video
+      rehab: '/videos/demo.mp4', // Placeholder demo video
     },
-    Infraspinatus: { normal: '#', rehab: '#' },
-    Subscapularis: { normal: '#', rehab: '#' },
-    TeresMinor: { normal: '#', rehab: '#' },
-    Humerus: { normal: '#', rehab: '#' },
+    Infraspinatus: {
+      normal: '/videos/demo.mp4',
+      rehab: '/videos/demo.mp4',
+    },
+    Subscapularis: {
+      normal: '/videos/demo.mp4',
+      rehab: '/videos/demo.mp4',
+    },
+    TeresMinor: {
+      normal: '/videos/demo.mp4',
+      rehab: '/videos/demo.mp4',
+    },
+    Humerus: {
+      normal: '/videos/demo.mp4',
+      rehab: '/videos/demo.mp4',
+    },
   };
 
   // Load Model
@@ -189,7 +201,6 @@ export function loadRotatorCuff(app) {
         // Apply hover highlight
         if (hovered.material && hovered !== selectedMesh) {
           hovered.material.color.set(0xffff00); // yellow
-          console.log(`🟡 Hovering over: ${hovered.name}`);
         }
       }
     } else {
@@ -205,10 +216,6 @@ export function loadRotatorCuff(app) {
       hoveredMesh = null;
     }
   }
-
-  canvasElement.addEventListener('pointermove', (e) => {
-    console.log('👆 pointermove detected on canvas', e.clientX, e.clientY);
-  });
 
   function downHandler(event) {
     const rect = canvasElement.getBoundingClientRect();
@@ -280,20 +287,31 @@ export function loadRotatorCuff(app) {
     if (e.target.classList.contains('video-box')) {
       e.preventDefault();
       const href = e.target.getAttribute('href');
+
       if (href && href !== '#') {
         videoSource.src = href;
         exerciseVideo.load();
-        videoArea.style.display = 'flex';
+        exerciseVideo.muted = true; // Ensure it's muted by default
+
+        // Check if the screen is wide enough to display on the right or if it needs full-screen mode
+        if (window.innerWidth >= 1024) {
+          // Apply the default right-side layout
+          videoArea.classList.remove('full-screen');
+        } else {
+          // Apply the full-screen layout for smaller screens
+          videoArea.classList.add('full-screen');
+        }
+
+        videoArea.style.display = 'flex'; // Show video area
       }
     }
   });
 
-  // Close Video
   closeVideoBtn.addEventListener('click', () => {
     exerciseVideo.pause();
     exerciseVideo.currentTime = 0;
     videoSource.src = '';
-    videoArea.style.display = 'none';
+    videoArea.style.display = 'none'; // Hide video area when clicked
   });
 
   // Handle Resize
