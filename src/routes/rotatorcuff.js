@@ -291,18 +291,15 @@ export function loadRotatorCuff(app) {
       if (href && href !== '#') {
         videoSource.src = href;
         exerciseVideo.load();
-        exerciseVideo.muted = true; // Ensure it's muted by default
+        exerciseVideo.muted = true; // Make sure it's muted by default
 
-        // Check if the screen is wide enough to display on the right or if it needs full-screen mode
-        if (window.innerWidth >= 1024) {
-          // Apply the default right-side layout
-          videoArea.classList.remove('full-screen');
+        // Show video on large screens (right side) and full screen on small screens
+        if (window.innerWidth >= 768) {
+          videoArea.style.display = 'flex'; // Show on the right side
         } else {
-          // Apply the full-screen layout for smaller screens
           videoArea.classList.add('full-screen');
+          videoArea.style.display = 'flex'; // Full-screen layout for small screens
         }
-
-        videoArea.style.display = 'flex'; // Show video area
       }
     }
   });
