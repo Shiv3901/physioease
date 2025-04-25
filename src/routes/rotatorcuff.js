@@ -7,70 +7,48 @@ import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';
 console.log('🚀 PhysioEase 3D viewer loaded');
 
 export function loadRotatorCuff(app) {
-  let canvasElement;
-  let resizeHandler;
-  let moveHandler;
-  let downHandler;
-
   app.innerHTML = getRotatorCuffHTML();
 
-  const style = document.createElement('style');
-  document.head.appendChild(style);
-
-  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    cancelAnimationFrame(animationId);
-    renderer.dispose();
-    renderer.domElement.remove();
-
-    window.removeEventListener('resize', resizeHandler);
-    canvasElement?.removeEventListener('pointermove', moveHandler);
-    canvasElement?.removeEventListener('pointerdown', downHandler);
-
-    history.pushState({}, '', '/');
-    window.dispatchEvent(new Event('popstate'));
-  });
-
-  // info to display
-  const muscleInfo = {
-    Supraspinatus:
-      'The supraspinatus is part of the rotator cuff and helps with shoulder abduction.',
-    Infraspinatus: 'The infraspinatus externally rotates the shoulder and stabilizes the joint.',
-    Subscapularis: 'The subscapularis helps internally rotate the arm and stabilize the shoulder.',
-    TeresMinor: 'The teres minor assists with external rotation of the shoulder.',
-    Humerus: 'The humerus is the long bone of the upper arm, connecting the shoulder to the elbow.',
-    Clavicle:
-      'The clavicle, or collarbone, connects the arm to the body and helps stabilize the shoulder.',
-    Scapula:
-      'The scapula, or shoulder blade, provides attachment points for muscles and stabilizes the shoulder.',
-  };
-
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-
-  let hoveredMesh = null;
-  let selectedMesh = null;
-
-  const labelEl = document.getElementById('selectedLabel');
+  // Grab elements
   const popup = document.getElementById('popup');
+  const labelEl = document.getElementById('selectedLabel');
+  const videoLinks = document.getElementById('videoLinks');
+  const videoArea = document.getElementById('videoArea');
+  const exerciseVideo = document.getElementById('exerciseVideo');
+  const closeVideoBtn = document.getElementById('closeVideoBtn');
+  const videoSource = exerciseVideo.querySelector('source');
+  const viewerArea = document.getElementById('viewerArea'); // 🆕 Where canvas will go
 
-  // Scene setup
+  // 3D Setup
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff); // 🔁 White background
+  scene.background = new THREE.Color(0xffffff);
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    viewerArea.clientWidth / viewerArea.clientHeight,
+    0.1,
+    1000
+  );
   camera.position.set(0, 1, 5);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  canvasElement = renderer.domElement;
-  document.body.appendChild(canvasElement);
+  renderer.setSize(viewerArea.clientWidth, viewerArea.clientHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.LinearToneMapping;
-  renderer.toneMappingExposure = 1; // tweak if too dark/bright
+  renderer.toneMappingExposure = 1;
 
-  // LIGHTING — to match the glTF viewer's visibility
+  viewerArea.appendChild(renderer.domElement); // 🆕 append to correct div
+  const canvasElement = renderer.domElement;
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  let hoveredMesh = null;
+  let selectedMesh = null;
+  let animationId;
+
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
   hemiLight.position.set(0, 20, 0);
   scene.add(hemiLight);
@@ -80,18 +58,34 @@ export function loadRotatorCuff(app) {
   dirLight.castShadow = true;
   scene.add(dirLight);
 
-  // Orbit Controls
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  let animationId;
-
   function animate() {
     animationId = requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
   }
   animate();
+
+  // Information data
+  const muscleInfo = {
+    Supraspinatus: 'The supraspinatus helps shoulder abduction.',
+    Infraspinatus: 'The infraspinatus externally rotates the shoulder.',
+    Subscapularis: 'The subscapularis internally rotates the arm.',
+    TeresMinor: 'The teres minor assists with external rotation.',
+    Humerus: 'The humerus connects the shoulder to elbow.',
+    Clavicle: 'The clavicle connects arm to body and stabilizes shoulder.',
+    Scapula: 'The scapula stabilizes and moves the shoulder.',
+  };
+
+  const videoData = {
+    Supraspinatus: {
+      normal: 'https://example.com/supraspinatus-normal.mp4',
+      rehab: 'https://example.com/supraspinatus-rehab.mp4',
+    },
+    Infraspinatus: { normal: '#', rehab: '#' },
+    Subscapularis: { normal: '#', rehab: '#' },
+    TeresMinor: { normal: '#', rehab: '#' },
+    Humerus: { normal: '#', rehab: '#' },
+  };
 
   // Load Model
   const modelPath = '/models/rotator-cuff.glb';
@@ -113,63 +107,46 @@ export function loadRotatorCuff(app) {
           model.traverse((child) => {
             if (child.isMesh) {
               console.log(`🧠 Mesh found: "${child.name}"`);
-
-              // 🧽 Clone material to avoid touching shared GPU resources
               child.material = child.material.clone();
-
-              // Optionally clone texture if you plan to modify it
               if (child.material.map) {
                 child.material.map = child.material.map.clone();
               }
             }
           });
 
-          // Compute model's bounding box
+          // Fit model nicely
           const box = new THREE.Box3().setFromObject(model);
-          const size = box.getSize(new THREE.Vector3());
           const center = box.getCenter(new THREE.Vector3());
-
-          // Center the camera on the model
+          const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z);
-          const fitHeightDistance = maxDim / (2 * Math.atan((Math.PI * camera.fov) / 360));
-          const fitWidthDistance = fitHeightDistance / camera.aspect;
-          const distance = Math.max(fitHeightDistance, fitWidthDistance);
-
-          // Reposition camera
+          const distance = maxDim / (2 * Math.atan((Math.PI * camera.fov) / 360));
           camera.position.copy(center);
           camera.position.z += distance * 1.2;
-          camera.position.y += distance * 0.2; // optional: a little top-down
+          camera.position.y += distance * 0.2;
           camera.lookAt(center);
 
-          // Update controls
           controls.target.copy(center);
           controls.update();
+
           console.log('✅ Model loaded');
           document.getElementById('loadingScreen').style.display = 'none';
         },
         (xhr) => {
           const percent = (xhr.loaded / xhr.total) * 100;
           const rounded = percent.toFixed(0);
-
           const bar = document.getElementById('asciiBar');
           const label = document.getElementById('loadingPercent');
-
           if (bar && label) {
             const totalBlocks = 10;
             const filled = Math.round((rounded / 100) * totalBlocks);
             const empty = totalBlocks - filled;
-            const barStr = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
-
+            bar.textContent = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
             label.textContent = `${rounded}%`;
-            bar.textContent = barStr;
           }
         },
         (error) => {
           console.error('❌ GLTFLoader failed:', error);
-          const loadingScreen = document.getElementById('loadingScreen');
-          if (loadingScreen) {
-            loadingScreen.innerHTML = '❌ Failed to load model.';
-          }
+          document.getElementById('loadingScreen').innerHTML = '❌ Failed to load model.';
         }
       );
     })
@@ -177,19 +154,12 @@ export function loadRotatorCuff(app) {
       console.error('🚨 Failed to load model:', err);
     });
 
-  resizeHandler = () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  };
+  // Handlers
+  function moveHandler(event) {
+    const rect = canvasElement.getBoundingClientRect();
 
-  window.addEventListener('resize', resizeHandler);
-
-  moveHandler = (event) => {
-    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
@@ -197,80 +167,162 @@ export function loadRotatorCuff(app) {
     if (intersects.length > 0) {
       const hovered = intersects[0].object;
 
+      // Only react if not same as previously hovered or selected
       if (hovered !== hoveredMesh && hovered !== selectedMesh) {
-        if (hoveredMesh && hoveredMesh !== selectedMesh && hoveredMesh.originalColor) {
+        // Reset previous hover color if needed
+        if (
+          hoveredMesh &&
+          hoveredMesh !== selectedMesh &&
+          hoveredMesh.originalColor &&
+          hoveredMesh.material
+        ) {
           hoveredMesh.material.color.set(hoveredMesh.originalColor);
         }
 
         hoveredMesh = hovered;
 
-        if (!hovered.originalColor) {
+        // Clone color if first time
+        if (!hovered.originalColor && hovered.material && hovered.material.color) {
           hovered.originalColor = hovered.material.color.clone();
         }
 
-        if (hovered !== selectedMesh) {
-          hovered.material.color.set(0xffff00); // yellow for hover
+        // Apply hover highlight
+        if (hovered.material && hovered !== selectedMesh) {
+          hovered.material.color.set(0xffff00); // yellow
+          console.log(`🟡 Hovering over: ${hovered.name}`);
         }
       }
     } else {
-      // Clear previous hover highlight if it's not the selected one
-      if (hoveredMesh && hoveredMesh !== selectedMesh && hoveredMesh.originalColor) {
+      // No intersections — reset hover color if needed
+      if (
+        hoveredMesh &&
+        hoveredMesh !== selectedMesh &&
+        hoveredMesh.originalColor &&
+        hoveredMesh.material
+      ) {
         hoveredMesh.material.color.set(hoveredMesh.originalColor);
       }
       hoveredMesh = null;
     }
-  };
+  }
 
-  downHandler = (event) => {
-    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  canvasElement.addEventListener('pointermove', (e) => {
+    console.log('👆 pointermove detected on canvas', e.clientX, e.clientY);
+  });
+
+  function downHandler(event) {
+    const rect = canvasElement.getBoundingClientRect();
+
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
+    console.log('🧪 Raycasting intersects:', intersects.length);
 
     if (intersects.length > 0) {
       const clicked = intersects[0].object;
-      const name = clicked.name || 'Unnamed'; // ✅ Declare before use
+      const name = clicked.name || 'Unnamed';
 
-      // Clicked the same already-selected mesh? Deselect it
       if (clicked === selectedMesh) {
-        if (selectedMesh.originalColor) {
-          selectedMesh.material.color.set(selectedMesh.originalColor);
-        }
+        if (selectedMesh.originalColor) selectedMesh.material.color.set(selectedMesh.originalColor);
         selectedMesh = null;
         labelEl.textContent = `🧠 Selected: None`;
         popup.style.display = 'none';
+        videoLinks.style.display = 'none';
         return;
       }
 
-      // Un-highlight previous selection
-      if (selectedMesh && selectedMesh.originalColor) {
+      if (selectedMesh && selectedMesh.originalColor)
         selectedMesh.material.color.set(selectedMesh.originalColor);
-      }
 
-      // Select new
       selectedMesh = clicked;
+      if (!clicked.originalColor) clicked.originalColor = clicked.material.color.clone();
+      clicked.material.color.set(0x00ff00);
 
-      if (!clicked.originalColor) {
-        clicked.originalColor = clicked.material.color.clone();
-      }
-      clicked.material.color.set(0x00ff00); // green
-
-      // Show UI
       labelEl.textContent = `🧠 Selected: ${name}`;
       popup.innerHTML = `${muscleInfo[name] || 'No info available.'}`;
       popup.style.display = 'block';
-    } else {
-      // Clicked empty space — clear selection
-      if (selectedMesh && selectedMesh.originalColor) {
-        selectedMesh.material.color.set(selectedMesh.originalColor);
+
+      if (videoData[name]) {
+        videoLinks.innerHTML = `
+          <a href="${videoData[name].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
+          <a href="${videoData[name].rehab}" class="video-box" target="_blank">🛠️ Rehab Exercises</a>
+        `;
+        videoLinks.style.display = 'flex';
+      } else {
+        videoLinks.style.display = 'none';
       }
+
+      exerciseVideo.pause();
+      exerciseVideo.currentTime = 0;
+      videoSource.src = '';
+      videoArea.style.display = 'none';
+    } else {
+      if (selectedMesh && selectedMesh.originalColor)
+        selectedMesh.material.color.set(selectedMesh.originalColor);
       selectedMesh = null;
       labelEl.textContent = `🧠 Selected: None`;
       popup.style.display = 'none';
+      videoLinks.style.display = 'none';
+      videoArea.style.display = 'none';
+      exerciseVideo.pause();
+      exerciseVideo.currentTime = 0;
+      videoSource.src = '';
     }
-  };
+  }
 
   canvasElement.addEventListener('pointermove', moveHandler);
   canvasElement.addEventListener('pointerdown', downHandler);
+
+  // Video Link click
+  videoLinks.addEventListener('click', (e) => {
+    if (e.target.classList.contains('video-box')) {
+      e.preventDefault();
+      const href = e.target.getAttribute('href');
+      if (href && href !== '#') {
+        videoSource.src = href;
+        exerciseVideo.load();
+        videoArea.style.display = 'flex';
+      }
+    }
+  });
+
+  // Close Video
+  closeVideoBtn.addEventListener('click', () => {
+    exerciseVideo.pause();
+    exerciseVideo.currentTime = 0;
+    videoSource.src = '';
+    videoArea.style.display = 'none';
+  });
+
+  // Handle Resize
+  // 1. Define the resizeHandler function
+  const resizeHandler = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  };
+
+  // 2. Attach resizeHandler to window resize event
+  window.addEventListener('resize', resizeHandler);
+
+  // Back Home button
+  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    cancelAnimationFrame(animationId);
+    renderer.dispose();
+    renderer.domElement.remove();
+
+    window.removeEventListener('resize', resizeHandler);
+    canvasElement?.removeEventListener('pointermove', moveHandler);
+    canvasElement?.removeEventListener('pointerdown', downHandler);
+
+    history.pushState({}, '', '/');
+    window.dispatchEvent(new Event('popstate'));
+  });
 }
