@@ -25,7 +25,8 @@ export function loadModel(scene, camera, controls, onLoaded, onProgress, onError
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
-      const distance = Math.max(size.x, size.y, size.z) / (2 * Math.atan((Math.PI * camera.fov) / 360));
+      const distance =
+        Math.max(size.x, size.y, size.z) / (2 * Math.atan((Math.PI * camera.fov) / 360));
 
       camera.position.copy(center);
       camera.position.z += distance * 1.2;
