@@ -11,8 +11,10 @@ export function setupVideoHandlers() {
   function adjustLayoutForVideo() {
     const isBottomView = window.innerWidth <= 980;
 
+    videoArea.style.display = 'flex';
+    videoArea.style.backgroundColor = 'black';
+
     if (isBottomView) {
-      videoArea.style.display = 'flex';
       videoArea.style.position = 'absolute';
       videoArea.style.bottom = '0';
       videoArea.style.width = '100vw';
@@ -21,7 +23,6 @@ export function setupVideoHandlers() {
       modelContainer.style.width = '100%';
       modelContainer.style.height = '66.66vh';
     } else {
-      videoArea.style.display = 'flex';
       videoArea.style.position = 'relative';
       videoArea.style.width = '33.33%';
       videoArea.style.height = '100%';

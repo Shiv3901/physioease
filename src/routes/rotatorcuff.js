@@ -4,12 +4,14 @@ import { setupInteractions } from '../components/interactionHandlers.js';
 import { setupVideoHandlers } from '../components/videoHandlers.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';
+import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import '../styles/rotatorcuff.css';
 
 console.log('🚀 PhysioEase 3D viewer loaded');
 
 export function loadRotatorCuff(app) {
   app.innerHTML = getRotatorCuffHTML();
+  mountLandscapeBlocker();
 
   const modelContainer = document.getElementById('modelContainer');
   const { scene, camera, renderer, controls } = setupViewer(modelContainer);
