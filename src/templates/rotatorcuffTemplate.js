@@ -10,6 +10,10 @@ export function getRotatorCuffHTML() {
         </div>
         <div id="popup" class="popup"></div>
         <div id="videoLinks" class="video-links" style="display: none;"></div>
+        <div id="moreVideosContainer">
+          <div id="moreVideosPane" style="display: none;"></div>
+          <div id="moreVideosBtn" class="terminal-link fixed-bottom-left">🎬 More Videos</div>
+        </div>
       </div>
 
       <div id="videoArea" style="display: none;">
@@ -21,7 +25,6 @@ export function getRotatorCuffHTML() {
       </div>
     </div>
 
-    <!-- ✅ Move this OUTSIDE of #viewerArea -->
     <div id="debugDimensions" style="
       position: fixed;
       bottom: 8px;

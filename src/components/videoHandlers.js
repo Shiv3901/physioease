@@ -1,4 +1,5 @@
 import { updateDebugDimensions } from './uiHelpers';
+import * as constants from './../constants.js';
 
 export function setupVideoHandlers() {
   const videoLinks = document.getElementById('videoLinks');
@@ -7,6 +8,9 @@ export function setupVideoHandlers() {
   const videoArea = document.getElementById('videoArea');
   const modelContainer = document.getElementById('modelContainer');
   const closeVideoBtn = document.getElementById('closeVideoBtn');
+
+  const moreVideosBtn = document.getElementById('moreVideosBtn');
+  const moreVideosPane = document.getElementById('moreVideosPane');
 
   function adjustLayoutForVideo() {
     const isBottomView = window.innerWidth <= 980;
@@ -57,5 +61,35 @@ export function setupVideoHandlers() {
 
     window.dispatchEvent(new Event('resize'));
     updateDebugDimensions();
+  });
+
+  const moreVideos = constants.ROTATORCUFF_METADATA.base_videos;
+
+  moreVideos.forEach((video) => {
+    const link = document.createElement('a');
+    link.className = 'video-box';
+    link.innerText = video.title;
+    link.href = video.src;
+    link.target = '_blank';
+    moreVideosPane.appendChild(link);
+  });
+
+  moreVideosPane.addEventListener('click', (e) => {
+    if (e.target.classList.contains('video-box')) {
+      e.preventDefault();
+      const href = e.target.getAttribute('href');
+      if (!href) return;
+      videoSource.src = href;
+      exerciseVideo.load();
+      exerciseVideo.muted = true;
+      adjustLayoutForVideo();
+      window.dispatchEvent(new Event('resize'));
+      updateDebugDimensions();
+    }
+  });
+
+  moreVideosBtn?.addEventListener('click', () => {
+    const isVisible = moreVideosPane.style.display === 'flex';
+    moreVideosPane.style.display = isVisible ? 'none' : 'flex';
   });
 }

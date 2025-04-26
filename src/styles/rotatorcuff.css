@@ -193,19 +193,47 @@ body {
 /* === Video Links === */
 
 .video-box {
-  font-family: monospace;
-  font-size: 0.95rem;
-  color: #000;
-  border: 1px dashed #000;
-  background-color: transparent;
-  padding: 8px 14px;
-  text-decoration: none;
+  background: none;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
   cursor: pointer;
+  font-family: monospace;
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .video-box:hover {
-  background-color: #000;
-  color: #fff;
+  background-color: black;
+  color: white;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.video-box:hover {
+  animation: wiggle 0.4s ease-in-out;
 }
 
 @media (max-width: 768px) {
@@ -229,4 +257,58 @@ body {
     display: flex;
     flex-direction: column;
   }
+}
+
+#moreVideosContainer {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#moreVideosPane {
+  display: none;
+  flex-direction: column;
+  gap: 8px; /* 👈 Adds space between video buttons */
+  margin-bottom: 8px;
+}
+
+.more-video-btn {
+  background: none;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: monospace;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.more-video-btn:hover {
+  background-color: black;
+  color: white;
+}
+
+#moreVideosBtn {
+  padding: 6px 10px;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  background: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+#moreVideosBtn:hover {
+  background-color: black;
+  color: white;
 }

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as constants from './../constants.js';
 
 export function setupInteractions(scene, camera, canvasElement) {
   const raycaster = new THREE.Raycaster();
@@ -20,13 +21,7 @@ export function setupInteractions(scene, camera, canvasElement) {
     Scapula: 'The scapula stabilizes and moves the shoulder.',
   };
 
-  const videoData = {
-    Supraspinatus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
-    Infraspinatus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
-    Subscapularis: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
-    TeresMinor: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
-    Humerus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
-  };
+  const videoData = constants.ROTATORCUFF_METADATA.specific_videos;
   function moveHandler(event) {
     const rect = canvasElement.getBoundingClientRect();
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
