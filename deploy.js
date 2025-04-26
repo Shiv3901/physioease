@@ -22,6 +22,9 @@ try {
   console.log(`📝 Committing with message: "${fullMessage}"`);
   execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 
+  console.log('🚀 Pushing to GitHub...');
+  execSync('git push', { stdio: 'inherit' });
+
   console.log('✅ Done!');
 } catch (error) {
   console.error('❌ Something went wrong:', error.message);
