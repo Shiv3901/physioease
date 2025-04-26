@@ -18,7 +18,7 @@ try {
   console.log('➕ Adding all files to git...');
   execSync('git add .', { stdio: 'inherit' });
 
-  const fullMessage = `Production commit: ${commitMessage}`;
+  const fullMessage = `changelog: ${commitMessage}`;
   console.log(`📝 Committing with message: "${fullMessage}"`);
   execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 
