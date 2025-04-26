@@ -27,7 +27,6 @@ export function setupInteractions(scene, camera, canvasElement) {
     TeresMinor: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
     Humerus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
   };
-
   function moveHandler(event) {
     const rect = canvasElement.getBoundingClientRect();
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -38,8 +37,15 @@ export function setupInteractions(scene, camera, canvasElement) {
 
     if (intersects.length > 0) {
       const hovered = intersects[0].object;
+
+      // ✨ Ignore hover color change if it's the selected mesh
       if (hovered !== hoveredMesh && hovered !== selectedMesh) {
-        if (hoveredMesh && hoveredMesh.originalColor && hoveredMesh.material) {
+        if (
+          hoveredMesh &&
+          hoveredMesh.originalColor &&
+          hoveredMesh.material &&
+          hoveredMesh !== selectedMesh
+        ) {
           hoveredMesh.material.color.set(hoveredMesh.originalColor);
         }
 
@@ -50,11 +56,17 @@ export function setupInteractions(scene, camera, canvasElement) {
         }
 
         if (hovered.material && hovered !== selectedMesh) {
-          hovered.material.color.set(0xffff00);
+          hovered.material.color.set(0xffff00); // Yellow for hover
         }
       }
     } else {
-      if (hoveredMesh && hoveredMesh.originalColor && hoveredMesh.material) {
+      // ✨ Only reset color if the previous hoveredMesh is not selectedMesh
+      if (
+        hoveredMesh &&
+        hoveredMesh !== selectedMesh &&
+        hoveredMesh.originalColor &&
+        hoveredMesh.material
+      ) {
         hoveredMesh.material.color.set(hoveredMesh.originalColor);
       }
       hoveredMesh = null;
