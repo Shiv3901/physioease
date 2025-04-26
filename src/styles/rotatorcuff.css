@@ -73,6 +73,28 @@ body {
 }
 
 /* === Terminal-Style Elements === */
+#terminalHome {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  border: 1px dashed #000;
+  background-color: transparent;
+  padding: 8px 12px;
+  z-index: 9999;
+  user-select: none;
+  display: inline-block;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+#terminalHome:hover {
+  background-color: #000;
+  color: #fff;
+}
+
 .fixed-top-left {
   position: absolute;
   top: 16px;
@@ -140,8 +162,11 @@ body {
 }
 
 .video-links {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 8px; /* ✅ Adds space between the boxes */
+  margin-top: 12px; /* Optional: space from the text above */
 }
 
 /* === Loading === */

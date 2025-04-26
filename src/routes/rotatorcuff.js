@@ -284,9 +284,7 @@ export function loadRotatorCuff(app) {
 
       // Update UI
       labelEl.textContent = `🧠 Selected: ${name}`;
-      popup.innerHTML = `
-        <strong>${name}</strong><br>${muscleInfo[name] || 'No info available.'}
-      `;
+      popup.innerHTML = `${muscleInfo[name] || 'No info available.'}`;
       popup.appendChild(videoLinks);
       popup.style.display = 'block';
 
