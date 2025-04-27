@@ -1,13 +1,14 @@
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
-import { setupInteractions } from '../components/interactionHandlers.js';
+import { InteractionHandler } from '../components/interactionHandlers.js';
 import { setupVideoHandlers } from '../components/videoHandlers.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
+import { log } from '../components/utils.js';
 import '../styles/rotatorcuff.css';
 
-console.log('🚀 PhysioEase 3D viewer loaded');
+log('INFO', '🚀 PhysioEase 3D viewer loaded');
 
 export function loadRotatorCuff(app) {
   app.innerHTML = getRotatorCuffHTML();
@@ -46,11 +47,17 @@ export function loadRotatorCuff(app) {
     }
   );
 
-  setupInteractions(scene, camera, renderer.domElement);
+  const interactionHandler = new InteractionHandler(
+    scene,
+    camera,
+    renderer.domElement,
+    (clickedObject) => {}
+  );
   setupVideoHandlers();
 
   function animate() {
     requestAnimationFrame(animate);
+    interactionHandler.update();
     controls.update();
     renderer.render(scene, camera);
   }

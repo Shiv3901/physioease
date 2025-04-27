@@ -1,4 +1,5 @@
 export const MOBILE_BREAKPOINT = 980;
+export const DEBUG_MODE = true;
 
 // TODO: modify this later on
 export const ROTATORCUFF_METADATA = {
@@ -14,4 +15,15 @@ export const ROTATORCUFF_METADATA = {
     { title: '🧠 Extended Version', src: '/videos/rotatorcuff-extended.mp4' },
     { title: '🛠️ Rehab', src: '/videos/rotatorcuff-rehab.mp4' },
   ],
+  muscle_info: {
+    Supraspinatus: 'The supraspinatus helps shoulder abduction.',
+    Infraspinatus: 'The infraspinatus externally rotates the shoulder.',
+    Subscapularis: 'The subscapularis internally rotates the arm.',
+    TeresMinor: 'The teres minor assists with external rotation.',
+    Humerus: 'The humerus connects the shoulder to elbow.',
+    Clavicle: 'The clavicle connects arm to body and stabilizes shoulder.',
+    Scapula: 'The scapula stabilizes and moves the shoulder.',
+  },
 };
+
+export const LOG_LEVEL = 'DEBUG2'; // Choose between: 'INFO', 'DEBUG', 'DEBUG2'

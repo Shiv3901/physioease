@@ -1,6 +1,6 @@
 // deploy.js
 import { execSync } from 'child_process';
-
+import { log } from './src/components/utils.js';
 const commitMessage = process.argv.slice(2).join(' ').trim();
 
 if (!commitMessage) {
@@ -9,23 +9,23 @@ if (!commitMessage) {
 }
 
 try {
-  console.log('🧹 Running npm run format...');
+  log('INFO', '🧹 Running npm run format...');
   execSync('npm run format', { stdio: 'inherit' });
 
-  console.log('🏗️  Running npm run build...');
+  log('INFO', '🏗️  Running npm run build...');
   execSync('npm run build', { stdio: 'inherit' });
 
-  console.log('➕ Adding all files to git...');
+  log('INFO', '➕ Adding all files to git...');
   execSync('git add .', { stdio: 'inherit' });
 
   const fullMessage = `changelog: ${commitMessage}`;
-  console.log(`📝 Committing with message: "${fullMessage}"`);
+  log('INFO', `📝 Committing with message: "${fullMessage}"`);
   execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 
-  console.log('🚀 Pushing to GitHub...');
+  log('INFO', '🚀 Pushing to GitHub...');
   execSync('git push', { stdio: 'inherit' });
 
-  console.log('✅ Done!');
+  log('INFO', '✅ Done!');
 } catch (error) {
   console.error('❌ Something went wrong:', error.message);
   process.exit(1);

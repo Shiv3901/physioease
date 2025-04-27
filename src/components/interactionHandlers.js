@@ -1,127 +1,159 @@
 import * as THREE from 'three';
-import * as constants from './../constants.js';
+import { log } from './utils.js';
+import { ROTATORCUFF_METADATA } from '../constants.js';
 
-export function setupInteractions(scene, camera, canvasElement) {
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-  let hoveredMesh = null;
-  let selectedMesh = null;
+export class InteractionHandler {
+  constructor(scene, camera, canvasElement, onClickCallback) {
+    this.scene = scene;
+    this.camera = camera;
+    this.canvas = canvasElement;
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+    this.currentHovered = null;
+    this.currentClicked = null;
+    this.selectedLabel = document.getElementById('selectedLabel');
+    this.selectedPopup = document.getElementById('popup');
+    this.selectedVideoLinks = document.getElementById('videoLinks');
 
-  const labelEl = document.getElementById('selectedLabel');
-  const popup = document.getElementById('popup');
-  const videoLinks = document.getElementById('videoLinks');
+    this.onClickCallback = onClickCallback;
 
-  const muscleInfo = {
-    Supraspinatus: 'The supraspinatus helps shoulder abduction.',
-    Infraspinatus: 'The infraspinatus externally rotates the shoulder.',
-    Subscapularis: 'The subscapularis internally rotates the arm.',
-    TeresMinor: 'The teres minor assists with external rotation.',
-    Humerus: 'The humerus connects the shoulder to elbow.',
-    Clavicle: 'The clavicle connects arm to body and stabilizes shoulder.',
-    Scapula: 'The scapula stabilizes and moves the shoulder.',
-  };
+    this.holdTimeout = null;
+    this.isLongPress = false;
 
-  const videoData = constants.ROTATORCUFF_METADATA.specific_videos;
-  function moveHandler(event) {
-    const rect = canvasElement.getBoundingClientRect();
-    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-    raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
-
-    if (intersects.length > 0) {
-      const hovered = intersects[0].object;
-
-      // ✨ Ignore hover color change if it's the selected mesh
-      if (hovered !== hoveredMesh && hovered !== selectedMesh) {
-        if (
-          hoveredMesh &&
-          hoveredMesh.originalColor &&
-          hoveredMesh.material &&
-          hoveredMesh !== selectedMesh
-        ) {
-          hoveredMesh.material.color.set(hoveredMesh.originalColor);
-        }
-
-        hoveredMesh = hovered;
-
-        if (!hovered.originalColor && hovered.material && hovered.material.color) {
-          hovered.originalColor = hovered.material.color.clone();
-        }
-
-        if (hovered.material && hovered !== selectedMesh) {
-          hovered.material.color.set(0xffff00); // Yellow for hover
-        }
-      }
-    } else {
-      // ✨ Only reset color if the previous hoveredMesh is not selectedMesh
-      if (
-        hoveredMesh &&
-        hoveredMesh !== selectedMesh &&
-        hoveredMesh.originalColor &&
-        hoveredMesh.material
-      ) {
-        hoveredMesh.material.color.set(hoveredMesh.originalColor);
-      }
-      hoveredMesh = null;
-    }
+    window.addEventListener('pointermove', this.onPointerMove.bind(this));
+    window.addEventListener('pointerdown', this.onPointerDown.bind(this));
+    window.addEventListener('pointerup', this.onPointerUp.bind(this));
+    window.addEventListener('pointercancel', this.clearHold.bind(this));
+    window.addEventListener('pointerleave', this.clearHold.bind(this));
   }
 
-  function downHandler(event) {
-    const rect = canvasElement.getBoundingClientRect();
-    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  onPointerMove(event) {
+    const rect = this.canvas.getBoundingClientRect();
+    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  }
 
-    raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
+  onPointerDown(event) {
+    this.isLongPress = false;
+    this.holdTimeout = setTimeout(() => {
+      this.isLongPress = true;
+      log('DEBUG', 'Long press detected');
+    }, 500);
+  }
 
-    if (intersects.length > 0) {
-      const clicked = intersects[0].object;
-      const name = clicked.name || 'Unnamed';
+  onPointerUp(event) {
+    clearTimeout(this.holdTimeout);
 
-      if (clicked === selectedMesh) {
-        if (selectedMesh.originalColor) selectedMesh.material.color.set(selectedMesh.originalColor);
-        selectedMesh = null;
-        labelEl.textContent = `🧠 Selected: None`;
-        popup.style.display = 'none';
-        videoLinks.style.display = 'none';
-        return;
-      }
+    if (!this.isLongPress && this.currentHovered) {
+      log('DEBUG', 'Click detected on', this.currentHovered.name || this.currentHovered.id);
 
-      if (selectedMesh && selectedMesh.originalColor) {
-        selectedMesh.material.color.set(selectedMesh.originalColor);
-      }
-
-      selectedMesh = clicked;
-      if (!clicked.originalColor) clicked.originalColor = clicked.material.color.clone();
-      clicked.material.color.set(0x00ff00);
-
-      labelEl.textContent = `🧠 Selected: ${name}`;
-      popup.innerHTML = muscleInfo[name] || 'No info available.';
-      popup.appendChild(videoLinks);
-      popup.style.display = 'block';
-
-      if (videoData[name]) {
-        videoLinks.innerHTML = `
-          <a href="${videoData[name].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
-          <a href="${videoData[name].rehab}" class="video-box" target="_blank">🛠️ Rehab Exercises</a>
-        `;
-        videoLinks.style.display = 'flex';
+      if (this.currentClicked === this.currentHovered) {
+        // Clicking the same object again → unselect
+        this.setHighlight(this.currentClicked, 'restore');
+        this.currentClicked = null;
+        log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);
+        this.updateSelectedInfo(null);
       } else {
-        videoLinks.style.display = 'none';
+        // Clicking a new object → unselect old one
+        if (this.currentClicked) {
+          this.setHighlight(this.currentClicked, 'restore');
+        }
+
+        // Set new clicked object
+        this.currentClicked = this.currentHovered;
+        this.setHighlight(this.currentClicked, 'click');
+        log('DEBUG2', 'Selected:', this.currentClicked.name || this.currentClicked.id);
       }
-    } else {
-      if (selectedMesh && selectedMesh.originalColor) {
-        selectedMesh.material.color.set(selectedMesh.originalColor);
+
+      if (this.onClickCallback) {
+        this.onClickCallback(this.currentClicked);
       }
-      selectedMesh = null;
-      labelEl.textContent = `🧠 Selected: None`;
-      popup.style.display = 'none';
-      videoLinks.style.display = 'none';
     }
   }
 
-  canvasElement.addEventListener('pointermove', moveHandler);
-  canvasElement.addEventListener('pointerdown', downHandler);
+  clearHold() {
+    clearTimeout(this.holdTimeout);
+  }
+
+  setHighlight(object, type) {
+    if (!object || !object.material) return;
+
+    // Ensure material has emissive property
+    if (!object.material.emissive) {
+      console.warn(`Object ${object.name || object.id} has no emissive material.`);
+      return;
+    }
+
+    if (type === 'hover') {
+      object.material.emissive.setHex(0x999900); // Medium yellow
+      log('DEBUG2', `Highlight hover on ${object.name || object.id}`);
+    } else if (type === 'click') {
+      object.material.emissive.setHex(0x009900); // Medium green
+      log('DEBUG2', `Highlight click on ${object.name || object.id}`);
+      this.updateSelectedInfo(object); // <-- ONLY ON CLICK
+    } else if (type === 'restore') {
+      object.material.emissive.setHex(0x000000); // No glow
+      log('DEBUG2', `Restore original color on ${object.name || object.id}`);
+      // NO updateSelectedInfo(null) here
+    }
+  }
+
+  update() {
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+
+    if (intersects.length > 0) {
+      const firstIntersect = intersects[0].object;
+
+      if (this.currentHovered !== firstIntersect) {
+        if (this.currentHovered && this.currentHovered !== this.currentClicked) {
+          this.setHighlight(this.currentHovered, 'restore');
+        }
+        this.currentHovered = firstIntersect;
+
+        if (this.currentHovered !== this.currentClicked) {
+          this.setHighlight(this.currentHovered, 'hover');
+        }
+      }
+    } else {
+      if (this.currentHovered && this.currentHovered !== this.currentClicked) {
+        this.setHighlight(this.currentHovered, 'restore');
+      }
+      this.currentHovered = null;
+    }
+  }
+
+  updateSelectedInfo(object) {
+    if (object) {
+      const selectedName = object.name || object.id || 'Unnamed';
+      log('DEBUG', `Updating selected info for: ${selectedName}`);
+
+      const infoText = ROTATORCUFF_METADATA.muscle_info[selectedName] || 'No info available.';
+      this.selectedPopup.innerHTML = `<p>${infoText}</p>`;
+      log('DEBUG2', `Displayed info text: ${infoText}`);
+
+      const videoData = ROTATORCUFF_METADATA.specific_videos;
+      if (videoData[selectedName]) {
+        this.selectedVideoLinks.innerHTML = `
+          <a href="${videoData[selectedName].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
+          <a href="${videoData[selectedName].rehab}" class="video-box" target="_blank">🛠️ Rehab Exercises</a>
+        `;
+        this.selectedVideoLinks.style.display = 'flex';
+        log('DEBUG2', `Added specific video links for: ${selectedName}`);
+      } else {
+        this.selectedVideoLinks.style.display = 'none';
+        log('DEBUG2', `No specific videos available for: ${selectedName}`);
+      }
+
+      this.selectedPopup.appendChild(this.selectedVideoLinks);
+      this.selectedPopup.style.display = 'block';
+      this.selectedLabel.textContent = `🧠 Selected: ${selectedName}`;
+    } else {
+      log('DEBUG', 'Clearing selected info (no object or unselected).');
+      this.selectedLabel.textContent = '🧠 Selected: None';
+      this.selectedVideoLinks.style.display = 'none';
+      this.selectedPopup.style.display = 'none';
+    }
+  }
 }

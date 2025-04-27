@@ -1,5 +1,6 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
+import { log } from './utils.js';
 
 export function loadModel(scene, camera, controls, onLoaded, onProgress, onError) {
   const loader = new GLTFLoader();
