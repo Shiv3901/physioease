@@ -1,0 +1,86 @@
+import { describe, it, vi, expect, beforeEach } from 'vitest';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+import { loadModel } from '../../src/components/modelLoader';
+
+vi.mock('../../src/components/utils', () => ({
+  log: vi.fn(),
+}));
+
+vi.mock('three/examples/jsm/loaders/GLTFLoader.js', () => {
+  return {
+    GLTFLoader: vi.fn().mockImplementation(() => ({
+      load: vi.fn(),
+    })),
+  };
+});
+
+describe('loadModel', () => {
+  let scene, camera, controls, onLoaded, onProgress, onError;
+  let mockLoader;
+
+  beforeEach(() => {
+    scene = { add: vi.fn() };
+    camera = {
+      position: new THREE.Vector3(),
+      lookAt: vi.fn(),
+      fov: 75,
+    };
+    controls = {
+      target: new THREE.Vector3(),
+      update: vi.fn(),
+    };
+    onLoaded = vi.fn();
+    onProgress = vi.fn();
+    onError = vi.fn();
+
+    // Reset and grab the mock loader
+    mockLoader = new GLTFLoader();
+    mockLoader.load = vi.fn();
+    GLTFLoader.mockImplementation(() => mockLoader);
+  });
+
+  it('loads and adds model to scene', () => {
+    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+
+    expect(mockLoader.load).toHaveBeenCalled();
+    const args = mockLoader.load.mock.calls[0];
+
+    const modelPath = args[0];
+    const onSuccess = args[1];
+
+    expect(modelPath).toBe('/models/rotatorCuff.glb');
+
+    // Simulate model loaded
+    const dummyScene = new THREE.Group();
+    onSuccess({ scene: dummyScene });
+
+    expect(scene.add).toHaveBeenCalledWith(dummyScene);
+    expect(onLoaded).toHaveBeenCalled();
+  });
+
+  it('calls onProgress during load', () => {
+    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+
+    const args = mockLoader.load.mock.calls[0];
+    const onProgressCallback = args[2];
+
+    const xhrMock = { loaded: 50, total: 100 };
+    onProgressCallback(xhrMock);
+
+    expect(onProgress).toHaveBeenCalledWith(xhrMock);
+  });
+
+  it('calls onError when loading fails', () => {
+    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+
+    const args = mockLoader.load.mock.calls[0];
+    const onErrorCallback = args[3];
+
+    const errorMock = new Error('Failed to load');
+    onErrorCallback(errorMock);
+
+    expect(onError).toHaveBeenCalledWith(errorMock);
+  });
+});
