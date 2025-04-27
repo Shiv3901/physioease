@@ -6,11 +6,13 @@ export function loadHomepage(app) {
     <div class="terminal-wrapper">
       <div class="terminal-box">
         <div class="title">PhysioEase v${version}</div>
-        <p>Welcome, operator.</p>
-        <p>Select a module to launch:</p>
 
-        <div class="terminal-link" id="launch-rotator">[1] 🎯 Rotator Cuff Viewer</div>
-        <div class="terminal-link disabled">[2] 🦶 Ankle Viewer (Coming Soon)</div>
+        <div class="subtitle">A tool to animate injuries, concepts, and exercises.</div>
+
+        <div class="viewer-links">
+          <div class="terminal-link" id="launch-rotator">🎯 Rotator Cuff Viewer</div>
+          <div class="terminal-link disabled">🦶 Ankle Viewer (Coming Soon)</div>
+        </div>
 
         <div class="prompt-line">&gt; <span class="cursor">_</span></div>
       </div>
@@ -38,7 +40,14 @@ export function loadHomepage(app) {
         max-width: 600px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
-  
+
+      .viewer-links {
+        display: flex;
+        gap: 10px; /* Space between the links */
+        align-items: flex-start; /* Optional: align them to the left inside the box */
+        margin: 10px 0;
+      }
+
       .title {
         font-weight: bold;
         font-size: 1.1rem;
@@ -73,6 +82,13 @@ export function loadHomepage(app) {
         display: inline-block;
         width: 10px;
         animation: blink 1s infinite;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        color: #999;
+        margin-top: 3px;
+        text-align: left;
       }
   
       @keyframes blink {
