@@ -1,18 +1,21 @@
+import pkg from '../package.json';
+const { version } = pkg;
+
 export function loadHomepage(app) {
   app.innerHTML = `
-      <div class="terminal-wrapper">
-        <div class="terminal-box">
-          <div class="title">PhysioEase v1.0</div>
-          <p>Welcome, operator.</p>
-          <p>Select a module to launch:</p>
-  
-          <div class="terminal-link" id="launch-rotator">[1] 🎯 Rotator Cuff Viewer</div>
-          <div class="terminal-link disabled">[2] 🦶 Ankle Viewer (Coming Soon)</div>
-  
-          <div class="prompt-line">&gt; <span class="cursor">_</span></div>
-        </div>
+    <div class="terminal-wrapper">
+      <div class="terminal-box">
+        <div class="title">PhysioEase v${version}</div>
+        <p>Welcome, operator.</p>
+        <p>Select a module to launch:</p>
+
+        <div class="terminal-link" id="launch-rotator">[1] 🎯 Rotator Cuff Viewer</div>
+        <div class="terminal-link disabled">[2] 🦶 Ankle Viewer (Coming Soon)</div>
+
+        <div class="prompt-line">&gt; <span class="cursor">_</span></div>
       </div>
-    `;
+    </div>
+  `;
 
   const style = document.createElement('style');
   style.innerHTML = `
