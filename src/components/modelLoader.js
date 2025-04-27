@@ -25,12 +25,12 @@ export function loadModel(
   scene,
   camera,
   controls,
+  modelPath,
   onLoaded = () => {},
   onProgress = () => {},
   onError = (err) => log('ERROR', err)
 ) {
   const loader = new GLTFLoader();
-  const modelPath = '/models/rotatorCuff.glb';
 
   log('INFO', `Starting to load model from ${modelPath}.`);
 

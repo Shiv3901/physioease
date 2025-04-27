@@ -7,25 +7,11 @@ vi.mock('../../src/components/utils', () => ({
   log: vi.fn(),
 }));
 
-// Mock ROTATORCUFF_METADATA
-vi.mock('../../src/constants', () => ({
-  ROTATORCUFF_METADATA: {
-    muscle_info: {
-      MuscleA: 'Test muscle info',
-    },
-    specific_videos: {
-      MuscleA: {
-        normal: 'https://normal.mov',
-        rehab: 'https://rehab.mov',
-      },
-    },
-  },
-}));
-
 describe('InteractionHandler', () => {
   let scene, camera, canvas, onClickCallback;
   let handler;
   let fakeObject;
+  let mockMetadata;
 
   beforeAll(() => {
     // Create a reusable scene and fake object once
@@ -34,7 +20,7 @@ describe('InteractionHandler', () => {
     fakeObject = new THREE.Mesh(
       new THREE.BoxGeometry(),
       new THREE.MeshStandardMaterial({
-        emissive: new THREE.Color(0x000000), // ensure emissive exists for highlight
+        emissive: new THREE.Color(0x000000), // Ensure emissive exists for highlight
       })
     );
     fakeObject.name = 'MuscleA';
@@ -49,6 +35,18 @@ describe('InteractionHandler', () => {
     };
     onClickCallback = vi.fn();
 
+    mockMetadata = {
+      muscle_info: {
+        MuscleA: 'Test muscle info',
+      },
+      specific_videos: {
+        MuscleA: {
+          normal: 'https://normal.mov',
+          rehab: 'https://rehab.mov',
+        },
+      },
+    };
+
     // Create fresh DOM elements
     const label = document.createElement('div');
     label.id = 'selectedLabel';
@@ -62,7 +60,7 @@ describe('InteractionHandler', () => {
     videoLinks.id = 'videoLinks';
     document.body.appendChild(videoLinks);
 
-    handler = new InteractionHandler(scene, camera, canvas, onClickCallback);
+    handler = new InteractionHandler(scene, camera, canvas, mockMetadata, onClickCallback);
 
     // 🔥 Mock raycaster to always hit our fakeObject
     vi.spyOn(handler.raycaster, 'intersectObjects').mockImplementation(() => [

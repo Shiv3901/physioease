@@ -19,6 +19,7 @@ vi.mock('three/examples/jsm/loaders/GLTFLoader.js', () => {
 describe('loadModel', () => {
   let scene, camera, controls, onLoaded, onProgress, onError;
   let mockLoader;
+  const testModelPath = '/models/testModel.glb'; // 🔥 you pick any fake model path here
 
   beforeEach(() => {
     scene = { add: vi.fn() };
@@ -35,14 +36,13 @@ describe('loadModel', () => {
     onProgress = vi.fn();
     onError = vi.fn();
 
-    // Reset and grab the mock loader
     mockLoader = new GLTFLoader();
     mockLoader.load = vi.fn();
     GLTFLoader.mockImplementation(() => mockLoader);
   });
 
   it('loads and adds model to scene', () => {
-    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+    loadModel(scene, camera, controls, testModelPath, onLoaded, onProgress, onError);
 
     expect(mockLoader.load).toHaveBeenCalled();
     const args = mockLoader.load.mock.calls[0];
@@ -50,7 +50,7 @@ describe('loadModel', () => {
     const modelPath = args[0];
     const onSuccess = args[1];
 
-    expect(modelPath).toBe('/models/rotatorCuff.glb');
+    expect(modelPath).toBe(testModelPath);
 
     // Simulate model loaded
     const dummyScene = new THREE.Group();
@@ -61,7 +61,7 @@ describe('loadModel', () => {
   });
 
   it('calls onProgress during load', () => {
-    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+    loadModel(scene, camera, controls, testModelPath, onLoaded, onProgress, onError);
 
     const args = mockLoader.load.mock.calls[0];
     const onProgressCallback = args[2];
@@ -73,7 +73,7 @@ describe('loadModel', () => {
   });
 
   it('calls onError when loading fails', () => {
-    loadModel(scene, camera, controls, onLoaded, onProgress, onError);
+    loadModel(scene, camera, controls, testModelPath, onLoaded, onProgress, onError);
 
     const args = mockLoader.load.mock.calls[0];
     const onErrorCallback = args[3];

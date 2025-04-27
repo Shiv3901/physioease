@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { log } from './utils.js';
-import { ROTATORCUFF_METADATA } from '../constants.js';
 
 export class InteractionHandler {
-  constructor(scene, camera, canvasElement, onClickCallback) {
+  constructor(scene, camera, canvasElement, metadata, onClickCallback) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvasElement;
+    this.metadata = metadata; // <-- NEW
+
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.currentHovered = null;
@@ -48,18 +49,15 @@ export class InteractionHandler {
       log('DEBUG', 'Click detected on', this.currentHovered.name || this.currentHovered.id);
 
       if (this.currentClicked === this.currentHovered) {
-        // Clicking the same object again → unselect
         this.setHighlight(this.currentClicked, 'restore');
         this.currentClicked = null;
         log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);
         this.updateSelectedInfo(null);
       } else {
-        // Clicking a new object → unselect old one
         if (this.currentClicked) {
           this.setHighlight(this.currentClicked, 'restore');
         }
 
-        // Set new clicked object
         this.currentClicked = this.currentHovered;
         this.setHighlight(this.currentClicked, 'click');
         log('DEBUG2', 'Selected:', this.currentClicked.name || this.currentClicked.id);
@@ -78,23 +76,21 @@ export class InteractionHandler {
   setHighlight(object, type) {
     if (!object || !object.material) return;
 
-    // Ensure material has emissive property
     if (!object.material.emissive) {
       console.warn(`Object ${object.name || object.id} has no emissive material.`);
       return;
     }
 
     if (type === 'hover') {
-      object.material.emissive.setHex(0x999900); // Medium yellow
+      object.material.emissive.setHex(0x999900);
       log('DEBUG2', `Highlight hover on ${object.name || object.id}`);
     } else if (type === 'click') {
-      object.material.emissive.setHex(0x009900); // Medium green
+      object.material.emissive.setHex(0x009900);
       log('DEBUG2', `Highlight click on ${object.name || object.id}`);
-      this.updateSelectedInfo(object); // <-- ONLY ON CLICK
+      this.updateSelectedInfo(object);
     } else if (type === 'restore') {
-      object.material.emissive.setHex(0x000000); // No glow
+      object.material.emissive.setHex(0x000000);
       log('DEBUG2', `Restore original color on ${object.name || object.id}`);
-      // NO updateSelectedInfo(null) here
     }
   }
 
@@ -129,12 +125,12 @@ export class InteractionHandler {
       const selectedName = object.name || object.id || 'Unnamed';
       log('DEBUG', `Updating selected info for: ${selectedName}`);
 
-      const infoText = ROTATORCUFF_METADATA.muscle_info[selectedName] || 'No info available.';
+      const infoText = this.metadata?.muscle_info[selectedName] || 'No info available.';
       this.selectedPopup.innerHTML = `<p>${infoText}</p>`;
       log('DEBUG2', `Displayed info text: ${infoText}`);
 
-      const videoData = ROTATORCUFF_METADATA.specific_videos;
-      if (videoData[selectedName]) {
+      const videoData = this.metadata?.specific_videos;
+      if (videoData && videoData[selectedName]) {
         this.selectedVideoLinks.innerHTML = `
           <a href="${videoData[selectedName].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
           <a href="${videoData[selectedName].rehab}" class="video-box" target="_blank">🛠️ Rehab Exercises</a>

@@ -25,7 +25,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">0/77</span>
+            <span class="fraction">0/78</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -43,7 +43,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">0/77</span>
+            <span class="fraction">0/78</span>
           </div>
         </div>
         <p class="quiet">
@@ -148,7 +148,9 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -167,20 +169,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -204,6 +192,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -224,7 +227,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -242,15 +244,16 @@
 <span class="cstat-no" title="statement not covered" >import { InteractionHandler } from '../components/interactionHandlers.js';</span>
 <span class="cstat-no" title="statement not covered" >import { setupVideoHandlers } from '../components/videoHandlers.js';</span>
 <span class="cstat-no" title="statement not covered" >import { updateDebugDimensions } from '../components/uiHelpers.js';</span>
-<span class="cstat-no" title="statement not covered" >import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';</span>
+<span class="cstat-no" title="statement not covered" >import { getViewerHTML } from '../templates/viewerTemplate.js';</span>
 <span class="cstat-no" title="statement not covered" >import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';</span>
 <span class="cstat-no" title="statement not covered" >import { log } from '../components/utils.js';</span>
-<span class="cstat-no" title="statement not covered" >import '../styles/rotatorcuff.css';</span>
+<span class="cstat-no" title="statement not covered" >import '../styles/viewer.css';</span>
+<span class="cstat-no" title="statement not covered" >import { ROTATORCUFF_METADATA } from '../constants.js';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >log('INFO', '🚀 PhysioEase 3D viewer loaded');</span>
+<span class="cstat-no" title="statement not covered" >log('INFO', '🚀 Rotator Cuff Model Loaded');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function loadRotatorCuff(app) {</span>
-<span class="cstat-no" title="statement not covered" >  app.innerHTML = getRotatorCuffHTML();</span>
+<span class="cstat-no" title="statement not covered" >  app.innerHTML = getViewerHTML();</span>
 <span class="cstat-no" title="statement not covered" >  mountLandscapeBlocker();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const modelContainer = document.getElementById('modelContainer');</span>
@@ -258,11 +261,11 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  modelContainer.appendChild(renderer.domElement);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  // Start loading model</span>
 <span class="cstat-no" title="statement not covered" >  loadModel(</span>
 <span class="cstat-no" title="statement not covered" >    scene,</span>
 <span class="cstat-no" title="statement not covered" >    camera,</span>
 <span class="cstat-no" title="statement not covered" >    controls,</span>
+<span class="cstat-no" title="statement not covered" >    'models/rotatorcuff.glb',</span>
 <span class="cstat-no" title="statement not covered" >    () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      document.getElementById('loadingScreen').style.display = 'none';</span>
 <span class="cstat-no" title="statement not covered" >    },</span>
@@ -290,9 +293,10 @@
 <span class="cstat-no" title="statement not covered" >    scene,</span>
 <span class="cstat-no" title="statement not covered" >    camera,</span>
 <span class="cstat-no" title="statement not covered" >    renderer.domElement,</span>
+<span class="cstat-no" title="statement not covered" >    ROTATORCUFF_METADATA,</span>
 <span class="cstat-no" title="statement not covered" >    (clickedObject) =&gt; {}</span>
 <span class="cstat-no" title="statement not covered" >  );</span>
-<span class="cstat-no" title="statement not covered" >  setupVideoHandlers();</span>
+<span class="cstat-no" title="statement not covered" >  setupVideoHandlers(ROTATORCUFF_METADATA);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  function animate() {</span>
 <span class="cstat-no" title="statement not covered" >    requestAnimationFrame(animate);</span>
@@ -313,7 +317,6 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  window.addEventListener('resize', handleResize);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  // Handle Back Home</span>
 <span class="cstat-no" title="statement not covered" >  document.getElementById('terminalHome')?.addEventListener('click', (e) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    e.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >    cancelAnimationFrame(animate);</span>
@@ -335,7 +338,7 @@
     <div class="footer quiet pad2 space-top1 center small">
       Code coverage generated by
       <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-      at 2025-04-27T13:29:19.187Z
+      at 2025-04-27T14:10:08.231Z
     </div>
     <script src="../../../prettify.js"></script>
     <script>

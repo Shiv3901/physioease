@@ -3,15 +3,16 @@ import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
 import { setupVideoHandlers } from '../components/videoHandlers.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
-import { getRotatorCuffHTML } from '../templates/rotatorcuffTemplate.js';
+import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
-import '../styles/rotatorcuff.css';
+import '../styles/viewer.css';
+import { ROTATORCUFF_METADATA } from '../constants.js';
 
-log('INFO', '🚀 PhysioEase 3D viewer loaded');
+log('INFO', '🚀 Rotator Cuff Model Loaded');
 
 export function loadRotatorCuff(app) {
-  app.innerHTML = getRotatorCuffHTML();
+  app.innerHTML = getViewerHTML();
   mountLandscapeBlocker();
 
   const modelContainer = document.getElementById('modelContainer');
@@ -19,11 +20,11 @@ export function loadRotatorCuff(app) {
 
   modelContainer.appendChild(renderer.domElement);
 
-  // Start loading model
   loadModel(
     scene,
     camera,
     controls,
+    'models/rotatorcuff.glb',
     () => {
       document.getElementById('loadingScreen').style.display = 'none';
     },
@@ -51,9 +52,10 @@ export function loadRotatorCuff(app) {
     scene,
     camera,
     renderer.domElement,
+    ROTATORCUFF_METADATA,
     (clickedObject) => {}
   );
-  setupVideoHandlers();
+  setupVideoHandlers(ROTATORCUFF_METADATA);
 
   function animate() {
     requestAnimationFrame(animate);
@@ -74,7 +76,6 @@ export function loadRotatorCuff(app) {
 
   window.addEventListener('resize', handleResize);
 
-  // Handle Back Home
   document.getElementById('terminalHome')?.addEventListener('click', (e) => {
     e.preventDefault();
     cancelAnimationFrame(animate);

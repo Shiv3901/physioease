@@ -23,9 +23,9 @@
         </h1>
         <div class="clearfix">
           <div class="fl pad1y space-right2">
-            <span class="strong">77.03% </span>
+            <span class="strong">77.69% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">104/135</span>
+            <span class="fraction">101/130</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -41,9 +41,9 @@
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">77.03% </span>
+            <span class="strong">77.69% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">104/135</span>
+            <span class="fraction">101/130</span>
           </div>
         </div>
         <p class="quiet">
@@ -214,12 +214,7 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -227,6 +222,8 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -272,14 +269,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -299,7 +293,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -312,7 +305,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -379,13 +371,14 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as THREE from 'three';
 import { log } from './utils.js';
-import { ROTATORCUFF_METADATA } from '../constants.js';
 &nbsp;
 export class InteractionHandler {
-  constructor(scene, camera, canvasElement, onClickCallback) {
+  constructor(scene, camera, canvasElement, metadata, onClickCallback) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvasElement;
+    this.metadata = metadata; // &lt;-- NEW
+&nbsp;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.currentHovered = null;
@@ -427,18 +420,15 @@ export class InteractionHandler {
       log('DEBUG', 'Click detected on', this.currentHovered.name <span class="branch-0 cbranch-no" title="branch not covered" >|| this.currentHovered.id)</span>;
 &nbsp;
       if (this.currentClicked === this.currentHovered) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >        // Clicking the same object again → unselect</span>
 <span class="cstat-no" title="statement not covered" >        this.setHighlight(this.currentClicked, 'restore');</span>
 <span class="cstat-no" title="statement not covered" >        this.currentClicked = null;</span>
 <span class="cstat-no" title="statement not covered" >        log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);</span>
 <span class="cstat-no" title="statement not covered" >        this.updateSelectedInfo(null);</span>
       } else {
-        // Clicking a new object → unselect old one
         if (this.currentClicked) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >          this.setHighlight(this.currentClicked, 'restore');</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 &nbsp;
-        // Set new clicked object
         this.currentClicked = this.currentHovered;
         this.setHighlight(this.currentClicked, 'click');
         log('DEBUG2', 'Selected:', this.currentClicked.name <span class="branch-0 cbranch-no" title="branch not covered" >|| this.currentClicked.id)</span>;
@@ -457,23 +447,21 @@ export class InteractionHandler {
   setHighlight(object, type) {
     if (!object || !object.material) <span class="branch-0 cbranch-no" title="branch not covered" >return;</span>
 &nbsp;
-    // Ensure material has emissive property
     if (!object.material.emissive) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      console.warn(`Object ${object.name || object.id} has no emissive material.`);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
     if (type === 'hover') {
-      object.material.emissive.setHex(0x999900); // Medium yellow
+      object.material.emissive.setHex(0x999900);
       log('DEBUG2', `Highlight hover on ${object.name <span class="branch-0 cbranch-no" title="branch not covered" >|| object.id}</span>`);
     } else if (type === 'click') {
-      object.material.emissive.setHex(0x009900); // Medium green
+      object.material.emissive.setHex(0x009900);
       log('DEBUG2', `Highlight click on ${object.name <span class="branch-0 cbranch-no" title="branch not covered" >|| object.id}</span>`);
-      this.updateSelectedInfo(object); // &lt;-- ONLY ON CLICK
+      this.updateSelectedInfo(object);
     }<span class="branch-0 cbranch-no" title="branch not covered" > else if (type === 'restore') {</span>
-<span class="cstat-no" title="statement not covered" >      object.material.emissive.setHex(0x000000); // No glow</span>
+<span class="cstat-no" title="statement not covered" >      object.material.emissive.setHex(0x000000);</span>
 <span class="cstat-no" title="statement not covered" >      log('DEBUG2', `Restore original color on ${object.name || object.id}`);</span>
-<span class="cstat-no" title="statement not covered" >      // NO updateSelectedInfo(null) here</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }
 &nbsp;
@@ -508,12 +496,12 @@ export class InteractionHandler {
       const selectedName = object.name <span class="branch-0 cbranch-no" title="branch not covered" >|| object.id <span class="branch-0 cbranch-no" title="branch not covered" ></span>|| 'Unnamed';</span>
       log('DEBUG', `Updating selected info for: ${selectedName}`);
 &nbsp;
-      const infoText = ROTATORCUFF_METADATA.muscle_info[selectedName] <span class="branch-0 cbranch-no" title="branch not covered" >|| 'No info available.';</span>
+      const infoText = this.metadata?.muscle_info[selectedName] <span class="branch-0 cbranch-no" title="branch not covered" >|| 'No info available.';</span>
       this.selectedPopup.innerHTML = `&lt;p&gt;${infoText}&lt;/p&gt;`;
       log('DEBUG2', `Displayed info text: ${infoText}`);
 &nbsp;
-      const videoData = ROTATORCUFF_METADATA.specific_videos;
-      if (videoData[selectedName]) {
+      const videoData = this.metadata?.specific_videos;
+      if (videoData &amp;&amp; videoData[selectedName]) {
         this.selectedVideoLinks.innerHTML = `
           &lt;a href="${videoData[selectedName].normal}" class="video-box" target="_blank"&gt;🎥 Normal Movement&lt;/a&gt;
           &lt;a href="${videoData[selectedName].rehab}" class="video-box" target="_blank"&gt;🛠️ Rehab Exercises&lt;/a&gt;
@@ -545,7 +533,7 @@ export class InteractionHandler {
     <div class="footer quiet pad2 space-top1 center small">
       Code coverage generated by
       <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-      at 2025-04-27T13:29:19.187Z
+      at 2025-04-27T14:10:08.231Z
     </div>
     <script src="../../../prettify.js"></script>
     <script>

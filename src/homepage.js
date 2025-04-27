@@ -11,7 +11,7 @@ export function loadHomepage(app) {
 
         <div class="viewer-links">
           <div class="terminal-link" id="launch-rotator">🎯 Rotator Cuff Viewer</div>
-          <div class="terminal-link disabled">🦶 Ankle Viewer (Coming Soon)</div>
+          <div class="terminal-link" id="launch-ankle">🦶 Ankle Viewer</div>
         </div>
 
         <div class="prompt-line">&gt; <span class="cursor">_</span></div>
@@ -96,11 +96,16 @@ export function loadHomepage(app) {
         51%, 100% { opacity: 0; }
       }
     `;
+
   document.head.appendChild(style);
 
-  // Click handler
   document.getElementById('launch-rotator')?.addEventListener('click', () => {
     history.pushState({}, '', '/rotatorcuff');
+    window.dispatchEvent(new Event('popstate'));
+  });
+
+  document.getElementById('launch-ankle')?.addEventListener('click', () => {
+    history.pushState({}, '', '/ankle');
     window.dispatchEvent(new Event('popstate'));
   });
 }

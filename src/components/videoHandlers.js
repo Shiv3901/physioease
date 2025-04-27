@@ -1,7 +1,6 @@
-import { updateDebugDimensions } from './uiHelpers';
-import * as constants from './../constants.js';
+import { updateDebugDimensions } from './uiHelpers.js';
 
-export function setupVideoHandlers() {
+export function setupVideoHandlers(metadata) {
   const videoLinks = document.getElementById('videoLinks');
   const exerciseVideo = document.getElementById('exerciseVideo');
   const videoSource = exerciseVideo.querySelector('source');
@@ -63,7 +62,7 @@ export function setupVideoHandlers() {
     updateDebugDimensions();
   });
 
-  const moreVideos = constants.ROTATORCUFF_METADATA.base_videos;
+  const moreVideos = metadata?.base_videos || [];
 
   moreVideos.forEach((video) => {
     const link = document.createElement('a');

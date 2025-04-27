@@ -1,39 +1,90 @@
-export function loadAnkle(app) {
-  app.innerHTML = `
-      <div class="coming-soon">
-        <h1>🦶 Ankle Viewer</h1>
-        <p>This module is coming soon. Stay tuned!</p>
-        <a href="/">← Back to Home</a>
-      </div>
-    `;
+import { setupViewer } from '../components/viewerSetup.js';
+import { loadModel } from '../components/modelLoader.js';
+import { InteractionHandler } from '../components/interactionHandlers.js';
+import { setupVideoHandlers } from '../components/videoHandlers.js';
+import { updateDebugDimensions } from '../components/uiHelpers.js';
+import { getViewerHTML } from '../templates/viewerTemplate.js';
+import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
+import { log } from '../components/utils.js';
+import '../styles/viewer.css';
+import { ANKLE_METADATA } from '../constants.js';
 
-  const style = document.createElement('style');
-  style.innerHTML = `
-      .coming-soon {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        height: 100vh;
-        font-family: sans-serif;
+log('INFO', '🚀 Ankle Model Loaded');
+
+export function loadAnkle(app) {
+  app.innerHTML = getViewerHTML();
+  mountLandscapeBlocker();
+
+  const modelContainer = document.getElementById('modelContainer');
+  const { scene, camera, renderer, controls } = setupViewer(modelContainer);
+
+  modelContainer.appendChild(renderer.domElement);
+
+  loadModel(
+    scene,
+    camera,
+    controls,
+    'models/ankle.glb',
+    () => {
+      document.getElementById('loadingScreen').style.display = 'none';
+    },
+    (xhr) => {
+      const percent = (xhr.loaded / xhr.total) * 100;
+      const rounded = percent.toFixed(0);
+      const bar = document.getElementById('asciiBar');
+      const label = document.getElementById('loadingPercent');
+
+      if (bar && label) {
+        const totalBlocks = 10;
+        const filled = Math.round((rounded / 100) * totalBlocks);
+        const empty = totalBlocks - filled;
+        bar.textContent = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
+        label.textContent = `${rounded}%`;
       }
-  
-      .coming-soon h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-      }
-  
-      .coming-soon a {
-        margin-top: 1rem;
-        text-decoration: none;
-        color: #0070f3;
-        font-weight: bold;
-      }
-  
-      .coming-soon a:hover {
-        text-decoration: underline;
-      }
-    `;
-  document.head.appendChild(style);
+    },
+    (error) => {
+      console.error('❌ Failed to load ankle model:', error);
+      document.getElementById('loadingScreen').innerHTML = '❌ Failed to load ankle model.';
+    }
+  );
+
+  const interactionHandler = new InteractionHandler(
+    scene,
+    camera,
+    renderer.domElement,
+    ANKLE_METADATA,
+    (clickedObject) => {}
+  );
+  setupVideoHandlers(ANKLE_METADATA);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    interactionHandler.update();
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  function handleResize() {
+    const width = modelContainer.clientWidth;
+    const height = modelContainer.clientHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+    updateDebugDimensions();
+  }
+
+  window.addEventListener('resize', handleResize);
+
+  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    cancelAnimationFrame(animate);
+    renderer.dispose();
+    renderer.domElement.remove();
+    window.removeEventListener('resize', handleResize);
+    history.pushState({}, '', '/');
+    window.dispatchEvent(new Event('popstate'));
+  });
+
+  updateDebugDimensions();
 }

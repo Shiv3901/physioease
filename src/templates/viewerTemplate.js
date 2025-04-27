@@ -1,4 +1,4 @@
-export function getRotatorCuffHTML() {
+export function getViewerHTML() {
   return `
     <div id="viewerArea">
       <div id="modelContainer">

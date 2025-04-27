@@ -1,7 +1,7 @@
+// TODO: refactor this file a bit, it's a bit messy
 export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;
 
-// TODO: modify this later on
 export const ROTATORCUFF_METADATA = {
   specific_videos: {
     Supraspinatus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
@@ -26,4 +26,24 @@ export const ROTATORCUFF_METADATA = {
   },
 };
 
-export const LOG_LEVEL = 'DEBUG2'; // Choose between: 'INFO', 'DEBUG', 'DEBUG2'
+export const ANKLE_METADATA = {
+  specific_videos: {
+    TibialisAnterior: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
+    Gastrocnemius: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
+    Soleus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
+    PeroneusLongus: { normal: '/videos/demo.mp4', rehab: '/videos/demo.mp4' },
+  },
+  base_videos: [
+    { title: '📖 Introduction', src: '/videos/ankle-introduction.mp4' },
+    { title: '🧠 Extended Version', src: '/videos/ankle-extended.mp4' },
+    { title: '🛠️ Rehab', src: '/videos/ankle-rehab.mp4' },
+  ],
+  muscle_info: {
+    TibialisAnterior: 'The tibialis anterior dorsiflexes the foot.',
+    Gastrocnemius: 'The gastrocnemius plantarflexes the foot.',
+    Soleus: 'The soleus assists with plantarflexion.',
+    PeroneusLongus: 'The peroneus longus everts the foot.',
+  },
+};
+
+export const LOG_LEVEL = 'INFO'; // Choose between: 'INFO', 'DEBUG', 'DEBUG2'
