@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -20,6 +19,25 @@ export default defineConfig({
           }
         },
       },
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    threads: false,
+    isolate: false,
+    watch: true,
+    deps: {
+      optimizer: {
+        web: {
+          include: ['src'],
+          exclude: ['three'],
+        },
+      },
+    },
+    coverage: {
+      reporter: ['text', 'html'],
+      enabled: true,
     },
   },
 });
