@@ -24,7 +24,7 @@ export function loadRotatorCuff(app) {
     scene,
     camera,
     controls,
-    'models/rotatorcuff.glb',
+    './models/rotatorcuff.glb',
     () => {
       document.getElementById('loadingScreen').style.display = 'none';
     },
