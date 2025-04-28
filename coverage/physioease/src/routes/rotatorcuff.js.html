@@ -25,7 +25,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">0/78</span>
+            <span class="fraction">0/88</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -43,7 +43,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">0/78</span>
+            <span class="fraction">0/88</span>
           </div>
         </div>
         <p class="quiet">
@@ -149,7 +149,16 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -184,7 +193,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -270,14 +288,23 @@
 <span class="cstat-no" title="statement not covered" >      document.getElementById('loadingScreen').style.display = 'none';</span>
 <span class="cstat-no" title="statement not covered" >    },</span>
 <span class="cstat-no" title="statement not covered" >    (xhr) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const percent = (xhr.loaded / xhr.total) * 100;</span>
+<span class="cstat-no" title="statement not covered" >      const total = xhr.total;</span>
+<span class="cstat-no" title="statement not covered" >      const loaded = xhr.loaded;</span>
+<span class="cstat-no" title="statement not covered" >      </span>
+<span class="cstat-no" title="statement not covered" >      // Guard against bad totals</span>
+<span class="cstat-no" title="statement not covered" >      if (!total || total &lt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >        console.warn('⚠️ Warning: Invalid total size during model loading.', xhr);</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      </span>
+<span class="cstat-no" title="statement not covered" >      const percent = (loaded / total) * 100;</span>
 <span class="cstat-no" title="statement not covered" >      const rounded = percent.toFixed(0);</span>
 <span class="cstat-no" title="statement not covered" >      const bar = document.getElementById('asciiBar');</span>
 <span class="cstat-no" title="statement not covered" >      const label = document.getElementById('loadingPercent');</span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" >    </span>
 <span class="cstat-no" title="statement not covered" >      if (bar &amp;&amp; label) {</span>
 <span class="cstat-no" title="statement not covered" >        const totalBlocks = 10;</span>
-<span class="cstat-no" title="statement not covered" >        const filled = Math.round((rounded / 100) * totalBlocks);</span>
+<span class="cstat-no" title="statement not covered" >        const filled = Math.max(0, Math.round((percent / 100) * totalBlocks)); // Make sure no negatives</span>
 <span class="cstat-no" title="statement not covered" >        const empty = totalBlocks - filled;</span>
 <span class="cstat-no" title="statement not covered" >        bar.textContent = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;</span>
 <span class="cstat-no" title="statement not covered" >        label.textContent = `${rounded}%`;</span>
@@ -338,7 +365,7 @@
     <div class="footer quiet pad2 space-top1 center small">
       Code coverage generated by
       <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-      at 2025-04-28T07:34:54.291Z
+      at 2025-04-28T07:40:06.824Z
     </div>
     <script src="../../../prettify.js"></script>
     <script>

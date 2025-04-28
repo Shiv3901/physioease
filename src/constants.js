@@ -46,4 +46,4 @@ export const ANKLE_METADATA = {
   },
 };
 
-export const LOG_LEVEL = 'INFO'; // Choose between: 'INFO', 'DEBUG', 'DEBUG2'
+export const LOG_LEVEL = 'DEBUG2'; // Choose between: 'INFO', 'DEBUG', 'DEBUG2'

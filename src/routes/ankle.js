@@ -29,14 +29,22 @@ export function loadAnkle(app) {
       document.getElementById('loadingScreen').style.display = 'none';
     },
     (xhr) => {
-      const percent = (xhr.loaded / xhr.total) * 100;
+      const total = xhr.total;
+      const loaded = xhr.loaded;
+
+      if (!total || total <= 0) {
+        console.warn('⚠️ Warning: Invalid or missing total size during ankle model loading.', xhr);
+        return;
+      }
+
+      const percent = (loaded / total) * 100;
       const rounded = percent.toFixed(0);
       const bar = document.getElementById('asciiBar');
       const label = document.getElementById('loadingPercent');
 
       if (bar && label) {
         const totalBlocks = 10;
-        const filled = Math.round((rounded / 100) * totalBlocks);
+        const filled = Math.max(0, Math.round((percent / 100) * totalBlocks));
         const empty = totalBlocks - filled;
         bar.textContent = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
         label.textContent = `${rounded}%`;
