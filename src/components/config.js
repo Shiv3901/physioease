@@ -2,12 +2,12 @@ const isBrowser = typeof window !== 'undefined';
 const isDev = isBrowser && window.location.hostname === 'localhost';
 
 const VIDEO_BASE_URL = isDev
-  ? '/videos/'
-  : 'https://pub-f86f88e970454b81a8721bf2b7655644.r2.dev/videos/';
+  ? './videos/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev//videos/';
 
 const MODEL_BASE_URL = isDev
-  ? '/models/'
-  : 'https://pub-f86f88e970454b81a8721bf2b7655644.r2.dev/models/';
+  ? './models/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev//models/';
 
 // Helper functions
 const video = (filename) => VIDEO_BASE_URL + filename;
