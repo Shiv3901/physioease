@@ -1,4 +1,4 @@
-import { LOG_LEVEL } from '../constants.js';
+import { LOG_LEVEL } from './config.js';
 
 export function log(level, ...args) {
   const levels = {

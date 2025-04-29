@@ -6,8 +6,8 @@ import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
+import { ROTATORCUFF_METADATA } from '../components/config.js';
 import '../styles/viewer.css';
-import { ROTATORCUFF_METADATA } from '../constants.js';
 
 log('INFO', '🚀 Rotator Cuff Model Loaded');
 
@@ -24,7 +24,7 @@ export function loadRotatorCuff(app) {
     scene,
     camera,
     controls,
-    './models/rotatorcuff-compressed.glb',
+    ROTATORCUFF_METADATA.base_model,
     () => {
       document.getElementById('loadingScreen').style.display = 'none';
     },

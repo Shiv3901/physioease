@@ -6,8 +6,8 @@ import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
+import { ANKLE_METADATA } from '../components/config.js';
 import '../styles/viewer.css';
-import { ANKLE_METADATA } from '../constants.js';
 
 log('INFO', '🚀 Ankle Model Loaded');
 
@@ -24,7 +24,7 @@ export function loadAnkle(app) {
     scene,
     camera,
     controls,
-    './models/ankle-compressed.glb',
+    ANKLE_METADATA.base_model,
     () => {
       document.getElementById('loadingScreen').style.display = 'none';
     },

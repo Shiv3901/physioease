@@ -1,4 +1,4 @@
-import * as constants from './../constants.js';
+import { MOBILE_BREAKPOINT } from './config.js';
 import { log } from './utils.js';
 
 export function updateDebugDimensions() {
@@ -16,7 +16,7 @@ export function updateDebugDimensions() {
   const { clientWidth: modelW = 0, clientHeight: modelH = 0 } = modelContainer || {};
   const { clientWidth: videoW = 0, clientHeight: videoH = 0 } = videoArea || {};
 
-  const isBottomView = screenW <= constants.MOBILE_BREAKPOINT;
+  const isBottomView = screenW <= MOBILE_BREAKPOINT;
   const layoutType = isBottomView ? 'Column' : 'Row';
 
   log(
