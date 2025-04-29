@@ -1,17 +1,19 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
 import { loadModel } from '../../src/components/modelLoader';
 
+// Mock the logging utility
 vi.mock('../../src/components/utils', () => ({
   log: vi.fn(),
 }));
 
+// Mock the GLTFLoader
 vi.mock('three/examples/jsm/loaders/GLTFLoader.js', () => {
   return {
     GLTFLoader: vi.fn().mockImplementation(() => ({
       load: vi.fn(),
+      setMeshoptDecoder: vi.fn(), // <--- Important: Add this line
     })),
   };
 });
@@ -19,7 +21,7 @@ vi.mock('three/examples/jsm/loaders/GLTFLoader.js', () => {
 describe('loadModel', () => {
   let scene, camera, controls, onLoaded, onProgress, onError;
   let mockLoader;
-  const testModelPath = '/models/testModel.glb'; // 🔥 you pick any fake model path here
+  const testModelPath = '/models/testModel.glb';
 
   beforeEach(() => {
     scene = { add: vi.fn() };
@@ -44,6 +46,10 @@ describe('loadModel', () => {
   it('loads and adds model to scene', () => {
     loadModel(scene, camera, controls, testModelPath, onLoaded, onProgress, onError);
 
+    // Check if setMeshoptDecoder was called
+    expect(mockLoader.setMeshoptDecoder).toHaveBeenCalled();
+
+    // Check if loader.load was called
     expect(mockLoader.load).toHaveBeenCalled();
     const args = mockLoader.load.mock.calls[0];
 
@@ -52,7 +58,7 @@ describe('loadModel', () => {
 
     expect(modelPath).toBe(testModelPath);
 
-    // Simulate model loaded
+    // Simulate successful load
     const dummyScene = new THREE.Group();
     onSuccess({ scene: dummyScene });
 

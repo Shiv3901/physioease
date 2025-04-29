@@ -24,7 +24,7 @@ export function loadAnkle(app) {
     scene,
     camera,
     controls,
-    './models/ankle.glb',
+    './models/ankle-compressed.glb',
     () => {
       document.getElementById('loadingScreen').style.display = 'none';
     },

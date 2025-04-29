@@ -1,4 +1,5 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import * as THREE from 'three';
 import { log } from './utils.js';
 
@@ -31,6 +32,7 @@ export function loadModel(
   onError = (err) => log('ERROR', err)
 ) {
   const loader = new GLTFLoader();
+  loader.setMeshoptDecoder(MeshoptDecoder);
 
   log('INFO', `Starting to load model from ${modelPath}.`);
 
