@@ -3,13 +3,12 @@ const isDev = isBrowser && window.location.hostname === 'localhost';
 
 const VIDEO_BASE_URL = isDev
   ? './videos/'
-  : 'https://re-cors-proxy.physioeaseau.workers.dev//videos/';
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/videos/';
 
 const MODEL_BASE_URL = isDev
   ? './models/'
-  : 'https://re-cors-proxy.physioeaseau.workers.dev//models/';
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/models/';
 
-// Helper functions
 const video = (filename) => VIDEO_BASE_URL + filename;
 const model = (filename) => MODEL_BASE_URL + filename;
 
