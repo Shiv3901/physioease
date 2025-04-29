@@ -45,7 +45,10 @@ export function loadRotatorCuff(app) {
 
       if (bar && label) {
         const totalBlocks = 10;
-        const filled = Math.max(0, Math.round((percent / 100) * totalBlocks)); // Make sure no negatives
+        const filled = Math.min(
+          totalBlocks,
+          Math.max(0, Math.round((percent / 100) * totalBlocks))
+        );
         const empty = totalBlocks - filled;
         bar.textContent = `[${'█'.repeat(filled)}${'-'.repeat(empty)}]`;
         label.textContent = `${rounded}%`;
