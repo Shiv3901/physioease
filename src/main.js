@@ -16,6 +16,12 @@ function route() {
   } else {
     app.innerHTML = '<h1>404 Not Found</h1>';
   }
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'pageview',
+    page_path: path,
+  });
 }
 
 window.addEventListener('DOMContentLoaded', route);
