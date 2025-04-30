@@ -25,7 +25,7 @@ export const ROTATORCUFF_METADATA = {
     Humerus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
   },
   base_videos: [
-    { title: '📖 Introduction', src: video('rotatorcuff-introduction.mp4') },
+    { title: '📖 Introduction', src: video('rotatorcuff_demo.mp4') },
     { title: '🧠 Extended Version', src: video('rotatorcuff-extended.mp4') },
     { title: '🛠️ Rehab', src: video('rotatorcuff-rehab.mp4') },
   ],
@@ -49,7 +49,7 @@ export const ANKLE_METADATA = {
     PeroneusLongus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
   },
   base_videos: [
-    { title: '📖 Introduction', src: video('ankle-introduction.mp4') },
+    { title: '📖 Introduction', src: video('ankle_demo.mp4') },
     { title: '🧠 Extended Version', src: video('ankle-extended.mp4') },
     { title: '🛠️ Rehab', src: video('ankle-rehab.mp4') },
   ],
