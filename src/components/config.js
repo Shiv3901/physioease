@@ -18,11 +18,11 @@ export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
 export const ROTATORCUFF_METADATA = {
   specific_videos: {
-    Supraspinatus: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    Infraspinatus: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    Subscapularis: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    TeresMinor: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    Humerus: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
+    Supraspinatus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
+    Infraspinatus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
+    Subscapularis: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
+    TeresMinor: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
+    Humerus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
   },
   base_videos: [
     { title: '📖 Introduction', src: video('rotatorcuff-introduction.mp4') },
@@ -43,10 +43,10 @@ export const ROTATORCUFF_METADATA = {
 
 export const ANKLE_METADATA = {
   specific_videos: {
-    TibialisAnterior: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    Gastrocnemius: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    Soleus: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
-    PeroneusLongus: { normal: video('demo.mp4'), rehab: video('demo.mp4') },
+    TibialisAnterior: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
+    Gastrocnemius: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
+    Soleus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
+    PeroneusLongus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
   },
   base_videos: [
     { title: '📖 Introduction', src: video('ankle-introduction.mp4') },
