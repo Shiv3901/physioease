@@ -122,7 +122,7 @@ describe('InteractionHandler', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(document.getElementById('selectedLabel').textContent).toContain('Selected: MuscleA');
+    expect(document.getElementById('selectedLabel').textContent).toContain('Selected: Muscle A');
     expect(document.getElementById('popup').innerHTML).toContain('Test muscle info');
     expect(document.getElementById('videoLinks').innerHTML).toContain('🎥 Normal Movement');
   });

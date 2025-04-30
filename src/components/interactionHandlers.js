@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import _ from 'lodash';
 import { log } from './utils.js';
 
 export class InteractionHandler {
@@ -123,7 +124,7 @@ export class InteractionHandler {
   updateSelectedInfo(object) {
     if (object) {
       const selectedName = object.name || object.id || 'Unnamed';
-      log('DEBUG', `Updating selected info for: ${selectedName}`);
+      const formattedName = _.startCase(selectedName);
 
       const infoText = this.metadata?.muscle_info[selectedName] || 'No info available.';
       this.selectedPopup.innerHTML = `<p>${infoText}</p>`;
@@ -144,7 +145,7 @@ export class InteractionHandler {
 
       this.selectedPopup.appendChild(this.selectedVideoLinks);
       this.selectedPopup.style.display = 'block';
-      this.selectedLabel.textContent = `🧠 Selected: ${selectedName}`;
+      this.selectedLabel.textContent = `🧠 Selected: ${formattedName}`;
     } else {
       log('DEBUG', 'Clearing selected info (no object or unselected).');
       this.selectedLabel.textContent = '🧠 Selected: None';
