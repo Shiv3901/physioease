@@ -8,6 +8,7 @@ export function setupVideoHandlers(metadata) {
   const modelContainer = document.getElementById('modelContainer');
   const closeVideoBtn = document.getElementById('closeVideoBtn');
 
+  const moreVideosContainer = document.getElementById('moreVideosContainer');
   const moreVideosBtn = document.getElementById('moreVideosBtn');
   const moreVideosPane = document.getElementById('moreVideosPane');
 
@@ -44,6 +45,7 @@ export function setupVideoHandlers(metadata) {
       exerciseVideo.load();
       exerciseVideo.muted = true;
       adjustLayoutForVideo();
+      moreVideosContainer.style.display = 'none';
       window.dispatchEvent(new Event('resize'));
       updateDebugDimensions();
     }
@@ -57,6 +59,8 @@ export function setupVideoHandlers(metadata) {
 
     modelContainer.style.width = '100%';
     modelContainer.style.height = '100%';
+
+    moreVideosContainer.style.display = 'block';
 
     window.dispatchEvent(new Event('resize'));
     updateDebugDimensions();
@@ -82,6 +86,7 @@ export function setupVideoHandlers(metadata) {
       exerciseVideo.load();
       exerciseVideo.muted = true;
       adjustLayoutForVideo();
+      moreVideosContainer.style.display = 'none';
       window.dispatchEvent(new Event('resize'));
       updateDebugDimensions();
     }
