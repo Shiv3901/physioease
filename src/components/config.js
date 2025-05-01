@@ -17,170 +17,256 @@ export const DEBUG_MODE = true;
 export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
 export const ROTATORCUFF_METADATA = {
-  specific_videos: {
-    Supraspinatus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
-    Infraspinatus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
-    Subscapularis: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
-    TeresMinor: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
-    Humerus: { normal: video('rotatorcuff_demo.mp4'), rehab: video('rotatorcuff_demo.mp4') },
-  },
-  base_videos: [
-    { title: '📖 Introduction', src: video('rotatorcuff_demo.mp4') },
-    { title: '🧠 Extended Version', src: video('rotatorcuff-extended.mp4') },
-    { title: '🛠️ Rehab', src: video('rotatorcuff-rehab.mp4') },
-  ],
   base_model: model('rotatorcuff-compressed.glb'),
-  muscle_info: {
-    Supraspinatus: 'The supraspinatus helps shoulder abduction.',
-    Infraspinatus: 'The infraspinatus externally rotates the shoulder.',
-    Subscapularis: 'The subscapularis internally rotates the arm.',
-    TeresMinor: 'The teres minor assists with external rotation.',
-    Humerus: 'The humerus connects the shoulder to elbow.',
-    Clavicle: 'The clavicle connects arm to body and stabilizes shoulder.',
-    Scapula: 'The scapula stabilizes and moves the shoulder.',
+
+  // === GENERAL VIDEO CATEGORIES (used for "More Videos" section) ===
+  base_videos: {
+    intro: {
+      title: '📖 Introduction',
+      src: video('rotatorcuff_demo.mp4'),
+    },
+    movements: {
+      title: '🏃 Movements',
+      videos: {
+        abduction: {
+          title: '🦴 Ab/Adduction',
+          src: video('rotatorcuff_ab_adduction.mp4'),
+        },
+        flexion: {
+          title: '🦾 Flex/Extend',
+          src: video('rotatorcuff_flex_extend.mp4'),
+        },
+        horizontal: {
+          title: '↔️ Horiz Ab/Ad',
+          src: video('rotatorcuff_horizontal_ab_ad.mp4'),
+        },
+        hanging: {
+          title: '🔁 Hanging Arm',
+          src: video('rotatorcuff_rotation_down.mp4'),
+        },
+        raised: {
+          title: '🔄 Raised Arm',
+          src: video('rotatorcuff_rotation_up.mp4'),
+        },
+      },
+    },
+    extended: {
+      title: '🧠 Extended Version',
+      src: video('rotatorcuff-extended.mp4'),
+    },
+    rehab: {
+      title: '🛠️ Rehab Exercises',
+      src: video('rotatorcuff-rehab.mp4'),
+    },
+  },
+
+  // === STRUCTURE-SPECIFIC INFO (used for label popup + video buttons) ===
+  specific_videos: {
+    Supraspinatus: {
+      info: 'The supraspinatus helps shoulder abduction.',
+      normal: {
+        title: '👥 Normal Movement',
+        src: video('supraspinatus_normal.mp4'),
+      },
+      rehab: {
+        title: '🛠️ Rehab Exercises',
+        src: video('supraspinatus_rehab.mp4'),
+      },
+    },
+    Infraspinatus: {
+      info: 'The infraspinatus externally rotates the shoulder.',
+      normal: {
+        title: '👥 Normal Movement',
+        src: video('infraspinatus_normal.mp4'),
+      },
+    },
+    Subscapularis: {
+      info: 'The subscapularis internally rotates the arm.',
+      normal: {
+        title: '👥 Normal Movement',
+        src: video('subscapularis_normal.mp4'),
+      },
+      rehab: {
+        title: '🛠️ Rehab Exercises',
+        src: video('subscapularis_rehab.mp4'),
+      },
+    },
+    TeresMinor: {
+      info: 'The teres minor assists with external rotation.',
+      normal: {
+        title: '👥 Normal Movement',
+        src: video('teresminor_normal.mp4'),
+      },
+    },
+    Humerus: {
+      info: 'The humerus connects the shoulder to elbow.',
+      normal: {
+        title: '🦴 Bone Articulation',
+        src: video('humerus_articulation.mp4'),
+      },
+    },
+    Clavicle: {
+      info: 'The clavicle connects arm to body and stabilizes shoulder.',
+    },
+    Scapula: {
+      info: 'The scapula stabilizes and moves the shoulder.',
+    },
   },
 };
 
 export const ANKLE_METADATA = {
+  base_model: model('ankle-compressed.glb'),
+  base_videos: {
+    intro: { title: '📖 Introduction', src: video('ankle_demo.mp4') },
+    movements: {
+      title: '🏃 Movements',
+      videos: {
+        dorsiflexion: { title: '⬆️ Dorsiflexion', src: video('ankle_dorsiflexion.mp4') },
+        plantarflexion: { title: '⬇️ Plantarflexion', src: video('ankle_plantarflexion.mp4') },
+        eversion: { title: '↔️ Eversion', src: video('ankle_eversion.mp4') },
+        inversion: { title: '↕️ Inversion', src: video('ankle_inversion.mp4') },
+      },
+    },
+    extended: { title: '🧠 Extended Version', src: video('ankle-extended.mp4') },
+    rehab: { title: '🛠️ Rehab', src: video('ankle-rehab.mp4') },
+  },
   specific_videos: {
-    TibialisAnterior: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Gastrocnemius: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Soleus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    PeroneusLongus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
+    TibialisAnterior: {
+      info: 'The tibialis anterior dorsiflexes the foot.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
+    Gastrocnemius: {
+      info: 'The gastrocnemius plantarflexes the foot.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
+    Soleus: {
+      info: 'The soleus assists with plantarflexion.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
+    PeroneusLongus: {
+      info: 'The peroneus longus everts the foot.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
     AnteriorTalofibularLigament: {
-      normal: video('ankle_demo.mp4'),
-      rehab: video('ankle_demo.mp4'),
+      info: 'Connects the fibula to the talus; prevents excessive forward displacement of the foot and is commonly injured in ankle sprains.',
+      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
     },
     AnteriorTibiofibularLigament: {
-      normal: video('ankle_demo.mp4'),
-      rehab: video('ankle_demo.mp4'),
+      info: 'Stabilizes the distal tibiofibular joint, maintaining the integrity of the ankle mortise.',
     },
-    CalcaneofibularLigament: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Calcaneus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DeltoidLigament: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DeltoidLigament001: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DeltoidLigament002: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DeltoidLigament003: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DistalPhalanxOfBigToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DistalPhalanxOfFifthToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DistalPhalanxOfFourthToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DistalPhalanxOfSecondToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    DistalPhalanxOfThirdToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Fibula: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    FifthMetatarsal: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    FirstMetatarsal: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    FourthMetatarsal: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    IntermediateCuneiform: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    InterosseousMembraneOfLeg: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    LateralCuneiform: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    MedialCuneiform: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    MiddlePhalanxOfFourthToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    MiddlePhalanxOfSecondToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    MiddlePhalanxOfThirdToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Navicular: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
+    CalcaneofibularLigament: {
+      info: 'Connects the fibula to the calcaneus; resists excessive inversion of the foot.',
+      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
+    },
+    Calcaneus: {
+      info: 'The heel bone; supports body weight and serves as the attachment point for the Achilles tendon.',
+      diagnostic: { title: '🔬 Diagnostic View', src: video('ankle_diagnostic.mp4') },
+    },
+    DeltoidLigament: {
+      info: 'A strong, triangular ligament on the medial side of the ankle that prevents over-eversion.',
+      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
+    },
+    DeltoidLigament001: {
+      info: 'Component of the deltoid ligament complex contributing to ankle joint stability.',
+    },
+    DeltoidLigament002: {
+      info: 'Part of the deltoid ligament complex; provides medial ankle support.',
+    },
+    DeltoidLigament003: {
+      info: 'Medial ligamentous fiber reinforcing the ankle joint capsule.',
+    },
+    DistalPhalanxOfBigToe: {
+      info: 'The tip bone of the big toe; essential for balance and propulsion.',
+    },
+    DistalPhalanxOfFifthToe: {
+      info: 'The terminal bone of the smallest toe; supports lateral balance.',
+    },
+    DistalPhalanxOfFourthToe: {
+      info: 'The furthest bone of the fourth toe, aiding toe function.',
+    },
+    DistalPhalanxOfSecondToe: {
+      info: 'The tip of the second toe, assisting in toe-off during gait.',
+    },
+    DistalPhalanxOfThirdToe: {
+      info: 'The distal bone of the third toe, helping in foot push-off.',
+    },
+    Fibula: {
+      info: 'The slender lateral bone of the lower leg; contributes to ankle stability.',
+    },
+    FifthMetatarsal: {
+      info: 'The long bone of the foot connecting to the fifth toe; stabilizes lateral foot.',
+    },
+    FirstMetatarsal: {
+      info: 'Primary metatarsal connected to the big toe; important for push-off.',
+    },
+    FourthMetatarsal: {
+      info: 'Foot bone that connects to the fourth toe and supports midfoot structure.',
+    },
+    IntermediateCuneiform: {
+      info: 'A wedge-shaped bone in the midfoot that articulates with the second metatarsal.',
+    },
+    InterosseousMembraneOfLeg: {
+      info: 'A fibrous sheet connecting the tibia and fibula; separates muscle compartments.',
+    },
+    LateralCuneiform: {
+      info: 'Midfoot bone that connects to the third metatarsal and helps form the arch.',
+    },
+    MedialCuneiform: {
+      info: 'Articulates with the first metatarsal; supports the medial arch of the foot.',
+    },
+    MiddlePhalanxOfFourthToe: {
+      info: 'Middle segment of the fourth toe, enabling flexibility.',
+    },
+    MiddlePhalanxOfSecondToe: {
+      info: 'Intermediate bone of the second toe for joint mobility.',
+    },
+    MiddlePhalanxOfThirdToe: {
+      info: 'The center bone of the third toe, aiding movement.',
+    },
+    Navicular: {
+      info: 'A boat-shaped bone on the medial foot that links the talus and cuneiforms.',
+      diagnostic: { title: '🔬 Diagnostic View', src: video('ankle_diagnostic.mp4') },
+    },
     PosteriorTalofibularLigament: {
-      normal: video('ankle_demo.mp4'),
-      rehab: video('ankle_demo.mp4'),
+      info: 'Connects the fibula to the talus at the rear; prevents backward ankle displacement.',
     },
     PosteriorTibiofibularLigament: {
-      normal: video('ankle_demo.mp4'),
-      rehab: video('ankle_demo.mp4'),
+      info: 'Supports the connection between the tibia and fibula posteriorly.',
     },
     PosteriorTibiofibularLigament_001: {
-      normal: video('ankle_demo.mp4'),
-      rehab: video('ankle_demo.mp4'),
+      info: 'Additional posterior fibers stabilizing the tibiofibular joint.',
     },
-    ProximalPhalanxOfBigToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    ProximalPhalanxOfFifthToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    ProximalPhalanxOfFourthToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    ProximalPhalanxOfSecondToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    ProximalPhalanxOfThirdToe: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    RightCuboid: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    SecondMetatarsal: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Talus: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    ThirdMetatarsal: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-    Tibia: { normal: video('ankle_demo.mp4'), rehab: video('ankle_demo.mp4') },
-  },
-  base_videos: [
-    { title: '📖 Introduction', src: video('ankle_demo.mp4') },
-    { title: '🧠 Extended Version', src: video('ankle-extended.mp4') },
-    { title: '🛠️ Rehab', src: video('ankle-rehab.mp4') },
-  ],
-  base_model: model('ankle-compressed.glb'),
-  muscle_info: {
-    TibialisAnterior: 'The tibialis anterior dorsiflexes the foot.',
-    Gastrocnemius: 'The gastrocnemius plantarflexes the foot.',
-    Soleus: 'The soleus assists with plantarflexion.',
-    PeroneusLongus: 'The peroneus longus everts the foot.',
-    AnteriorTalofibularLigament:
-      'Connects the fibula to the talus; prevents excessive forward displacement of the foot and is commonly injured in ankle sprains.',
-    AnteriorTibiofibularLigament:
-      'Stabilizes the distal tibiofibular joint, maintaining the integrity of the ankle mortise.',
-    CalcaneofibularLigament:
-      'Connects the fibula to the calcaneus; resists excessive inversion of the foot.',
-    Calcaneus:
-      'The heel bone; supports body weight and serves as the attachment point for the Achilles tendon.',
-    DeltoidLigament:
-      'A strong, triangular ligament on the medial side of the ankle; prevents excessive eversion of the foot.',
-    DeltoidLigament001:
-      'Part of the deltoid ligament complex; contributes to medial ankle stability.',
-    DeltoidLigament002:
-      'Part of the deltoid ligament complex; contributes to medial ankle stability.',
-    DeltoidLigament003:
-      'Part of the deltoid ligament complex; contributes to medial ankle stability.',
-    DistalPhalanxOfBigToe:
-      'The terminal bone of the big toe; essential for balance and propulsion during walking.',
-    DistalPhalanxOfFifthToe:
-      'The terminal bone of the little toe; aids in balance and lateral foot stability.',
-    DistalPhalanxOfFourthToe: 'The terminal bone of the fourth toe; contributes to foot balance.',
-    DistalPhalanxOfSecondToe:
-      'The terminal bone of the second toe; assists in foot balance and propulsion.',
-    DistalPhalanxOfThirdToe: 'The terminal bone of the third toe; plays a role in foot balance.',
-    Fibula:
-      'The lateral bone of the lower leg; provides lateral stability to the ankle and serves as an attachment point for muscles.',
-    FifthMetatarsal: 'Connects the midfoot to the fifth toe; important for lateral foot stability.',
-    FirstMetatarsal:
-      'Connects the midfoot to the big toe; crucial for weight-bearing and propulsion.',
-    FourthMetatarsal: 'Connects the midfoot to the fourth toe; aids in foot stability.',
-    IntermediateCuneiform:
-      'A tarsal bone that articulates with the second metatarsal; helps maintain the transverse arch of the foot.',
-    InterosseousMembraneOfLeg:
-      'A fibrous sheet connecting the tibia and fibula; stabilizes the bones and separates muscle compartments.',
-    LateralCuneiform:
-      'A tarsal bone that articulates with the third metatarsal; supports the transverse arch of the foot.',
-    MedialCuneiform:
-      'A tarsal bone that articulates with the first metatarsal; plays a role in maintaining the medial longitudinal arch.',
-    MiddlePhalanxOfFourthToe:
-      'The intermediate bone of the fourth toe; contributes to toe flexibility.',
-    MiddlePhalanxOfSecondToe: 'The intermediate bone of the second toe; aids in toe movement.',
-    MiddlePhalanxOfThirdToe: 'The intermediate bone of the third toe; facilitates toe flexibility.',
-    Navicular:
-      'A tarsal bone located medially in the foot; serves as a keystone for the medial arch and articulates with the talus and cuneiforms.',
-    PosteriorTalofibularLigament:
-      'Connects the fibula to the talus posteriorly; prevents excessive backward displacement of the foot.',
-    PosteriorTibiofibularLigament:
-      'Stabilizes the distal tibiofibular joint; maintains the integrity of the ankle mortise.',
-    PosteriorTibiofibularLigament_001:
-      'Additional fibers of the posterior tibiofibular ligament; contribute to ankle stability.',
-    ProximalPhalanxOfBigToe:
-      'The first bone of the big toe; crucial for push-off in gait and bearing weight during toe-off phase.',
-    ProximalPhalanxOfFifthToe:
-      'The first bone of the little toe; supports lateral balance and assists in gait.',
-    ProximalPhalanxOfFourthToe:
-      'The first bone of the fourth toe; aids in stability and propulsion during walking.',
-    ProximalPhalanxOfSecondToe:
-      'The first bone of the second toe; helps in balance and forward propulsion.',
-    ProximalPhalanxOfThirdToe:
-      'The first bone of the third toe; contributes to weight distribution during motion.',
-    RightCuboid:
-      'A lateral tarsal bone that links the foot and ankle; stabilizes the lateral column of the foot and supports the arch.',
-    SecondMetatarsal:
-      'Connects the second toe to the midfoot; plays a central role in maintaining the transverse arch.',
-    Talus:
-      'The bone that sits between the tibia and calcaneus; transmits weight and motion across the ankle joint.',
-    ThirdMetatarsal:
-      'Connects the third toe to the midfoot; involved in foot flexibility and stability.',
-    Tibia:
-      'The larger, medial bone of the lower leg; bears most of the body’s weight and forms the primary structure of the shin.',
+    ProximalPhalanxOfBigToe: {
+      info: 'Base bone of the big toe; critical for push-off during gait.',
+    },
+    ProximalPhalanxOfFifthToe: {
+      info: 'First bone of the smallest toe; aids in foot balance.',
+    },
+    ProximalPhalanxOfFourthToe: {
+      info: 'Initial bone of the fourth toe, contributes to walking mechanics.',
+    },
+    ProximalPhalanxOfSecondToe: {
+      info: 'Beginning segment of the second toe, aids in balance and motion.',
+    },
+    ProximalPhalanxOfThirdToe: {
+      info: 'First bone of the third toe; supports toe movement.',
+    },
+    RightCuboid: {
+      info: 'Lateral midfoot bone that links heel and forefoot; maintains foot arch.',
+    },
+    SecondMetatarsal: {
+      info: 'Central metatarsal that helps support the transverse arch of the foot.',
+    },
+    Talus: {
+      info: 'Ankle bone that transmits weight from the tibia to the foot.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
+    ThirdMetatarsal: {
+      info: 'Midfoot bone connecting to the third toe; assists in load distribution.',
+    },
+    Tibia: {
+      info: 'Main weight-bearing bone of the lower leg; forms the shin.',
+      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+    },
   },
 };

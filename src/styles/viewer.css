@@ -113,6 +113,7 @@ body {
   font-weight: 600;
   color: #000;
   border: 1px dashed #000;
+  border-radius: 4px;
   padding: 8px 12px;
   background-color: transparent;
   z-index: 5;
@@ -123,6 +124,7 @@ body {
   cursor: pointer;
   padding: 6px 12px;
   border: 1px dashed #000;
+  border-radius: 4px;
   color: #000;
   font-family: monospace;
   background-color: transparent;

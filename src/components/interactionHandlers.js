@@ -3,21 +3,23 @@ import _ from 'lodash';
 import { log } from './utils.js';
 
 export class InteractionHandler {
-  constructor(scene, camera, canvasElement, metadata, onClickCallback) {
+  constructor(scene, camera, canvasElement, metadata, onClickCallback, playVideoCallback) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvasElement;
-    this.metadata = metadata; // <-- NEW
+    this.metadata = metadata;
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.currentHovered = null;
     this.currentClicked = null;
+
     this.selectedLabel = document.getElementById('selectedLabel');
     this.selectedPopup = document.getElementById('popup');
     this.selectedVideoLinks = document.getElementById('videoLinks');
 
     this.onClickCallback = onClickCallback;
+    this.playVideoCallback = playVideoCallback;
 
     this.holdTimeout = null;
     this.isLongPress = false;
@@ -35,7 +37,7 @@ export class InteractionHandler {
     this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   }
 
-  onPointerDown(event) {
+  onPointerDown() {
     this.isLongPress = false;
     this.holdTimeout = setTimeout(() => {
       this.isLongPress = true;
@@ -43,7 +45,7 @@ export class InteractionHandler {
     }, 500);
   }
 
-  onPointerUp(event) {
+  onPointerUp() {
     clearTimeout(this.holdTimeout);
 
     if (!this.isLongPress && this.currentHovered) {
@@ -52,8 +54,8 @@ export class InteractionHandler {
       if (this.currentClicked === this.currentHovered) {
         this.setHighlight(this.currentClicked, 'restore');
         this.currentClicked = null;
-        log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);
         this.updateSelectedInfo(null);
+        log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);
       } else {
         if (this.currentClicked) {
           this.setHighlight(this.currentClicked, 'restore');
@@ -64,7 +66,7 @@ export class InteractionHandler {
         log('DEBUG2', 'Selected:', this.currentClicked.name || this.currentClicked.id);
       }
 
-      if (this.onClickCallback) {
+      if (typeof this.onClickCallback === 'function') {
         this.onClickCallback(this.currentClicked);
       }
     }
@@ -75,29 +77,20 @@ export class InteractionHandler {
   }
 
   setHighlight(object, type) {
-    if (!object || !object.material) return;
-
-    if (!object.material.emissive) {
-      console.warn(`Object ${object.name || object.id} has no emissive material.`);
-      return;
-    }
+    if (!object || !object.material || !object.material.emissive) return;
 
     if (type === 'hover') {
       object.material.emissive.setHex(0x999900);
-      log('DEBUG2', `Highlight hover on ${object.name || object.id}`);
     } else if (type === 'click') {
       object.material.emissive.setHex(0x009900);
-      log('DEBUG2', `Highlight click on ${object.name || object.id}`);
       this.updateSelectedInfo(object);
     } else if (type === 'restore') {
       object.material.emissive.setHex(0x000000);
-      log('DEBUG2', `Restore original color on ${object.name || object.id}`);
     }
   }
 
   update() {
     this.raycaster.setFromCamera(this.mouse, this.camera);
-
     const intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
     if (intersects.length > 0) {
@@ -107,6 +100,7 @@ export class InteractionHandler {
         if (this.currentHovered && this.currentHovered !== this.currentClicked) {
           this.setHighlight(this.currentHovered, 'restore');
         }
+
         this.currentHovered = firstIntersect;
 
         if (this.currentHovered !== this.currentClicked) {
@@ -122,35 +116,54 @@ export class InteractionHandler {
   }
 
   updateSelectedInfo(object) {
-    if (object) {
-      const selectedName = object.name || object.id || 'Unnamed';
-      const formattedName = _.startCase(selectedName);
-
-      const infoText = this.metadata?.muscle_info[selectedName] || 'No info available.';
-      this.selectedPopup.innerHTML = `<p>${infoText}</p>`;
-      log('DEBUG2', `Displayed info text: ${infoText}`);
-
-      const videoData = this.metadata?.specific_videos;
-      if (videoData && videoData[selectedName]) {
-        this.selectedVideoLinks.innerHTML = `
-          <a href="${videoData[selectedName].normal}" class="video-box" target="_blank">🎥 Normal Movement</a>
-          <a href="${videoData[selectedName].rehab}" class="video-box" target="_blank">🛠️ Rehab Exercises</a>
-        `;
-        this.selectedVideoLinks.style.display = 'flex';
-        log('DEBUG2', `Added specific video links for: ${selectedName}`);
-      } else {
-        this.selectedVideoLinks.style.display = 'none';
-        log('DEBUG2', `No specific videos available for: ${selectedName}`);
-      }
-
-      this.selectedPopup.appendChild(this.selectedVideoLinks);
-      this.selectedPopup.style.display = 'block';
-      this.selectedLabel.textContent = `🧠 Selected: ${formattedName}`;
-    } else {
-      log('DEBUG', 'Clearing selected info (no object or unselected).');
+    if (!object) {
       this.selectedLabel.textContent = '🧠 Selected: None';
-      this.selectedVideoLinks.style.display = 'none';
       this.selectedPopup.style.display = 'none';
+      this.selectedVideoLinks.style.display = 'none';
+      return;
     }
+
+    const selectedName = object.name || object.id || 'Unnamed';
+    const formattedName = _.startCase(selectedName);
+    const entry = this.metadata?.specific_videos?.[selectedName];
+
+    this.selectedLabel.textContent = `🧠 Selected: ${formattedName}`;
+    this.selectedPopup.innerHTML = '';
+
+    const infoText = document.createElement('p');
+    infoText.textContent = entry?.info || 'No description available.';
+    this.selectedPopup.appendChild(infoText);
+
+    this.selectedVideoLinks.innerHTML = ''; // Clear any existing buttons
+
+    if (entry) {
+      Object.entries(entry).forEach(([key, video]) => {
+        if (key === 'info' || !video?.src) return;
+
+        const btn = document.createElement('div');
+        btn.className = 'terminal-link';
+        btn.innerText = video.title || _.startCase(key);
+        btn.style.marginTop = '2px';
+
+        btn.addEventListener('click', () => {
+          if (typeof this.playVideoCallback === 'function') {
+            this.playVideoCallback(video.src);
+          } else {
+            window.open(video.src, '_blank');
+          }
+        });
+
+        this.selectedVideoLinks.appendChild(btn);
+      });
+    }
+
+    if (this.selectedVideoLinks.children.length > 0) {
+      this.selectedVideoLinks.style.display = 'flex';
+      this.selectedPopup.appendChild(this.selectedVideoLinks);
+    } else {
+      this.selectedVideoLinks.style.display = 'none';
+    }
+
+    this.selectedPopup.style.display = 'block';
   }
 }
