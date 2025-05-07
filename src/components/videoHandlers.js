@@ -1,8 +1,10 @@
 import { updateDebugDimensions } from './uiHelpers.js';
+import { log } from './utils.js';
 
 export function playVideo(src) {
   const exerciseVideo = document.getElementById('exerciseVideo');
   const videoSource = exerciseVideo.querySelector('source');
+  const sharedContentArea = document.getElementById('sharedContentArea');
   const videoArea = document.getElementById('videoArea');
   const modelContainer = document.getElementById('modelContainer');
   const moreVideosContainer = document.getElementById('moreVideosContainer');
@@ -16,16 +18,18 @@ export function playVideo(src) {
   exerciseVideo.load();
   exerciseVideo.muted = true;
 
+  sharedContentArea.style.display = 'flex';
+  sharedContentArea.style.backgroundColor = 'black';
   videoArea.style.display = 'flex';
   videoArea.style.backgroundColor = 'black';
 
   const isBottomView = window.innerWidth <= 980;
 
   if (isBottomView) {
-    videoArea.style.position = 'absolute';
-    videoArea.style.bottom = '0';
-    videoArea.style.width = '100vw';
-    videoArea.style.height = '33.33vh';
+    sharedContentArea.style.position = 'absolute';
+    sharedContentArea.style.bottom = '0';
+    sharedContentArea.style.width = '100vw';
+    sharedContentArea.style.height = '33.33vh';
 
     modelContainer.style.width = '100%';
     modelContainer.style.height = '66.66vh';
@@ -33,16 +37,18 @@ export function playVideo(src) {
     // Only hide More Videos in bottom view
     moreVideosContainer.style.display = 'none';
   } else {
-    videoArea.style.position = 'relative';
-    videoArea.style.width = '33.33%';
-    videoArea.style.height = '100%';
+    sharedContentArea.style.position = 'relative';
+    sharedContentArea.style.width = '33.33vw';
+    sharedContentArea.style.height = '100%';
 
-    modelContainer.style.width = '66.66%';
+    log('DEBUG', `New Height ${sharedContentArea.style.height}`);
+
+    modelContainer.style.width = '66.66wh';
     modelContainer.style.height = '100%';
 
-    // Keep More Videos visible in side-by-side view
     moreVideosContainer.style.display = 'block';
   }
+
   window.dispatchEvent(new Event('resize'));
   updateDebugDimensions();
 }
@@ -50,9 +56,9 @@ export function playVideo(src) {
 export function setupVideoHandlers(metadata) {
   const exerciseVideo = document.getElementById('exerciseVideo');
   const videoSource = exerciseVideo.querySelector('source');
-  const videoArea = document.getElementById('videoArea');
+  const sharedContentArea = document.getElementById('sharedContentArea');
   const modelContainer = document.getElementById('modelContainer');
-  const closeVideoBtn = document.getElementById('closeVideoBtn');
+  const closeVideoBtn = document.getElementById('closeContentBtn');
 
   const moreVideosContainer = document.getElementById('moreVideosContainer');
   const moreVideosBtn = document.getElementById('moreVideosBtn');
@@ -62,7 +68,8 @@ export function setupVideoHandlers(metadata) {
     exerciseVideo.pause();
     exerciseVideo.currentTime = 0;
     videoSource.src = '';
-    videoArea.style.display = 'none';
+
+    sharedContentArea.style.display = 'none';
 
     modelContainer.style.width = '100%';
     modelContainer.style.height = '100%';
@@ -85,7 +92,6 @@ export function setupVideoHandlers(metadata) {
     }
 
     Object.entries(videoData).forEach(([key, entry]) => {
-      // Single video entry
       if (entry.src) {
         const btn = document.createElement('div');
         btn.className = 'terminal-link';
@@ -97,10 +103,7 @@ export function setupVideoHandlers(metadata) {
         });
 
         moreVideosPane.appendChild(btn);
-      }
-
-      // Group with sub-videos
-      else if (entry.videos && typeof entry.videos === 'object') {
+      } else if (entry.videos && typeof entry.videos === 'object') {
         const categoryTitle = entry.title || key;
 
         const categoryBtn = document.createElement('div');

@@ -8,26 +8,26 @@ export function updateDebugDimensions() {
   const { innerWidth: screenW, innerHeight: screenH } = window;
 
   const modelContainer = document.getElementById('modelContainer');
-  const videoArea = document.getElementById('videoArea');
+  const sharedContentArea = document.getElementById('sharedContentArea');
 
   if (!modelContainer) log('DEBUG', 'No modelContainer.');
-  if (!videoArea) log('DEBUG', 'No videoArea.');
+  if (!sharedContentArea) log('DEBUG', 'No sharedContentArea.');
 
   const { clientWidth: modelW = 0, clientHeight: modelH = 0 } = modelContainer || {};
-  const { clientWidth: videoW = 0, clientHeight: videoH = 0 } = videoArea || {};
+  const { clientWidth: sharedW = 0, clientHeight: sharedH = 0 } = sharedContentArea || {};
 
   const isBottomView = screenW <= MOBILE_BREAKPOINT;
   const layoutType = isBottomView ? 'Column' : 'Row';
 
   log(
     'DEBUG2',
-    `Screen: ${screenW}x${screenH} | Model: ${modelW}x${modelH} | Video: ${videoW}x${videoH} | Layout: ${layoutType}`
+    `Screen: ${screenW}x${screenH} | Model: ${modelW}x${modelH} | Shared: ${sharedW}x${sharedH} | Layout: ${layoutType}`
   );
 
   debugDimensions.innerHTML = `
       📱 Screen: ${screenW} × ${screenH}<br>
       🎨 Model: ${modelW} × ${modelH}<br>
-      🎬 Video: ${videoW} × ${videoH}<br>
+      🎥 Shared: ${sharedW} × ${sharedH}<br>
       🧱 Layout: ${layoutType}
     `;
 }

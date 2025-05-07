@@ -16,12 +16,20 @@ export function getViewerHTML() {
         </div>
       </div>
 
-      <div id="videoArea" style="display: none;">
-        <button id="closeVideoBtn" class="close-video-btn">✖️</button>
-        <video id="exerciseVideo" controls preload="metadata" muted>
-          <source src="" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      <div id="sharedContentArea" style="display: none;">
+        <button id="closeContentBtn" class="close-video-btn">✖️</button>
+
+        <div id="videoArea" style="display: none;">
+          <video id="exerciseVideo" controls preload="metadata" muted>
+            <source src="" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div id="contentArea" style="display: none;">
+          <!-- Custom dynamic content goes here -->
+          <div id="customContent" class="custom-content">📘 Your content here</div>
+        </div>
       </div>
     </div>
 
