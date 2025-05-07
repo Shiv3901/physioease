@@ -10,7 +10,7 @@ export function loadHomepage(app) {
         <div class="subtitle">A tool to animate injuries, concepts, and exercises.</div>
 
         <div class="viewer-links">
-          <div class="terminal-link" id="launch-rotator">🎯 Rotator Cuff Viewer</div>
+          <div class="terminal-link" id="launch-rotator">💪🏼 Rotator Cuff Viewer</div>
           <div class="terminal-link" id="launch-ankle">🦶 Ankle Viewer</div>
         </div>
 
