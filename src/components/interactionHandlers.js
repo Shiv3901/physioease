@@ -2,8 +2,30 @@ import * as THREE from 'three';
 import _ from 'lodash';
 import { log } from './utils.js';
 
+async function loadHTMLContent(path) {
+  try {
+    const res = await fetch(path);
+    if (!res.ok) {
+      log('WARN', `[loadHTMLContent] Failed to load: ${path}`);
+      return '';
+    }
+    return await res.text();
+  } catch (err) {
+    log('ERROR', `[loadHTMLContent] Error fetching ${path}: ${err.message}`);
+    return '';
+  }
+}
+
 export class InteractionHandler {
-  constructor(scene, camera, canvasElement, metadata, onClickCallback, playVideoCallback) {
+  constructor(
+    scene,
+    camera,
+    canvasElement,
+    metadata,
+    onClickCallback,
+    playVideoCallback,
+    showContentCallback
+  ) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvasElement;
@@ -20,6 +42,7 @@ export class InteractionHandler {
 
     this.onClickCallback = onClickCallback;
     this.playVideoCallback = playVideoCallback;
+    this.showContentCallback = showContentCallback;
 
     this.holdTimeout = null;
     this.isLongPress = false;
@@ -137,23 +160,38 @@ export class InteractionHandler {
     this.selectedVideoLinks.innerHTML = ''; // Clear any existing buttons
 
     if (entry) {
-      Object.entries(entry).forEach(([key, video]) => {
-        if (key === 'info' || !video?.src) return;
+      Object.entries(entry).forEach(([key, item]) => {
+        if (key === 'info' || typeof item !== 'object') return;
+
+        const { title, type, src, path } = item;
 
         const btn = document.createElement('div');
         btn.className = 'terminal-link';
-        btn.innerText = video.title || _.startCase(key);
+        btn.innerText = title || _.startCase(key);
         btn.style.marginTop = '2px';
 
-        btn.addEventListener('click', () => {
-          if (typeof this.playVideoCallback === 'function') {
-            this.playVideoCallback(video.src);
-          } else {
-            window.open(video.src, '_blank');
-          }
-        });
+        if (type === 'video' && src) {
+          btn.addEventListener('click', () => {
+            if (typeof this.playVideoCallback === 'function') {
+              this.playVideoCallback(src);
+            } else {
+              window.open(src, '_blank');
+            }
+          });
+          this.selectedVideoLinks.appendChild(btn);
+        }
 
-        this.selectedVideoLinks.appendChild(btn);
+        if (type === 'content' && path) {
+          log('DEBUG', 'Content path:', path);
+          btn.addEventListener('click', () => {
+            if (typeof this.showContentCallback === 'function') {
+              loadHTMLContent(path).then((html) => {
+                this.showContentCallback(html);
+              });
+            }
+          });
+          this.selectedVideoLinks.appendChild(btn);
+        }
       });
     }
 

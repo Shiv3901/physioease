@@ -171,6 +171,46 @@ body {
   margin-bottom: 4px;
 }
 
+#contentArea {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-family: 'Segoe UI';
+  color: #222;
+  text-align: left;
+  background-color: rgba(250, 250, 250, 0.95);
+  overflow-y: auto;
+}
+
+#contentArea .content-wrapper {
+  max-width: 640px;
+  width: 100%;
+}
+
+#contentArea h2,
+#contentArea h3 {
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: #111;
+}
+
+#contentArea p {
+  margin-bottom: 1em;
+}
+
+#contentArea ul {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+#contentArea li {
+  margin-bottom: 0.4em;
+}
+
 .video-links {
   display: flex;
   flex-direction: column;

@@ -27,8 +27,7 @@ export function getViewerHTML() {
         </div>
 
         <div id="contentArea" style="display: none;">
-          <!-- Custom dynamic content goes here -->
-          <div id="customContent" class="custom-content">📘 Your content here</div>
+          <div id="contentText" class="content-text"></div>
         </div>
       </div>
     </div>

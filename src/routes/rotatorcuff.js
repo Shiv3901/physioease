@@ -1,13 +1,13 @@
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
-import { setupVideoHandlers } from '../components/videoHandlers.js';
+import { setupContentHandlers } from '../components/contentHandler.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
 import { ROTATORCUFF_METADATA } from '../components/config.js';
-import { playVideo } from '../components/videoHandlers.js';
+import { playVideo, showContent } from '../components/contentHandler.js';
 import '../styles/viewer.css';
 
 log('INFO', '🚀 Rotator Cuff Model Loaded');
@@ -67,9 +67,10 @@ export function loadRotatorCuff(app) {
     renderer.domElement,
     ROTATORCUFF_METADATA,
     (clickedObject) => {},
-    playVideo
+    playVideo,
+    showContent
   );
-  setupVideoHandlers(ROTATORCUFF_METADATA);
+  setupContentHandlers(ROTATORCUFF_METADATA);
 
   function animate() {
     requestAnimationFrame(animate);
@@ -83,6 +84,7 @@ export function loadRotatorCuff(app) {
     const width = modelContainer.clientWidth;
     const height = modelContainer.clientHeight;
     camera.aspect = width / height;
+    camera.position.z += 1;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
     updateDebugDimensions();

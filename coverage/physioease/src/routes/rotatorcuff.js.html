@@ -25,7 +25,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">0/90</span>
+            <span class="fraction">0/92</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -43,7 +43,7 @@
           <div class="fl pad1y space-right2">
             <span class="strong">0% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">0/90</span>
+            <span class="fraction">0/92</span>
           </div>
         </div>
         <p class="quiet">
@@ -163,7 +163,9 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -235,15 +237,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -270,13 +274,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { setupViewer } from '../components/viewerSetup.js';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >import { loadModel } from '../components/modelLoader.js';</span>
 <span class="cstat-no" title="statement not covered" >import { InteractionHandler } from '../components/interactionHandlers.js';</span>
-<span class="cstat-no" title="statement not covered" >import { setupVideoHandlers } from '../components/videoHandlers.js';</span>
+<span class="cstat-no" title="statement not covered" >import { setupContentHandlers } from '../components/contentHandler.js';</span>
 <span class="cstat-no" title="statement not covered" >import { updateDebugDimensions } from '../components/uiHelpers.js';</span>
 <span class="cstat-no" title="statement not covered" >import { getViewerHTML } from '../templates/viewerTemplate.js';</span>
 <span class="cstat-no" title="statement not covered" >import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';</span>
 <span class="cstat-no" title="statement not covered" >import { log } from '../components/utils.js';</span>
 <span class="cstat-no" title="statement not covered" >import { ROTATORCUFF_METADATA } from '../components/config.js';</span>
-<span class="cstat-no" title="statement not covered" >import { playVideo } from '../components/videoHandlers.js';</span>
+<span class="cstat-no" title="statement not covered" >import { playVideo, showContent } from '../components/contentHandler.js';</span>
 <span class="cstat-no" title="statement not covered" >import '../styles/viewer.css';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >log('INFO', '🚀 Rotator Cuff Model Loaded');</span>
@@ -336,9 +340,10 @@
 <span class="cstat-no" title="statement not covered" >    renderer.domElement,</span>
 <span class="cstat-no" title="statement not covered" >    ROTATORCUFF_METADATA,</span>
 <span class="cstat-no" title="statement not covered" >    (clickedObject) =&gt; {},</span>
-<span class="cstat-no" title="statement not covered" >    playVideo</span>
+<span class="cstat-no" title="statement not covered" >    playVideo,</span>
+<span class="cstat-no" title="statement not covered" >    showContent</span>
 <span class="cstat-no" title="statement not covered" >  );</span>
-<span class="cstat-no" title="statement not covered" >  setupVideoHandlers(ROTATORCUFF_METADATA);</span>
+<span class="cstat-no" title="statement not covered" >  setupContentHandlers(ROTATORCUFF_METADATA);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  function animate() {</span>
 <span class="cstat-no" title="statement not covered" >    requestAnimationFrame(animate);</span>
@@ -352,6 +357,7 @@
 <span class="cstat-no" title="statement not covered" >    const width = modelContainer.clientWidth;</span>
 <span class="cstat-no" title="statement not covered" >    const height = modelContainer.clientHeight;</span>
 <span class="cstat-no" title="statement not covered" >    camera.aspect = width / height;</span>
+<span class="cstat-no" title="statement not covered" >    camera.position.z += 1;</span>
 <span class="cstat-no" title="statement not covered" >    camera.updateProjectionMatrix();</span>
 <span class="cstat-no" title="statement not covered" >    renderer.setSize(width, height);</span>
 <span class="cstat-no" title="statement not covered" >    updateDebugDimensions();</span>
@@ -380,7 +386,7 @@
     <div class="footer quiet pad2 space-top1 center small">
       Code coverage generated by
       <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-      at 2025-05-07T06:10:53.419Z
+      at 2025-05-07T07:19:32.400Z
     </div>
     <script src="../../../prettify.js"></script>
     <script>

@@ -1,27 +1,13 @@
 import { updateDebugDimensions } from './uiHelpers.js';
-import { log } from './utils.js';
 
-export function playVideo(src) {
-  const exerciseVideo = document.getElementById('exerciseVideo');
-  const videoSource = exerciseVideo.querySelector('source');
+function showContentPanel({ type, videoSrc = '', html = '' }) {
   const sharedContentArea = document.getElementById('sharedContentArea');
   const videoArea = document.getElementById('videoArea');
+  const contentArea = document.getElementById('contentArea');
   const modelContainer = document.getElementById('modelContainer');
   const moreVideosContainer = document.getElementById('moreVideosContainer');
 
-  if (!exerciseVideo || !videoSource) {
-    console.warn('Video elements not found.');
-    return;
-  }
-
-  videoSource.src = src;
-  exerciseVideo.load();
-  exerciseVideo.muted = true;
-
   sharedContentArea.style.display = 'flex';
-  sharedContentArea.style.backgroundColor = 'black';
-  videoArea.style.display = 'flex';
-  videoArea.style.backgroundColor = 'black';
 
   const isBottomView = window.innerWidth <= 980;
 
@@ -34,42 +20,78 @@ export function playVideo(src) {
     modelContainer.style.width = '100%';
     modelContainer.style.height = '66.66vh';
 
-    // Only hide More Videos in bottom view
     moreVideosContainer.style.display = 'none';
   } else {
     sharedContentArea.style.position = 'relative';
     sharedContentArea.style.width = '33.33vw';
     sharedContentArea.style.height = '100%';
 
-    log('DEBUG', `New Height ${sharedContentArea.style.height}`);
-
-    modelContainer.style.width = '66.66wh';
+    modelContainer.style.width = '66.66vw';
     modelContainer.style.height = '100%';
 
     moreVideosContainer.style.display = 'block';
+  }
+
+  if (type === 'video') {
+    const exerciseVideo = document.getElementById('exerciseVideo');
+    const videoSource = exerciseVideo.querySelector('source');
+
+    if (!exerciseVideo || !videoSource) {
+      console.warn('Video elements not found.');
+      return;
+    }
+
+    videoSource.src = videoSrc;
+    exerciseVideo.load();
+    exerciseVideo.muted = true;
+
+    sharedContentArea.style.backgroundColor = 'black';
+    videoArea.style.display = 'flex';
+    contentArea.style.display = 'none';
+  }
+
+  if (type === 'text') {
+    sharedContentArea.style.backgroundColor = 'white';
+    videoArea.style.display = 'none';
+    contentArea.style.display = 'flex';
+    contentArea.innerHTML = `<div class="content-wrapper">${html}</div>`;
   }
 
   window.dispatchEvent(new Event('resize'));
   updateDebugDimensions();
 }
 
-export function setupVideoHandlers(metadata) {
+export function playVideo(src) {
+  showContentPanel({ type: 'video', videoSrc: src });
+}
+
+export function showContent(html) {
+  showContentPanel({ type: 'text', html: html });
+}
+
+export function setupContentHandlers(metadata) {
   const exerciseVideo = document.getElementById('exerciseVideo');
   const videoSource = exerciseVideo.querySelector('source');
   const sharedContentArea = document.getElementById('sharedContentArea');
+  const videoArea = document.getElementById('videoArea');
+  const contentArea = document.getElementById('contentArea');
   const modelContainer = document.getElementById('modelContainer');
-  const closeVideoBtn = document.getElementById('closeContentBtn');
+  const closeBtn = document.getElementById('closeContentBtn');
 
   const moreVideosContainer = document.getElementById('moreVideosContainer');
   const moreVideosBtn = document.getElementById('moreVideosBtn');
   const moreVideosPane = document.getElementById('moreVideosPane');
 
-  closeVideoBtn.addEventListener('click', () => {
-    exerciseVideo.pause();
-    exerciseVideo.currentTime = 0;
-    videoSource.src = '';
+  closeBtn.addEventListener('click', () => {
+    if (exerciseVideo) {
+      exerciseVideo.pause();
+      exerciseVideo.currentTime = 0;
+    }
+    if (videoSource) videoSource.src = '';
 
     sharedContentArea.style.display = 'none';
+    videoArea.style.display = 'none';
+    contentArea.style.display = 'none';
 
     modelContainer.style.width = '100%';
     modelContainer.style.height = '100%';

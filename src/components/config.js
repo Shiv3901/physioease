@@ -9,8 +9,13 @@ const MODEL_BASE_URL = isDev
   ? './models/'
   : 'https://re-cors-proxy.physioeaseau.workers.dev/models/';
 
+const CONTENT_BASE_URL = isDev
+  ? './content/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/content/';
+
 const video = (filename) => VIDEO_BASE_URL + filename;
 const model = (filename) => MODEL_BASE_URL + filename;
+const content = (filename) => CONTENT_BASE_URL + filename;
 
 export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;
@@ -66,10 +71,12 @@ export const ROTATORCUFF_METADATA = {
       info: 'The supraspinatus helps shoulder abduction.',
       normal: {
         title: '👥 Normal Movement',
+        type: 'video',
         src: video('supraspinatus_normal.mp4'),
       },
       rehab: {
         title: '🛠️ Rehab Exercises',
+        type: 'video',
         src: video('supraspinatus_rehab.mp4'),
       },
     },
@@ -77,6 +84,7 @@ export const ROTATORCUFF_METADATA = {
       info: 'The infraspinatus externally rotates the shoulder.',
       normal: {
         title: '👥 Normal Movement',
+        type: 'video',
         src: video('infraspinatus_normal.mp4'),
       },
     },
@@ -84,10 +92,12 @@ export const ROTATORCUFF_METADATA = {
       info: 'The subscapularis internally rotates the arm.',
       normal: {
         title: '👥 Normal Movement',
+        type: 'video',
         src: video('subscapularis_normal.mp4'),
       },
       rehab: {
         title: '🛠️ Rehab Exercises',
+        type: 'video',
         src: video('subscapularis_rehab.mp4'),
       },
     },
@@ -95,6 +105,7 @@ export const ROTATORCUFF_METADATA = {
       info: 'The teres minor assists with external rotation.',
       normal: {
         title: '👥 Normal Movement',
+        type: 'video',
         src: video('teresminor_normal.mp4'),
       },
     },
@@ -102,14 +113,25 @@ export const ROTATORCUFF_METADATA = {
       info: 'The humerus connects the shoulder to elbow.',
       normal: {
         title: '🦴 Bone Articulation',
+        type: 'video',
         src: video('humerus_articulation.mp4'),
       },
     },
     Clavicle: {
       info: 'The clavicle connects arm to body and stabilizes shoulder.',
+      more: {
+        title: '📘 Learn More',
+        type: 'content',
+        path: content('clavicle_content.html'),
+      },
     },
     Scapula: {
       info: 'The scapula stabilizes and moves the shoulder.',
+      more: {
+        title: '📘 Learn More',
+        type: 'content',
+        path: content('scapula_content.html'),
+      },
     },
   },
 };
@@ -133,38 +155,42 @@ export const ANKLE_METADATA = {
   specific_videos: {
     TibialisAnterior: {
       info: 'The tibialis anterior dorsiflexes the foot.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
     Gastrocnemius: {
       info: 'The gastrocnemius plantarflexes the foot.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
     Soleus: {
       info: 'The soleus assists with plantarflexion.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
     PeroneusLongus: {
       info: 'The peroneus longus everts the foot.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
     AnteriorTalofibularLigament: {
       info: 'Connects the fibula to the talus; prevents excessive forward displacement of the foot and is commonly injured in ankle sprains.',
-      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
+      rehab: { title: '🛠️ Rehab Exercises', type: 'video', src: video('ankle_demo.mp4') },
     },
     AnteriorTibiofibularLigament: {
       info: 'Stabilizes the distal tibiofibular joint, maintaining the integrity of the ankle mortise.',
     },
     CalcaneofibularLigament: {
       info: 'Connects the fibula to the calcaneus; resists excessive inversion of the foot.',
-      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
+      rehab: { title: '🛠️ Rehab Exercises', type: 'video', src: video('ankle_demo.mp4') },
     },
     Calcaneus: {
       info: 'The heel bone; supports body weight and serves as the attachment point for the Achilles tendon.',
-      diagnostic: { title: '🔬 Diagnostic View', src: video('ankle_diagnostic.mp4') },
+      diagnostic: {
+        title: '🔬 Diagnostic View',
+        type: 'video',
+        src: video('ankle_diagnostic.mp4'),
+      },
     },
     DeltoidLigament: {
       info: 'A strong, triangular ligament on the medial side of the ankle that prevents over-eversion.',
-      rehab: { title: '🛠️ Rehab Exercises', src: video('ankle_demo.mp4') },
+      rehab: { title: '🛠️ Rehab Exercises', type: 'video', src: video('ankle_demo.mp4') },
     },
     DeltoidLigament001: {
       info: 'Component of the deltoid ligament complex contributing to ankle joint stability.',
@@ -225,7 +251,11 @@ export const ANKLE_METADATA = {
     },
     Navicular: {
       info: 'A boat-shaped bone on the medial foot that links the talus and cuneiforms.',
-      diagnostic: { title: '🔬 Diagnostic View', src: video('ankle_diagnostic.mp4') },
+      diagnostic: {
+        title: '🔬 Diagnostic View',
+        type: 'video',
+        src: video('ankle_diagnostic.mp4'),
+      },
     },
     PosteriorTalofibularLigament: {
       info: 'Connects the fibula to the talus at the rear; prevents backward ankle displacement.',
@@ -259,14 +289,14 @@ export const ANKLE_METADATA = {
     },
     Talus: {
       info: 'Ankle bone that transmits weight from the tibia to the foot.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
     ThirdMetatarsal: {
       info: 'Midfoot bone connecting to the third toe; assists in load distribution.',
     },
     Tibia: {
       info: 'Main weight-bearing bone of the lower leg; forms the shin.',
-      normal: { title: '👥 Normal Movement', src: video('ankle_demo.mp4') },
+      normal: { title: '👥 Normal Movement', type: 'video', src: video('ankle_demo.mp4') },
     },
   },
 };

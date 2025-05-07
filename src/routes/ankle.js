@@ -1,7 +1,7 @@
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
-import { setupVideoHandlers } from '../components/videoHandlers.js';
+import { setupContentHandlers, playVideo, showContent } from '../components/contentHandler.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
@@ -64,9 +64,11 @@ export function loadAnkle(app) {
     camera,
     renderer.domElement,
     ANKLE_METADATA,
-    (clickedObject) => {}
+    (clickedObject) => {},
+    playVideo,
+    showContent
   );
-  setupVideoHandlers(ANKLE_METADATA);
+  setupContentHandlers(ANKLE_METADATA);
 
   function animate() {
     requestAnimationFrame(animate);
