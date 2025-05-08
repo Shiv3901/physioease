@@ -3,6 +3,22 @@ export function getViewerHTML() {
     <div id="viewerArea">
       <div id="modelContainer">
         <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
+        <div id="playAnimationsBtn" class="terminal-link fixed-top-right" style="top: 42px;">▶️ Play Animations</div>
+        <input
+          id="animationSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.001"
+          value="0"
+          style="
+            position: absolute;
+            right: 12px;
+            top: 78px;
+            z-index: 1000;
+            width: 160px;
+          "
+        />
         <div id="selectedLabel" class="terminal-output fixed-top-left">🧠 Selected: None</div>
         <div id="loadingScreen">
           <div class="loading-text">Loading <span id="loadingPercent">0%</span></div>

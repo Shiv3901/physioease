@@ -22,6 +22,9 @@ export function centerModel(model, camera, controls) {
   log('DEBUG2', `Model centered at ${center.toArray()} with camera distance ${distance}.`);
 }
 
+/**
+ * @param {Function} onLoaded - Callback called with { mixer, animations, model } after loading
+ */
 export function loadModel(
   scene,
   camera,
@@ -69,9 +72,10 @@ export function loadModel(
       log('DEBUG2', 'Materials cloned successfully.');
 
       centerModel(model, camera, controls);
+      const mixer = new THREE.AnimationMixer(model);
 
       log('INFO', 'Model fully loaded and centered.');
-      onLoaded();
+      onLoaded({ mixer, animations: gltf.animations });
     },
 
     (xhr) => {

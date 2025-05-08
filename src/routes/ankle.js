@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
@@ -7,9 +8,11 @@ import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
 import { ANKLE_METADATA } from '../components/config.js';
+import { setupAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
 log('INFO', '🚀 Ankle Model Loaded');
+
 
 export function loadAnkle(app) {
   app.innerHTML = getViewerHTML();
@@ -25,8 +28,9 @@ export function loadAnkle(app) {
     camera,
     controls,
     ANKLE_METADATA.base_model,
-    () => {
+    ({ mixer, animations }) => {
       document.getElementById('loadingScreen').style.display = 'none';
+      setupAnimationHandler(mixer, animations);
     },
     (xhr) => {
       const total = xhr.total;
