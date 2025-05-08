@@ -8,11 +8,12 @@ import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
 import { ANKLE_METADATA } from '../components/config.js';
-import { setupAnimationHandler } from '../components/animationHandler.js';
+import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
 log('INFO', '🚀 Ankle Model Loaded');
 
+const clock = new THREE.Clock();
 
 export function loadAnkle(app) {
   app.innerHTML = getViewerHTML();
@@ -79,6 +80,9 @@ export function loadAnkle(app) {
     interactionHandler.update();
     controls.update();
     renderer.render(scene, camera);
+    const delta = clock.getDelta();
+updateAnimationHandler(delta);
+
   }
   animate();
 

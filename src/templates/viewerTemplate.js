@@ -3,7 +3,7 @@ export function getViewerHTML() {
     <div id="viewerArea">
       <div id="modelContainer">
         <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
-        <div id="playAnimationsBtn" class="terminal-link fixed-top-right" style="top: 42px;">▶️ Play Animations</div>
+        <div id="playAnimationsBtn" class="terminal-link fixed-top-right" style="top: 42px;">▶️ Play Animation</div>
         <input
           id="animationSlider"
           type="range"
