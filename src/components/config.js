@@ -13,9 +13,14 @@ const CONTENT_BASE_URL = isDev
   ? './content/'
   : 'https://re-cors-proxy.physioeaseau.workers.dev/content/';
 
+export const IMAGE_BASE_URL = isDev
+  ? './images/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/images/';
+
 const video = (filename) => VIDEO_BASE_URL + filename;
 const model = (filename) => MODEL_BASE_URL + filename;
 const content = (filename) => CONTENT_BASE_URL + filename;
+const image = (filename) => IMAGE_BASE_URL + filename;
 
 export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;

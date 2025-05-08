@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import _ from 'lodash';
 import { log } from './utils.js';
+import { IMAGE_BASE_URL } from './config.js';
 
 async function loadHTMLContent(path) {
   try {
@@ -186,6 +187,7 @@ export class InteractionHandler {
           btn.addEventListener('click', () => {
             if (typeof this.showContentCallback === 'function') {
               loadHTMLContent(path).then((html) => {
+                html = html.replace(/%IMAGE_BASE%/g, IMAGE_BASE_URL);
                 this.showContentCallback(html);
               });
             }
