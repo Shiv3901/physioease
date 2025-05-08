@@ -2,10 +2,11 @@ import { loadHomepage } from './homepage.js';
 import { loadRotatorCuff } from './routes/rotatorcuff.js';
 import { loadAnkle } from './routes/ankle.js';
 
-const app = document.getElementById('app');
-
 function route() {
+  const app = document.getElementById('app');
   const path = window.location.pathname;
+
+  if (!app) return;
 
   if (path === '/' || path === '/index.html') {
     loadHomepage(app);

@@ -34,9 +34,12 @@ function showContentPanel({ type, videoSrc = '', html = '' }) {
 
   if (type === 'video') {
     const exerciseVideo = document.getElementById('exerciseVideo');
+    if (!exerciseVideo) {
+      console.warn('Video elements not found.');
+      return;
+    }
     const videoSource = exerciseVideo.querySelector('source');
-
-    if (!exerciseVideo || !videoSource) {
+    if (!videoSource) {
       console.warn('Video elements not found.');
       return;
     }
