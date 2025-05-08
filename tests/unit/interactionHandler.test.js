@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import { loadHTMLContent, InteractionHandler } from '../../src/components/interactionHandlers';
 import * as THREE from 'three';
-import { IMAGE_BASE_URL } from '../../src/components/config.js';
+import { IMAGE_BASE_URL } from '../../src/components/config';
 
 vi.mock('../../src/components/utils', () => ({
   log: vi.fn(),

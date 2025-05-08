@@ -3,7 +3,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import * as THREE from 'three';
 import { log } from './utils.js';
 
-function centerModel(model, camera, controls) {
+export function centerModel(model, camera, controls) {
   log('DEBUG2', 'Centering model based on bounding box.');
 
   const box = new THREE.Box3().setFromObject(model);
@@ -42,6 +42,13 @@ export function loadModel(
       log('DEBUG', 'Model loaded successfully.');
 
       const model = gltf.scene;
+
+      if (!model || typeof model !== 'object') {
+        log('ERROR', 'Loaded GLTF scene is null or invalid.');
+        onError(new Error('Invalid model scene'));
+        return;
+      }
+
       model.position.set(0, -1, 0);
       model.scale.set(1.5, 1.5, 1.5);
       scene.add(model);
@@ -66,6 +73,7 @@ export function loadModel(
       log('INFO', 'Model fully loaded and centered.');
       onLoaded();
     },
+
     (xhr) => {
       const percentComplete = (xhr.loaded / xhr.total) * 100;
       log('DEBUG2', `Loading model: ${percentComplete.toFixed(2)}% complete.`);
