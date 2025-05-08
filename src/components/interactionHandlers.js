@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { log } from './utils.js';
 import { IMAGE_BASE_URL } from './config.js';
 
-async function loadHTMLContent(path) {
+export async function loadHTMLContent(path) {
   try {
     const res = await fetch(path);
     if (!res.ok) {
@@ -158,7 +158,7 @@ export class InteractionHandler {
     infoText.textContent = entry?.info || 'No description available.';
     this.selectedPopup.appendChild(infoText);
 
-    this.selectedVideoLinks.innerHTML = ''; // Clear any existing buttons
+    this.selectedVideoLinks.innerHTML = '';
 
     if (entry) {
       Object.entries(entry).forEach(([key, item]) => {
