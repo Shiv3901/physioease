@@ -25,7 +25,7 @@ export function setupAnimationHandler(
 
   if (sliderElement) {
     sliderElement.max = duration.toString();
-    sliderElement.step = '0.01';
+    sliderElement.step = '0.1';
     sliderElement.value = '0';
 
     sliderElement.addEventListener('input', (e) => {
