@@ -30,7 +30,7 @@ export function setupAnimationHandler(
 
   if (sliderElement) {
     sliderElement.max = duration.toString();
-    sliderElement.step = '0.1';
+    sliderElement.step = '0.01';
     sliderElement.value = '0';
 
     sliderElement.addEventListener('input', (e) => {
@@ -48,7 +48,7 @@ export function setupAnimationHandler(
     });
   }
 
-  const stepAmount = 1.0;
+  const stepAmount = 0.1;
   const stepBackBtn = document.getElementById('stepBackBtn');
   const stepForwardBtn = document.getElementById('stepForwardBtn');
 

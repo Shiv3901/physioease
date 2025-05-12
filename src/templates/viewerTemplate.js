@@ -2,46 +2,49 @@ export function getViewerHTML() {
   return `
     <div id="viewerArea">
       <div id="modelContainer">
-        <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
 
-        <div id="animationControlPanel" class="popup animation-control-panel">
-          <div class="animation-label">
-            <span class="label-heading">🎞️ Animation:</span>
-            <span id="animationNameText" class="animation-name">None</span>
-          </div>
+        <div id="UITopPanel" class="ui-panel">
+          <div id="selectedLabel" class="terminal-output fixed-top-left">🧠 Selected: None</div>
+          <div id="popup" class="popup"></div>
+          <div id="videoLinks" class="video-links" style="display: none;"></div>
 
-          <div id="animationControlsWrapper">
-            <input
-              id="animationSlider"
-              type="range"
-              min="0"
-              max="1"
-              step="0.001"
-              value="0"
-              class="animation-slider"
-            />
+          <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
 
-            <div class="animation-controls">
-              <button id="stepBackBtn" class="terminal-link step-button">« 1s</button>
-              <button id="playAnimationsBtn" class="icon-button" title="Play">
-                <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-              <button id="stepForwardBtn" class="terminal-link step-button">1s »</button>
+          <div id="animationControlPanel" class="popup animation-control-panel">
+            <div class="animation-label">
+              <span class="label-heading">🎞️ Animation:</span>
+              <span id="animationNameText" class="animation-name">None</span>
+            </div>
+
+            <div id="animationControlsWrapper">
+              <input
+                id="animationSlider"
+                type="range"
+                min="0"
+                max="1"
+                step="0.001"
+                value="0"
+                class="animation-slider"
+              />
+
+              <div class="animation-controls">
+                <button id="stepBackBtn" class="terminal-link step-button">« 1s</button>
+                <button id="playAnimationsBtn" class="icon-button" title="Play">
+                  <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+                <button id="stepForwardBtn" class="terminal-link step-button">1s »</button>
+              </div>
             </div>
           </div>
         </div>
-
-        <div id="selectedLabel" class="terminal-output fixed-top-left">🧠 Selected: None</div>
-
+        
         <div id="loadingScreen">
           <div class="loading-text">Loading <span id="loadingPercent">0%</span></div>
           <pre id="asciiBar">[----------]</pre>
         </div>
 
-        <div id="popup" class="popup"></div>
-        <div id="videoLinks" class="video-links" style="display: none;"></div>
         <div id="moreVideosContainer">
           <div id="moreVideosPane" style="display: none;"></div>
           <div id="moreVideosBtn" class="terminal-link fixed-bottom-left">🎬 More Animations</div>
