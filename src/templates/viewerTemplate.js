@@ -3,15 +3,21 @@ export function getViewerHTML() {
     <div id="viewerArea">
       <div id="modelContainer">
 
-        <div id="UITopPanel" class="ui-panel">
-          <div id="selectedLabel" class="terminal-output fixed-top-left">🧠 Selected: None</div>
-          <div id="popup" class="popup"></div>
-          <div id="videoLinks" class="video-links" style="display: none;"></div>
+        <div id="UITopPanel" class="ui-panel p-4">
+          <div id="selectedLabel" class="terminal-output fixed-top-left mb-2">
+            🧠 Selected: None
+          </div>
 
-          <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
+          <div id="popup" class="popup mb-2"></div>
 
-          <div id="animationControlPanel" class="popup animation-control-panel">
-            <div class="animation-label">
+          <div id="videoLinks" class="video-links mb-2" style="display: none;"></div>
+
+          <div id="terminalHome" class="terminal-link fixed-top-right">
+            Home
+          </div>
+
+          <div id="animationControlPanel" class="popup animation-control-panel p-3">
+            <div class="animation-label mb-2">
               <span class="label-heading">🎞️ Animation:</span>
               <span id="animationNameText" class="animation-name">None</span>
             </div>
@@ -24,10 +30,10 @@ export function getViewerHTML() {
                 max="1"
                 step="0.001"
                 value="0"
-                class="animation-slider"
+                class="animation-slider w-full mb-2"
               />
 
-              <div class="animation-controls">
+              <div class="animation-controls flex items-center gap-3">
                 <button id="stepBackBtn" class="terminal-link step-button">« 1s</button>
                 <button id="playAnimationsBtn" class="icon-button" title="Play">
                   <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
