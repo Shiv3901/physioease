@@ -34,13 +34,13 @@ export function getViewerHTML() {
               />
 
               <div class="animation-controls flex items-center gap-3">
-                <button id="stepBackBtn" class="terminal-link step-button">« 1s</button>
+                <button id="stepBackBtn" class="terminal-link step-button">« 1ms</button>
                 <button id="playAnimationsBtn" class="icon-button" title="Play">
                   <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </button>
-                <button id="stepForwardBtn" class="terminal-link step-button">1s »</button>
+                <button id="stepForwardBtn" class="terminal-link step-button">1ms »</button>
               </div>
             </div>
           </div>

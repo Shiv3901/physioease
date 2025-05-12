@@ -1,11 +1,11 @@
-/* === Base Layout === */
+/* === Base Styles === */
 body {
   margin: 0;
   overflow: hidden;
   font-family: 'Arial', sans-serif;
 }
 
-/* === Flex Layout for Main Area === */
+/* === Layout Containers === */
 #viewerArea {
   display: flex;
   width: 100vw;
@@ -15,22 +15,13 @@ body {
 
 #modelContainer {
   position: relative;
-  flex-grow: 2;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-#modelContainer {
-  flex-grow: 1; /* ✅ model takes all space by default */
-  flex-shrink: 1;
-  flex-basis: 100%;
+  flex: 1 1 100%;
   height: 100%;
   overflow: hidden;
 }
 
 #modelContainer canvas {
-  background: red !important; /* ✅ PROOF of rendering */
+  background: red !important; /* Visual rendering proof */
   position: absolute;
   top: 0;
   left: 0;
@@ -39,14 +30,19 @@ body {
   z-index: 2;
 }
 
-/* === Video Area (Right 1/3 of screen on wide viewports) === */
 #sharedContentArea {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 33.33%; /* when visible, it will reserve 1/3 of space */
+  flex: 0 0 33.33%;
   height: 100%;
   overflow: hidden;
-  display: none; /* ✅ hidden by default */
+  display: none; /* Hidden by default */
+}
+
+#videoArea {
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 #videoArea video {
@@ -56,14 +52,7 @@ body {
   border-radius: 6px;
 }
 
-#videoArea {
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  display: none;
-}
-
+/* === Close Button === */
 #closeContentBtn {
   position: absolute;
   top: 10px;
@@ -80,29 +69,52 @@ body {
   color: red;
 }
 
-/* === Terminal-Style Elements === */
-#terminalHome {
+/* === Terminal Elements === */
+.terminal-output,
+.terminal-link,
+.icon-button {
   font-family: monospace;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #000;
   border: 1px dashed #000;
+  border-radius: 4px;
   background-color: transparent;
-  padding: 8px 12px;
-  z-index: 9999;
-  user-select: none;
-  display: inline-block;
-  cursor: pointer;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
 }
 
-#terminalHome:hover {
+.terminal-output {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  color: #000;
+  z-index: 5;
+  display: inline-block;
+}
+
+.terminal-link {
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  color: #000;
+  user-select: none;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.terminal-link:hover,
+.icon-button:hover {
   background-color: #000;
   color: #fff;
 }
 
+.icon-button {
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* === Fixed Position Helpers === */
 .fixed-top-left {
   position: absolute;
   top: 16px;
@@ -115,53 +127,21 @@ body {
   right: 16px;
 }
 
-.terminal-output {
-  font-family: monospace;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #000;
-  border: 1px dashed #000;
-  border-radius: 4px;
-  padding: 8px 12px;
-  background-color: transparent;
-  z-index: 5;
-  display: inline-block;
-}
-
-.terminal-link {
-  cursor: pointer;
-  padding: 6px 12px;
-  border: 1px dashed #000;
-  border-radius: 4px;
-  color: #000;
-  font-family: monospace;
-  background-color: transparent;
-  font-size: 0.95rem;
-  z-index: 5;
-  user-select: none;
-}
-
-.terminal-link:hover {
-  background-color: #000;
-  color: #fff;
-}
-
-/* === Info Box === */
+/* === Info Box / Popups === */
 .popup {
   font-family: monospace;
   font-size: 1rem;
   line-height: 1.4;
   color: #000;
   border: 1px dashed #000;
-  background-color: transparent;
   padding: 8px 12px;
   max-width: 300px;
   position: absolute;
   top: 60px;
   left: 16px;
-  z-index: 15;
+  background-color: transparent;
   white-space: pre-wrap;
-  display: none;
+  z-index: 15;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -171,6 +151,7 @@ body {
   margin-bottom: 4px;
 }
 
+/* === Content Area === */
 #contentArea {
   display: flex;
   flex-direction: column;
@@ -181,7 +162,7 @@ body {
   height: 100%;
   font-size: 1.05rem;
   line-height: 1.7;
-  font-family: 'Segoe UI';
+  font-family: 'Segoe UI', sans-serif;
   color: #222;
   background-color: rgba(250, 250, 250, 0.95);
   overflow-y: auto;
@@ -189,6 +170,8 @@ body {
 
 #contentArea .content-wrapper {
   width: 100%;
+  max-width: 680px;
+  box-sizing: border-box;
 }
 
 #contentArea h2,
@@ -212,168 +195,10 @@ body {
   margin-bottom: 0.4em;
 }
 
-.video-links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px; /* ✅ Adds space between the boxes */
-  margin-top: 12px; /* Optional: space from the text above */
-}
-
-/* === Loading === */
-#loadingScreen {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: monospace;
-  text-align: center;
-  z-index: 100;
-}
-
-#asciiBar {
-  font-size: 1.2rem;
-  color: #a56b00;
-}
-
-.loading-text {
-  font-size: 1rem;
-  margin-bottom: 6px;
-}
-
-/* === Video Links === */
-
-.video-box {
-  background: none;
-  border: 1px dashed #555;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  font-family: monospace;
-  text-decoration: none;
-  color: black;
-  display: inline-block;
-  white-space: nowrap;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-}
-
-.video-box:hover {
-  background-color: black;
-  color: white;
-}
-
-@keyframes wiggle {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(2deg);
-  }
-  50% {
-    transform: rotate(-2deg);
-  }
-  75% {
-    transform: rotate(2deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-.video-box:hover {
-  animation: wiggle 0.4s ease-in-out;
-}
-
-@media (max-width: 768px) {
-  #viewerLayout {
-    flex-direction: column;
-  }
-
-  #modelContainer {
-    width: 100%;
-    height: 66.66vh; /* 2/3 of screen height */
-  }
-
-  #sharedContentArea {
-    position: fixed;
-    width: 100vw;
-    height: 33.33vh; /* 1/3 of screen height */
-    bottom: 0; /* Stick to bottom */
-    left: 0;
-    z-index: 1000;
-    background-color: rgba(0, 0, 0, 0.95);
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-#moreVideosContainer {
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-#moreVideosPane {
-  display: none;
-  flex-direction: column;
-  gap: 8px; /* 👈 Adds space between video buttons */
-  margin-bottom: 8px;
-}
-
-.more-video-btn {
-  background: none;
-  border: 1px dashed #555;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  font-family: monospace;
-  white-space: nowrap;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-}
-
-.more-video-btn:hover {
-  background-color: black;
-  color: white;
-}
-
-#moreVideosBtn {
-  padding: 6px 10px;
-  border: 1px dashed #555;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 0.9rem;
-  background: none;
-  cursor: pointer;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-}
-
-#moreVideosBtn:hover {
-  background-color: black;
-  color: white;
-}
-
-#contentArea .content-wrapper {
-  width: 100%;
-  max-width: 680px;
-  box-sizing: border-box;
-}
-
 #contentArea figure {
   margin: 24px 0;
-  width: 100%;
   text-align: center;
+  width: 100%;
 }
 
 #contentArea img.content-image {
@@ -395,6 +220,7 @@ body {
 
 /* === Animation Control Panel === */
 .animation-control-panel {
+  position: absolute;
   top: 60px;
   right: 16px;
   left: auto;
@@ -405,14 +231,13 @@ body {
 }
 
 .animation-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 500;
   font-size: 0.95rem;
-  text-align: left;
   line-height: 1.4;
-  display: flex;
-  align-items: center;
   gap: 6px;
-  justify-content: space-between;
 }
 
 .label-heading {
@@ -421,7 +246,6 @@ body {
 
 .animation-name {
   font-weight: 500;
-  flex-shrink: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -450,30 +274,124 @@ body {
   text-align: center;
 }
 
-.icon-button {
-  background: none;
-  border: 1px dashed #000;
-  border-radius: 4px;
-  padding: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.icon-button:hover {
-  background-color: #000;
-  color: #fff;
-}
-
 .step-button {
   padding: 6px 8px;
   font-size: 0.85rem;
   min-width: 50px;
-  text-align: center;
   font-family: monospace;
   font-weight: 600;
+  text-align: center;
+}
+
+/* === Video Links & More Videos === */
+.video-links,
+#moreVideosPane {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.video-box,
+.more-video-btn,
+#moreVideosBtn {
+  background: none;
+  border: 1px dashed #555;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.video-box:hover,
+.more-video-btn:hover,
+#moreVideosBtn:hover {
+  background-color: black;
+  color: white;
+}
+
+.video-box:hover {
+  animation: wiggle 0.4s ease-in-out;
+}
+
+#moreVideosContainer {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#moreVideosPane {
+  display: none;
+  margin-bottom: 8px;
+}
+
+/* === Loading Screen === */
+#loadingScreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: monospace;
+  text-align: center;
+  z-index: 100;
+}
+
+#asciiBar {
+  font-size: 1.2rem;
+  color: #a56b00;
+}
+
+.loading-text {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+/* === Wiggle Animation === */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+}
+
+/* === Responsive Layout === */
+@media (max-width: 768px) {
+  #viewerLayout {
+    flex-direction: column;
+  }
+
+  #modelContainer {
+    width: 100%;
+    height: 66.66vh;
+  }
+
+  #sharedContentArea {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 33.33vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+  }
 }
