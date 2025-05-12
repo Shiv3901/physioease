@@ -31,43 +31,34 @@ export const ROTATORCUFF_METADATA = {
 
   // === GENERAL VIDEO CATEGORIES (used for "More Videos" section) ===
   base_videos: {
-    intro: {
-      title: '📖 Introduction',
-      src: video('rotatorcuff_demo.mp4'),
+    Abduction: {
+      title: '🦴 Ab/Adduction',
+      src: video('rotatorcuff_ab_adduction.mp4'),
     },
-    movements: {
-      title: '🏃 Movements',
-      videos: {
-        abduction: {
-          title: '🦴 Ab/Adduction',
-          src: video('rotatorcuff_ab_adduction.mp4'),
-        },
-        flexion: {
-          title: '🦾 Flex/Extend',
-          src: video('rotatorcuff_flex_extend.mp4'),
-        },
-        horizontal: {
-          title: '↔️ Horiz Ab/Ad',
-          src: video('rotatorcuff_horizontal_ab_ad.mp4'),
-        },
-        hanging: {
-          title: '🔁 Hanging Arm',
-          src: video('rotatorcuff_rotation_down.mp4'),
-        },
-        raised: {
-          title: '🔄 Raised Arm',
-          src: video('rotatorcuff_rotation_up.mp4'),
-        },
-      },
+    Flexion: {
+      title: '🦾 Flex/Extend',
+      src: video('rotatorcuff_flex_extend.mp4'),
     },
-    extended: {
-      title: '🧠 Extended Version',
-      src: video('rotatorcuff-extended.mp4'),
+    Horizontal: {
+      title: '↔️ Horiz Ab/Ad',
+      src: video('rotatorcuff_horizontal_ab_ad.mp4'),
     },
-    rehab: {
-      title: '🛠️ Rehab Exercises',
-      src: video('rotatorcuff-rehab.mp4'),
+    Hanging: {
+      title: '🔁 Hanging Arm',
+      src: video('rotatorcuff_rotation_down.mp4'),
     },
+    Raised: {
+      title: '🔄 Raised Arm',
+      src: video('rotatorcuff_rotation_up.mp4'),
+    },
+    // extended: {
+    //   title: '🧠 Extended Version',
+    //   src: video('rotatorcuff-extended.mp4'),
+    // },
+    // rehab: {
+    //   title: '🛠️ Rehab Exercises',
+    //   src: video('rotatorcuff-rehab.mp4'),
+    // },
   },
 
   // === STRUCTURE-SPECIFIC INFO (used for label popup + video buttons) ===
@@ -144,18 +135,12 @@ export const ROTATORCUFF_METADATA = {
 export const ANKLE_METADATA = {
   base_model: model('ankle-compressed.glb'),
   base_videos: {
-    intro: { title: '📖 Introduction', src: video('ankle_demo.mp4') },
-    movements: {
-      title: '🏃 Movements',
-      videos: {
-        dorsiflexion: { title: '⬆️ Dorsiflexion', src: video('ankle_dorsiflexion.mp4') },
-        plantarflexion: { title: '⬇️ Plantarflexion', src: video('ankle_plantarflexion.mp4') },
-        eversion: { title: '↔️ Eversion', src: video('ankle_eversion.mp4') },
-        inversion: { title: '↕️ Inversion', src: video('ankle_inversion.mp4') },
-      },
-    },
-    extended: { title: '🧠 Extended Version', src: video('ankle-extended.mp4') },
-    rehab: { title: '🛠️ Rehab', src: video('ankle-rehab.mp4') },
+    Dorsiflexion: { title: '⬆️ Dorsiflexion', src: video('ankle_dorsiflexion.mp4') },
+    Plantarflexion: { title: '⬇️ Plantarflexion', src: video('ankle_plantarflexion.mp4') },
+    Eversion: { title: '↔️ Eversion', src: video('ankle_eversion.mp4') },
+    Inversion: { title: '↕️ Inversion', src: video('ankle_inversion.mp4') },
+    // extended: { title: '🧠 Extended Version', src: video('ankle-extended.mp4') },
+    // rehab: { title: '🛠️ Rehab', src: video('ankle-rehab.mp4') },
   },
   specific_videos: {
     TibialisAnterior: {

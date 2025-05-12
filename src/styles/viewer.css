@@ -392,3 +392,86 @@ body {
   color: #555;
   margin-top: 8px;
 }
+
+/* === Animation Control Panel === */
+.animation-control-panel {
+  top: 60px;
+  right: 16px;
+  left: auto;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.animation-label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: left;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.label-heading {
+  font-weight: 600;
+}
+
+.animation-name {
+  font-weight: 500;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#animationControlsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.animation-slider {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.animation-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.animation-controls button {
+  flex: 1;
+  padding: 6px 0;
+  text-align: center;
+}
+
+.icon-button {
+  background: none;
+  border: 1px dashed #000;
+  border-radius: 4px;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.step-button {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  min-width: 50px;
+  text-align: center;
+  font-family: monospace;
+  font-weight: 600;
+}

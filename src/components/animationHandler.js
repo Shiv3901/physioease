@@ -6,7 +6,6 @@ let animations = [];
 let isPlaying = false;
 let sliderElement = null;
 let playButtonElement = null;
-let animationSelectElement = null;
 let currentAction = null;
 let duration = 0;
 
@@ -16,7 +15,6 @@ export function setupAnimationHandler(
   {
     sliderId = 'animationSlider',
     playButtonId = 'playAnimationsBtn',
-    selectId = 'animationSelect'
   } = {}
 ) {
   mixer = mixerInstance;
@@ -31,7 +29,7 @@ export function setupAnimationHandler(
 
   sliderElement = document.getElementById(sliderId);
   playButtonElement = document.getElementById(playButtonId);
-  animationSelectElement = document.getElementById(selectId);
+  const controlsWrapper = document.getElementById('animationControlsWrapper');
 
   if (sliderElement) {
     sliderElement.max = duration.toString();
@@ -53,31 +51,7 @@ export function setupAnimationHandler(
     });
   }
 
-  if (animationSelectElement) {
-    animationSelectElement.innerHTML = animations.map((clip, index) => `
-      <option value="${index}">${clip.name}</option>
-    `).join('');
-  
-    animationSelectElement.addEventListener('change', (e) => {
-      const selectedIndex = parseInt(e.target.value);
-      if (!isNaN(selectedIndex)) {
-        stopCurrentAction();
-        playAnimation(animations[selectedIndex]);
-        log('INFO', `🎬 Selected animation: ${animations[selectedIndex].name}`);
-      }
-    });
-  
-    if (animations.length > 0) {
-      stopCurrentAction();
-      playAnimation(animations[0]);
-      setAnimationTime(0);
-      animationSelectElement.value = "0";
-      log('INFO', `🎬 Default animation loaded: ${animations[0].name}`);
-    }
-  }
-  
-
-  const stepAmount = 0.1;
+  const stepAmount = 1.0;
   const stepBackBtn = document.getElementById('stepBackBtn');
   const stepForwardBtn = document.getElementById('stepForwardBtn');
 
@@ -103,6 +77,18 @@ export function setupAnimationHandler(
     log('DEBUG', `⏯️ Stepped to ${newTime.toFixed(2)}s`);
   }
 
+  if (animations.length > 0) {
+    stopCurrentAction();
+    playAnimation(animations[0]);
+    setAnimationTime(0);
+    updateAnimationName(animations[0].name);
+    if (controlsWrapper) controlsWrapper.style.display = 'flex';
+    log('INFO', `🎬 Default animation loaded: ${animations[0].name}`);
+  } else {
+    updateAnimationName('None');
+    if (controlsWrapper) controlsWrapper.style.display = 'none';
+  }
+
   log('INFO', `✅ Animation handler initialized. Duration: ${duration.toFixed(2)}s`);
 }
 
@@ -114,6 +100,8 @@ function playAnimation(clip) {
   currentAction.setEffectiveWeight(1);
   currentAction.play();
   currentAction.paused = !isPlaying;
+
+  updateAnimationName(clip.name);
 }
 
 function stopCurrentAction() {
@@ -123,12 +111,51 @@ function stopCurrentAction() {
   }
 }
 
+function updateAnimationName(name) {
+  const nameTextEl = document.getElementById('animationNameText');
+  if (nameTextEl) {
+    nameTextEl.textContent = name || 'None';
+    nameTextEl.title = name || 'None';
+  }
+}
+
+export function playAnimationByName(name) {
+  const clip = animations.find((clip) => clip.name === name);
+  const controlsWrapper = document.getElementById('animationControlsWrapper');
+
+  if (!clip) {
+    log('WARN', `❌ Animation "${name}" not found.`);
+    updateAnimationName('None');
+    if (controlsWrapper) controlsWrapper.style.display = 'none';
+    return;
+  }
+
+  stopCurrentAction();
+  playAnimation(clip);
+  setAnimationTime(0);
+  updateAnimationName(clip.name);
+  if (controlsWrapper) controlsWrapper.style.display = 'flex';
+
+  log('INFO', `🎬 Animation started: ${name}`);
+}
+
 export function togglePlay() {
   isPlaying = !isPlaying;
 
-  if (playButtonElement) {
-    playButtonElement.textContent = isPlaying ? '⏸️ Pause' : '▶️ Play ';
-  }  
+  // Swap SVG icon (play vs pause)
+  const playIcon = document.getElementById('playIcon');
+  if (playIcon && playIcon.tagName.toLowerCase() === 'svg') {
+    while (playIcon.firstChild) playIcon.removeChild(playIcon.firstChild);
+    const ns = 'http://www.w3.org/2000/svg';
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute(
+      'd',
+      isPlaying
+        ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z' // Pause
+        : 'M8 5v14l11-7z'                   // Play
+    );
+    playIcon.appendChild(path);
+  }
 
   if (isPlaying) {
     log('INFO', '▶️ Playing current animation...');

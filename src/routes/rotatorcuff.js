@@ -7,7 +7,7 @@ import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
 import { ROTATORCUFF_METADATA } from '../components/config.js';
-import { playVideo, showContent } from '../components/contentHandler.js';
+import { playAnimationPanel, showContent } from '../components/contentHandler.js';
 import '../styles/viewer.css';
 
 log('INFO', '🚀 Rotator Cuff Model Loaded');
@@ -67,7 +67,7 @@ export function loadRotatorCuff(app) {
     renderer.domElement,
     ROTATORCUFF_METADATA,
     (clickedObject) => {},
-    playVideo,
+    playAnimationPanel,
     showContent
   );
   setupContentHandlers(ROTATORCUFF_METADATA);

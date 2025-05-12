@@ -4,27 +4,32 @@ export function getViewerHTML() {
       <div id="modelContainer">
         <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
 
-        <div id="animationControlPanel" class="popup" style="top: 60px; right: 16px; left: auto; max-width: 220px;">
-  
-          <select id="animationSelect" class="terminal-link" style="width: 100%; margin-bottom: 8px;">
-            <option>Loading...</option>
-          </select>
+        <div id="animationControlPanel" class="popup animation-control-panel">
+          <div class="animation-label">
+            <span class="label-heading">🎞️ Animation:</span>
+            <span id="animationNameText" class="animation-name">None</span>
+          </div>
 
-          <div id="playAnimationsBtn" class="terminal-link" style="text-align: center; margin-bottom: 8px;">▶️ Play</div>
+          <div id="animationControlsWrapper">
+            <input
+              id="animationSlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.001"
+              value="0"
+              class="animation-slider"
+            />
 
-          <input
-            id="animationSlider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.001"
-            value="0"
-            style="width: 100%; margin-bottom: 8px;"
-          />
-
-          <div style="display: flex; justify-content: space-between; gap: 6px;">
-            <button id="stepBackBtn" class="terminal-link" style="flex: 1; padding: 4px 0;">⏪</button>
-            <button id="stepForwardBtn" class="terminal-link" style="flex: 1; padding: 4px 0;">⏩</button>
+            <div class="animation-controls">
+              <button id="stepBackBtn" class="terminal-link step-button">« 1s</button>
+              <button id="playAnimationsBtn" class="icon-button" title="Play">
+                <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+              <button id="stepForwardBtn" class="terminal-link step-button">1s »</button>
+            </div>
           </div>
         </div>
 
@@ -39,7 +44,7 @@ export function getViewerHTML() {
         <div id="videoLinks" class="video-links" style="display: none;"></div>
         <div id="moreVideosContainer">
           <div id="moreVideosPane" style="display: none;"></div>
-          <div id="moreVideosBtn" class="terminal-link fixed-bottom-left">🎬 More Videos</div>
+          <div id="moreVideosBtn" class="terminal-link fixed-bottom-left">🎬 More Animations</div>
         </div>
       </div>
 

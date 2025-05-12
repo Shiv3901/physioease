@@ -8,7 +8,7 @@ vi.mock('../../src/components/utils', () => ({
 }));
 
 describe('InteractionHandler', () => {
-  let scene, camera, canvas, onClickCallback, playVideoCallback, showContentCallback;
+  let scene, camera, canvas, onClickCallback, playAnimationPanel, showContentCallback;
   let handler, fakeObject, mockMetadata;
 
   beforeAll(() => {
@@ -28,7 +28,7 @@ describe('InteractionHandler', () => {
       addEventListener: vi.fn(),
     };
     onClickCallback = vi.fn();
-    playVideoCallback = vi.fn();
+    playAnimationPanel = vi.fn();
     showContentCallback = vi.fn();
 
     mockMetadata = {
@@ -53,7 +53,7 @@ describe('InteractionHandler', () => {
       canvas,
       mockMetadata,
       onClickCallback,
-      playVideoCallback,
+      playAnimationPanel,
       showContentCallback
     );
 
@@ -212,7 +212,7 @@ describe('InteractionHandler', () => {
         canvas,
         metadata,
         onClickCallback,
-        playVideoCallback,
+        playAnimationPanel,
         showContentCallback
       );
       handler.updateSelectedInfo(fakeObject);
@@ -239,7 +239,7 @@ describe('InteractionHandler', () => {
         canvas,
         metadata,
         onClickCallback,
-        playVideoCallback,
+        playAnimationPanel,
         showContentCallback
       );
       handler.updateSelectedInfo(fakeObject);
@@ -267,7 +267,7 @@ describe('InteractionHandler', () => {
         canvas,
         metadata,
         onClickCallback,
-        playVideoCallback,
+        playAnimationPanel,
         showContentCallback
       );
       handler.updateSelectedInfo(fakeObject);

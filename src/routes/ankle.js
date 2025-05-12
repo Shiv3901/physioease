@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
-import { setupContentHandlers, playVideo, showContent } from '../components/contentHandler.js';
+import { setupContentHandlers, playAnimationPanel, showContent } from '../components/contentHandler.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
@@ -70,7 +70,7 @@ export function loadAnkle(app) {
     renderer.domElement,
     ANKLE_METADATA,
     (clickedObject) => {},
-    playVideo,
+    playAnimationPanel,
     showContent
   );
   setupContentHandlers(ANKLE_METADATA);

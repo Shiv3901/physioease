@@ -24,7 +24,7 @@ export class InteractionHandler {
     canvasElement,
     metadata,
     onClickCallback,
-    playVideoCallback,
+    playAnimationPanel,
     showContentCallback
   ) {
     this.scene = scene;
@@ -42,7 +42,7 @@ export class InteractionHandler {
     this.selectedVideoLinks = document.getElementById('videoLinks');
 
     this.onClickCallback = onClickCallback;
-    this.playVideoCallback = playVideoCallback;
+    this.playAnimationPanel = playAnimationPanel;
     this.showContentCallback = showContentCallback;
 
     this.holdTimeout = null;
@@ -173,8 +173,8 @@ export class InteractionHandler {
 
         if (type === 'video' && src) {
           btn.addEventListener('click', () => {
-            if (typeof this.playVideoCallback === 'function') {
-              this.playVideoCallback(src);
+            if (typeof this.playAnimationPanel === 'function') {
+              this.playAnimationPanel(src);
             } else {
               window.open(src, '_blank');
             }
