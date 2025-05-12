@@ -3,27 +3,38 @@ export function getViewerHTML() {
     <div id="viewerArea">
       <div id="modelContainer">
         <div id="terminalHome" class="terminal-link fixed-top-right">Home</div>
-        <div id="playAnimationsBtn" class="terminal-link fixed-top-right" style="top: 42px;">▶️ Play Animation</div>
-        <input
-          id="animationSlider"
-          type="range"
-          min="0"
-          max="1"
-          step="0.001"
-          value="0"
-          style="
-            position: absolute;
-            right: 12px;
-            top: 78px;
-            z-index: 1000;
-            width: 160px;
-          "
-        />
+
+        <div id="animationControlPanel" class="popup" style="top: 60px; right: 16px; left: auto; max-width: 220px;">
+  
+          <select id="animationSelect" class="terminal-link" style="width: 100%; margin-bottom: 8px;">
+            <option>Loading...</option>
+          </select>
+
+          <div id="playAnimationsBtn" class="terminal-link" style="text-align: center; margin-bottom: 8px;">▶️ Play</div>
+
+          <input
+            id="animationSlider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.001"
+            value="0"
+            style="width: 100%; margin-bottom: 8px;"
+          />
+
+          <div style="display: flex; justify-content: space-between; gap: 6px;">
+            <button id="stepBackBtn" class="terminal-link" style="flex: 1; padding: 4px 0;">⏪</button>
+            <button id="stepForwardBtn" class="terminal-link" style="flex: 1; padding: 4px 0;">⏩</button>
+          </div>
+        </div>
+
         <div id="selectedLabel" class="terminal-output fixed-top-left">🧠 Selected: None</div>
+
         <div id="loadingScreen">
           <div class="loading-text">Loading <span id="loadingPercent">0%</span></div>
           <pre id="asciiBar">[----------]</pre>
         </div>
+
         <div id="popup" class="popup"></div>
         <div id="videoLinks" class="video-links" style="display: none;"></div>
         <div id="moreVideosContainer">
