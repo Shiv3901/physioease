@@ -1,5 +1,9 @@
 import { describe, it, beforeEach, vi, expect } from 'vitest';
-import { playAnimationPanel, showContent, setupContentHandlers } from '../../src/components/contentHandler';
+import {
+  playAnimationPanel,
+  showContent,
+  setupContentHandlers,
+} from '../../src/components/contentHandler';
 
 vi.mock('../../src/components/uiHelpers.js', () => ({
   updateDebugDimensions: vi.fn(),

@@ -12,10 +12,7 @@ let duration = 0;
 export function setupAnimationHandler(
   mixerInstance,
   clips,
-  {
-    sliderId = 'animationSlider',
-    playButtonId = 'playAnimationsBtn',
-  } = {}
+  { sliderId = 'animationSlider', playButtonId = 'playAnimationsBtn' } = {}
 ) {
   mixer = mixerInstance;
   animations = clips;
@@ -65,6 +62,10 @@ export function setupAnimationHandler(
   document.addEventListener('keydown', (e) => {
     if (e.key === 'j') stepAnimation(-stepAmount);
     if (e.key === 'k') stepAnimation(stepAmount);
+    if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlay();
+    }
   });
 
   function stepAnimation(offset) {
@@ -152,7 +153,7 @@ export function togglePlay() {
       'd',
       isPlaying
         ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z' // Pause
-        : 'M8 5v14l11-7z'                   // Play
+        : 'M8 5v14l11-7z' // Play
     );
     playIcon.appendChild(path);
   }
@@ -194,7 +195,10 @@ export function setAnimationTime(seconds) {
     currentAction.time = seconds;
     currentAction.paused = true;
     currentAction.play();
-    log('DEBUG2', ` → Current Clip "${currentAction._clip.name}": time=${currentAction.time.toFixed(3)}`);
+    log(
+      'DEBUG2',
+      ` → Current Clip "${currentAction._clip.name}": time=${currentAction.time.toFixed(3)}`
+    );
   }
 
   mixer.update(0);
