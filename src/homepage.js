@@ -8,7 +8,7 @@ export function loadHomepage(app) {
         <h1 class="text-lg font-bold mb-3">PhysioEase v${version}</h1>
         <p class="text-sm text-gray-500 mb-5">A tool to animate injuries, concepts, and exercises.</p>
 
-        <div class="flex flex-col sm:flex-row sm:items-start gap-3 mb-6">
+        <div class="flex flex-col gap-3 mb-6">
           <button id="launch-rotator" class="terminal-link">
             💪🏼 Rotator Cuff Viewer
           </button>
