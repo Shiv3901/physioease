@@ -69,7 +69,7 @@ export function setupContentHandlers(metadata) {
     if (entry.src) {
       const btn = document.createElement('div');
       btn.className =
-        'py-1 rounded border border-dashed border-gray-400 font-mono text-sm cursor-pointer hover:bg-black hover:text-white transition w-full text-left';
+        'py-1 rounded border border-dashed border-gray-400 font-mono text-sm text-black cursor-pointer w-full text-left transition hover:bg-gray-200 active:bg-gray-200';
 
       const label = document.createElement('span');
       label.className = 'px-3';
@@ -78,6 +78,12 @@ export function setupContentHandlers(metadata) {
       btn.appendChild(label);
 
       btn.addEventListener('click', () => {
+        document
+          .querySelectorAll('#moreVideosPane .selected')
+          .forEach((el) => el.classList.remove('bg-gray-200', 'text-black', 'selected'));
+
+        btn.classList.add('bg-gray-200', 'text-black', 'selected');
+
         log('INFO', `[▶️] Playing animation "${key}"`);
         playAnimationPanel(key);
       });

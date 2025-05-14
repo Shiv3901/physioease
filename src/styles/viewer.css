@@ -218,3 +218,8 @@ input.custom-slider::-moz-range-thumb {
   border: none;
   cursor: pointer;
 }
+
+.selected {
+  background-color: black;
+  color: white;
+}

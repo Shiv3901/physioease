@@ -72,9 +72,12 @@ export function getViewerHTML() {
             id="moreVideosPane"
             class="hidden fixed top-[3.2rem] left-3 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-50 max-h-64 overflow-y-auto flex-col gap-2"
           ></div>
-          <div id="moreVideosBtn" class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition">
+          <button
+            id="moreVideosBtn"
+            class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition focus:outline-none"
+          >
             🎬 More Animations
-          </div>
+          </button>
         </div>
 
         <!-- Overlay shared content -->
