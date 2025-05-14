@@ -15,11 +15,20 @@ import { ANKLE_METADATA } from '../components/config.js';
 import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
-log('INFO', '🚀 Ankle Model Loaded');
+log('INFO', '🚀 Ankle Model Loaded (Tailwind Edition)');
 
 const clock = new THREE.Clock();
 
 export function loadAnkle(app) {
+  const styleId = 'viewer-css-link';
+  if (!document.getElementById(styleId)) {
+    const link = document.createElement('link');
+    link.id = styleId;
+    link.rel = 'stylesheet';
+    link.href = '/src/styles/viewer.css';
+    document.head.appendChild(link);
+  }
+
   app.innerHTML = getViewerHTML();
   mountLandscapeBlocker();
 
@@ -34,7 +43,7 @@ export function loadAnkle(app) {
     controls,
     ANKLE_METADATA.base_model,
     ({ mixer, animations }) => {
-      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('loadingScreen').classList.add('hidden');
       setupAnimationHandler(mixer, animations);
     },
     (xhr) => {
@@ -42,7 +51,7 @@ export function loadAnkle(app) {
       const loaded = xhr.loaded;
 
       if (!total || total <= 0) {
-        console.warn('⚠️ Warning: Invalid or missing total size during ankle model loading.', xhr);
+        console.warn('⚠️ Invalid or missing total size during loading.', xhr);
         return;
       }
 
@@ -64,7 +73,8 @@ export function loadAnkle(app) {
     },
     (error) => {
       console.error('❌ Failed to load ankle model:', error);
-      document.getElementById('loadingScreen').innerHTML = '❌ Failed to load ankle model.';
+      const screen = document.getElementById('loadingScreen');
+      if (screen) screen.innerHTML = '❌ Failed to load ankle model.';
     }
   );
 
@@ -73,10 +83,13 @@ export function loadAnkle(app) {
     camera,
     renderer.domElement,
     ANKLE_METADATA,
-    (clickedObject) => {},
+    (clickedObject) => {
+      // Optional: handle click events
+    },
     playAnimationPanel,
     showContent
   );
+
   setupContentHandlers(ANKLE_METADATA);
 
   function animate() {
@@ -100,15 +113,18 @@ export function loadAnkle(app) {
 
   window.addEventListener('resize', handleResize);
 
-  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    cancelAnimationFrame(animate);
-    renderer.dispose();
-    renderer.domElement.remove();
-    window.removeEventListener('resize', handleResize);
-    history.pushState({}, '', '/');
-    window.dispatchEvent(new Event('popstate'));
-  });
+  const terminalHome = document.getElementById('terminalHome');
+  if (terminalHome) {
+    terminalHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      cancelAnimationFrame(animate);
+      renderer.dispose();
+      renderer.domElement.remove();
+      window.removeEventListener('resize', handleResize);
+      history.pushState({}, '', '/');
+      window.dispatchEvent(new Event('popstate'));
+    });
+  }
 
   updateDebugDimensions();
 }

@@ -13,6 +13,15 @@ import '../styles/viewer.css';
 log('INFO', '🚀 Rotator Cuff Model Loaded');
 
 export function loadRotatorCuff(app) {
+  const styleId = 'viewer-css-link';
+  if (!document.getElementById(styleId)) {
+    const link = document.createElement('link');
+    link.id = styleId;
+    link.rel = 'stylesheet';
+    link.href = '/src/styles/viewer.css';
+    document.head.appendChild(link);
+  }
+
   app.innerHTML = getViewerHTML();
   mountLandscapeBlocker();
 

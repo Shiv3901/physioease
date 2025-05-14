@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 /* === Base Styles === */
 body {
   margin: 0;
@@ -69,88 +71,6 @@ body {
   color: red;
 }
 
-/* === Terminal Elements === */
-.terminal-output,
-.terminal-link,
-.icon-button {
-  font-family: monospace;
-  border: 1px dashed #000;
-  border-radius: 4px;
-  background-color: transparent;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.terminal-output {
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 8px 12px;
-  color: #000;
-  z-index: 5;
-  display: inline-block;
-}
-
-.terminal-link {
-  font-size: 0.95rem;
-  padding: 6px 12px;
-  color: #000;
-  user-select: none;
-  cursor: pointer;
-  z-index: 5;
-}
-
-.terminal-link:hover,
-.icon-button:hover {
-  background-color: #000;
-  color: #fff;
-}
-
-.icon-button {
-  padding: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-/* === Fixed Position Helpers === */
-.fixed-top-left {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-}
-
-.fixed-top-right {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-}
-
-/* === Info Box / Popups === */
-.popup {
-  font-family: monospace;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #000;
-  border: 1px dashed #000;
-  padding: 8px 12px;
-  max-width: 300px;
-  position: absolute;
-  top: 60px;
-  left: 16px;
-  background-color: transparent;
-  white-space: pre-wrap;
-  z-index: 15;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.popup-description {
-  margin-bottom: 4px;
-}
-
 /* === Content Area === */
 #contentArea {
   display: flex;
@@ -218,82 +138,12 @@ body {
   margin-top: 8px;
 }
 
-/* === Animation Control Panel === */
-.animation-control-panel {
-  position: absolute;
-  top: 60px;
-  right: 16px;
-  left: auto;
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.animation-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  gap: 6px;
-}
-
-.label-heading {
-  font-weight: 600;
-}
-
-.animation-name {
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 #animationControlsWrapper {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.animation-slider {
-  width: 100%;
-  margin-top: 4px;
-}
-
-.animation-controls {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-}
-
-.animation-controls button {
-  flex: 1;
-  padding: 6px 0;
-  text-align: center;
-}
-
-.step-button {
-  padding: 6px 8px;
-  font-size: 0.85rem;
-  min-width: 50px;
-  font-family: monospace;
-  font-weight: 600;
-  text-align: center;
-}
-
-/* === Video Links & More Videos === */
-.video-links,
-#moreVideosPane {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.video-box,
-.more-video-btn,
 #moreVideosBtn {
   background: none;
   border: 1px dashed #555;
@@ -308,15 +158,9 @@ body {
     color 0.2s;
 }
 
-.video-box:hover,
-.more-video-btn:hover,
 #moreVideosBtn:hover {
   background-color: black;
   color: white;
-}
-
-.video-box:hover {
-  animation: wiggle 0.4s ease-in-out;
 }
 
 #moreVideosContainer {
@@ -327,11 +171,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-#moreVideosPane {
-  display: none;
-  margin-bottom: 8px;
 }
 
 /* === Loading Screen === */
@@ -350,48 +189,32 @@ body {
   color: #a56b00;
 }
 
-.loading-text {
-  font-size: 1rem;
-  margin-bottom: 6px;
+input.custom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background-color: #e5e7eb; /* Tailwind gray-200 */
+  border-radius: 9999px;
+  cursor: pointer;
 }
 
-/* === Wiggle Animation === */
-@keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(2deg);
-  }
-  50% {
-    transform: rotate(-2deg);
-  }
-  75% {
-    transform: rotate(2deg);
-  }
+/* Thumb for Chrome & Safari */
+input.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  border-radius: 9999px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
 }
 
-/* === Responsive Layout === */
-@media (max-width: 768px) {
-  #viewerLayout {
-    flex-direction: column;
-  }
-
-  #modelContainer {
-    width: 100%;
-    height: 66.66vh;
-  }
-
-  #sharedContentArea {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 33.33vh;
-    background-color: rgba(0, 0, 0, 0.95);
-    display: flex;
-    flex-direction: column;
-    z-index: 1000;
-  }
+/* Thumb for Firefox */
+input.custom-slider::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  background-color: #3b82f6;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
 }

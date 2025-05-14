@@ -1,91 +1,96 @@
 export function getViewerHTML() {
   return `
-    <div id="viewerArea">
-      <div id="modelContainer">
+    <div id="viewerArea" class="relative w-full h-full">
+      <div id="modelContainer" class="w-full h-full relative">
+        <canvas class="absolute top-0 left-0 w-full h-full z-[2]"></canvas>
 
-        <div id="UITopPanel" class="ui-panel p-4">
-          <div id="selectedLabel" class="terminal-output fixed-top-left mb-2">
-            🧠 Selected: None
-          </div>
-
-          <div id="popup" class="popup mb-2"></div>
-
-          <div id="videoLinks" class="video-links mb-2" style="display: none;"></div>
-
-          <div id="terminalHome" class="terminal-link fixed-top-right">
-            Home
-          </div>
-
-          <div id="animationControlPanel" class="popup animation-control-panel p-3">
-            <div class="animation-label mb-2">
-              <span class="label-heading">🎞️ Animation:</span>
-              <span id="animationNameText" class="animation-name">None</span>
+        <div id="UITopPanel" class="absolute top-0 left-0 w-full px-6 py-4 z-30 text-black">
+          <div class="flex justify-between items-start w-full gap-10">
+            <div class="flex flex-col gap-2 w-[280px] shrink-0">
+              <div id="selectedLabel" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono font-semibold text-sm shadow-sm leading-tight">
+                🧠 Selected: None
+              </div>
+              <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm shadow-sm leading-snug whitespace-pre-wrap break-words">
+                <div id="videoLinks" class="mt-2"></div>
+              </div>
             </div>
 
-            <div id="animationControlsWrapper">
-              <input
-                id="animationSlider"
-                type="range"
-                min="0"
-                max="1"
-                step="0.001"
-                value="0"
-                class="animation-slider w-full mb-2"
-              />
-
-              <div class="animation-controls flex items-center gap-3">
-                <button id="stepBackBtn" class="terminal-link step-button">« 1ms</button>
-                <button id="playAnimationsBtn" class="icon-button" title="Play">
-                  <svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+            <div class="flex flex-col w-[270px] shrink-0 gap-2">
+              <div class="flex justify-end">
+                <button id="terminalHome" class="px-4 py-1 border border-dashed border-black rounded font-mono text-sm cursor-pointer hover:bg-black hover:text-white transition">
+                  Home
                 </button>
-                <button id="stepForwardBtn" class="terminal-link step-button">1ms »</button>
+              </div>
+
+              <div class="w-full border border-dashed border-black bg-white px-4 py-3 rounded shadow-sm">
+                <div class="flex items-center gap-2 mb-2 font-mono text-sm">
+                  <span class="font-semibold">🎞️ Animation:</span>
+                  <span id="animationNameText" class="font-small"></span>
+                </div>
+
+                <input
+                  id="animationSlider"
+                  type="range"
+                  class="custom-slider w-full h-[4px] mb-4"
+                  min="0"
+                  max="1"
+                  step="0.001"
+                  value="0"
+                />
+
+                <div class="flex justify-center gap-2">
+                  <button id="stepBackBtn"
+                          class="px-3 py-1.5 rounded-md border border-black font-mono text-sm hover:bg-black hover:text-white transition">
+                    « 1ms
+                  </button>
+                  <button id="playAnimationsBtn" title="Toggle Play/Pause"
+                          class="px-3 py-1 rounded-md border border-black hover:bg-black hover:text-white transition">
+                    <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button id="stepForwardBtn"
+                          class="px-3 py-1.5 rounded-md border border-black font-mono text-sm hover:bg-black hover:text-white transition">
+                    1ms »
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <div id="loadingScreen">
-          <div class="loading-text">Loading <span id="loadingPercent">0%</span></div>
-          <pre id="asciiBar">[----------]</pre>
+
+        <div id="loadingScreen" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-center z-50">
+          <div class="text-base mb-1.5 text-black">Loading <span id="loadingPercent">0%</span></div>
+          <pre id="asciiBar" class="text-lg text-amber-700">[----------]</pre>
         </div>
 
-        <div id="moreVideosContainer">
-          <div id="moreVideosPane" style="display: none;"></div>
-          <div id="moreVideosBtn" class="terminal-link fixed-bottom-left">🎬 More Animations</div>
+        <div id="moreVideosContainer" class="fixed bottom-3 left-3 z-[9999] flex flex-col items-start gap-1">
+          <div
+            id="moreVideosPane"
+            class="hidden fixed bottom-12 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-45 max-h-64 overflow-y-auto flex-col gap-2"
+          >
+          </div>
+          <div id="moreVideosBtn" class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition">🎬 More Animations</div>
         </div>
       </div>
 
-      <div id="sharedContentArea" style="display: none;">
-        <button id="closeContentBtn" class="close-video-btn">✖️</button>
+      <div id="sharedContentArea" class="hidden absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-4 z-40">
+        <button id="closeContentBtn" class="absolute top-4 right-4 text-white text-xl hover:text-red-500 transition">✖️</button>
 
-        <div id="videoArea" style="display: none;">
-          <video id="exerciseVideo" controls preload="metadata" muted>
+        <div id="videoArea" class="hidden w-full max-w-3xl">
+          <video id="exerciseVideo" controls preload="metadata" muted class="w-full rounded">
             <source src="" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
 
-        <div id="contentArea" style="display: none;">
-          <div id="contentText" class="content-text"></div>
+        <div id="contentArea" class="hidden mt-4 w-full max-w-2xl text-white">
+          <div id="contentText" class="whitespace-pre-line"></div>
         </div>
       </div>
     </div>
 
-    <div id="debugDimensions" style="
-      position: fixed;
-      bottom: 8px;
-      right: 12px;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      font-family: monospace;
-      font-size: 0.85rem;
-      padding: 6px 10px;
-      border-radius: 6px;
-      z-index: 9999;
-      pointer-events: none;
-    ">
+    <div id="debugDimensions" class="fixed bottom-2 right-3 bg-black/10 text-black text-sm font-mono px-3 py-1 rounded z-[9999] pointer-events-none" >
       📏 0 x 0
     </div>
   `;

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   base: './',
@@ -9,6 +10,7 @@ export default defineConfig({
     open: false,
     allowedHosts: ['localhost', '127.0.0.1', '.ngrok-free.app'],
   },
+  plugins: [tailwindcss()],
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {

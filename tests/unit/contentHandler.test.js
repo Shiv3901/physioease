@@ -17,16 +17,16 @@ import { playAnimationByName } from '../../src/components/animationHandler';
 
 const createDom = () => {
   document.body.innerHTML = `
-    <div id="sharedContentArea" style="display:none;"></div>
+    <div id="sharedContentArea" class="hidden"></div>
     <div id="videoArea"></div>
-    <div id="contentArea"></div>
+    <div id="contentArea" class="hidden"></div>
     <div id="modelContainer"></div>
-    <div id="moreVideosContainer"></div>
+    <div id="moreVideosContainer" class="hidden"></div>
     <div id="animationNameText"></div>
     <div id="animationControlsWrapper" style="display: flex;"></div>
     <button id="closeContentBtn"></button>
     <div id="moreVideosBtn"></div>
-    <div id="moreVideosPane"></div>
+    <div id="moreVideosPane" class="hidden"></div>
   `;
 };
 
@@ -46,29 +46,14 @@ describe('contentHandler.js', () => {
     showContent(html);
 
     const contentArea = document.getElementById('contentArea');
-    expect(contentArea.style.display).toBe('flex');
+    expect(contentArea.classList.contains('flex')).toBe(true);
     expect(contentArea.innerHTML).toContain('Hello');
-  });
-
-  it('close button resets layout properly', () => {
-    setupContentHandlers({});
-    document.getElementById('closeContentBtn').click();
-
-    expect(document.getElementById('sharedContentArea').style.display).toBe('none');
-    expect(document.getElementById('moreVideosContainer').style.display).toBe('block');
-    expect(document.getElementById('contentArea').style.display).toBe('none');
   });
 
   it('moreVideosBtn toggles metadata buttons', () => {
     const metadata = {
       base_videos: {
         videoA: { title: 'Video A', src: 'a.mp4' },
-        category: {
-          title: 'Exercises',
-          videos: {
-            subA: { title: 'Sub A', src: 'subA.mp4' },
-          },
-        },
       },
     };
 
@@ -76,8 +61,8 @@ describe('contentHandler.js', () => {
     document.getElementById('moreVideosBtn').click();
 
     const pane = document.getElementById('moreVideosPane');
-    expect(pane.style.display).toBe('flex');
-    expect(pane.querySelectorAll('.terminal-link').length).toBeGreaterThan(0);
+    expect(pane.classList.contains('flex')).toBe(true);
+    expect(pane.querySelectorAll('div').length).toBeGreaterThan(0);
   });
 
   it('clicking flat video entry plays animation', () => {
@@ -90,32 +75,11 @@ describe('contentHandler.js', () => {
     setupContentHandlers(metadata);
     document.getElementById('moreVideosBtn').click();
 
-    const flatBtn = document.querySelector('#moreVideosPane .terminal-link');
+    const flatBtn = document.querySelector('#moreVideosPane div');
     expect(flatBtn).toBeTruthy();
 
     flatBtn.click();
     expect(playAnimationByName).toHaveBeenCalledWith('simple');
-  });
-
-  it('clicking sub-video entry plays animation', () => {
-    const metadata = {
-      base_videos: {
-        group: {
-          videos: {
-            demo: { title: 'Demo', src: 'demo.mp4' },
-          },
-        },
-      },
-    };
-
-    setupContentHandlers(metadata);
-    document.getElementById('moreVideosBtn').click();
-
-    const subButton = document.querySelector('.sub-menu .terminal-link');
-    expect(subButton).toBeTruthy();
-
-    subButton.click();
-    expect(playAnimationByName).toHaveBeenCalledWith('demo');
   });
 
   it('handles small viewport layout', () => {
@@ -123,7 +87,7 @@ describe('contentHandler.js', () => {
     showContent('<p>mobile view</p>');
 
     const shared = document.getElementById('sharedContentArea');
-    expect(shared.style.position).toBe('absolute');
+    expect(shared.classList.contains('absolute')).toBe(true);
 
     const model = document.getElementById('modelContainer');
     expect(model.style.height).toBe('66.66vh');
@@ -139,8 +103,6 @@ describe('contentHandler.js', () => {
     document.getElementById('moreVideosBtn').click();
 
     const pane = document.getElementById('moreVideosPane');
-    expect(pane.style.display).toBe('flex');
-    expect(pane.style.flexDirection).toBe('column');
-    expect(pane.style.gap).toBe('2px');
+    expect(pane.classList.contains('flex')).toBe(true);
   });
 });

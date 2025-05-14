@@ -143,19 +143,11 @@ export function playAnimationByName(name) {
 export function togglePlay() {
   isPlaying = !isPlaying;
 
-  // Swap SVG icon (play vs pause)
   const playIcon = document.getElementById('playIcon');
-  if (playIcon && playIcon.tagName.toLowerCase() === 'svg') {
-    while (playIcon.firstChild) playIcon.removeChild(playIcon.firstChild);
-    const ns = 'http://www.w3.org/2000/svg';
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute(
-      'd',
-      isPlaying
-        ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z' // Pause
-        : 'M8 5v14l11-7z' // Play
-    );
-    playIcon.appendChild(path);
+  if (playIcon?.tagName.toLowerCase() === 'svg') {
+    playIcon.innerHTML = isPlaying
+      ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />' // Pause icon
+      : '<path d="M8 5v14l11-7z" />'; // Play icon
   }
 
   if (isPlaying) {
