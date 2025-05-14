@@ -218,7 +218,3 @@ input.custom-slider::-moz-range-thumb {
   border: none;
   cursor: pointer;
 }
-
-.bottom-safe {
-  bottom: max(env(safe-area-inset-bottom), 0.75rem);
-}
