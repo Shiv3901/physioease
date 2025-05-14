@@ -31,26 +31,30 @@ export const ROTATORCUFF_METADATA = {
 
   // === GENERAL VIDEO CATEGORIES (used for "More Videos" section) ===
   base_videos: {
-    Abduction: {
-      title: '🦴 Ab/Adduction',
-      src: video('rotatorcuff_ab_adduction.mp4'),
-    },
+    // Abduction: {
+    //   title: '🦴 Ab/Adduction',
+    //   src: video('rotatorcuff_ab_adduction.mp4'),
+    // },
     Flexion: {
-      title: '🦾 Flex/Extend',
+      title: '🦾 Flex',
       src: video('rotatorcuff_flex_extend.mp4'),
     },
-    Horizontal: {
-      title: '↔️ Horiz Ab/Ad',
-      src: video('rotatorcuff_horizontal_ab_ad.mp4'),
+    Extension: {
+      title: '🦾 Extend',
+      src: video('rotatorcuff_flex_extend.mp4'),
     },
-    Hanging: {
-      title: '🔁 Hanging Arm',
-      src: video('rotatorcuff_rotation_down.mp4'),
-    },
-    Raised: {
-      title: '🔄 Raised Arm',
-      src: video('rotatorcuff_rotation_up.mp4'),
-    },
+    // Horizontal: {
+    //   title: '↔️ Horiz Ab/Ad',
+    //   src: video('rotatorcuff_horizontal_ab_ad.mp4'),
+    // },
+    // Hanging: {
+    //   title: '🔁 Hanging Arm',
+    //   src: video('rotatorcuff_rotation_down.mp4'),
+    // },
+    // Raised: {
+    //   title: '🔄 Raised Arm',
+    //   src: video('rotatorcuff_rotation_up.mp4'),
+    // },
     // extended: {
     //   title: '🧠 Extended Version',
     //   src: video('rotatorcuff-extended.mp4'),

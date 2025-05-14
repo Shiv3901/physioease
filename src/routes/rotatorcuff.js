@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
@@ -8,9 +9,12 @@ import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log } from '../components/utils.js';
 import { ROTATORCUFF_METADATA } from '../components/config.js';
 import { playAnimationPanel, showContent } from '../components/contentHandler.js';
+import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
 log('INFO', '🚀 Rotator Cuff Model Loaded');
+
+const clock = new THREE.Clock();
 
 export function loadRotatorCuff(app) {
   const styleId = 'viewer-css-link';
@@ -35,8 +39,9 @@ export function loadRotatorCuff(app) {
     camera,
     controls,
     ROTATORCUFF_METADATA.base_model,
-    () => {
-      document.getElementById('loadingScreen').style.display = 'none';
+    ({ mixer, animations }) => {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      setupAnimationHandler(mixer, animations);
     },
     (xhr) => {
       const total = xhr.total;
@@ -86,6 +91,8 @@ export function loadRotatorCuff(app) {
     interactionHandler.update();
     controls.update();
     renderer.render(scene, camera);
+    const delta = clock.getDelta();
+    updateAnimationHandler(delta);
   }
   animate();
 

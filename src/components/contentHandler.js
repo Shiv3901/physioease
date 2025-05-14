@@ -14,7 +14,6 @@ function showContentPanel({ type, html = '' }) {
   const isBottomView = window.innerWidth <= 980;
 
   if (isBottomView) {
-    // Switch to mobile (bottom panel)
     sharedContentArea.classList.remove('relative');
     sharedContentArea.classList.add('absolute', 'bottom-0', 'w-screen');
     sharedContentArea.style.height = '33.33vh';
@@ -24,7 +23,6 @@ function showContentPanel({ type, html = '' }) {
 
     moreVideosContainer.classList.add('hidden');
   } else {
-    // Switch to desktop (side panel)
     sharedContentArea.classList.remove('absolute', 'bottom-0', 'w-screen');
     sharedContentArea.classList.add('relative');
     sharedContentArea.style.height = '100%';
@@ -94,9 +92,7 @@ export function setupContentHandlers(metadata) {
   });
 
   log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
-  log('DEBUG', '[🧾] moreVideosPane innerHTML:\n' + moreVideosPane.innerHTML);
 
-  // Ensure pane starts hidden
   moreVideosPane.classList.add('hidden');
   moreVideosPane.classList.remove('flex');
 
