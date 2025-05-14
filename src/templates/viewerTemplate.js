@@ -51,7 +51,7 @@ export function getViewerHTML() {
         </div>
 
         <!-- Bottom-left: Selected label & popup -->
-        <div id="bottomLeftInfo" class="absolute bottom-3 left-3 z-40 flex flex-col gap-2 w-[280px]">
+        <div id="bottomLeftInfo" class="absolute left-3 z-40 flex flex-col gap-2 w-[280px] bottom-safe">
           <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm shadow-sm leading-snug whitespace-pre-wrap break-words">
             <div id="videoLinks" class="mt-2"></div>
           </div>  
