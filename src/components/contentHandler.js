@@ -14,27 +14,35 @@ function showContentPanel({ type, html = '' }) {
   const isBottomView = window.innerWidth <= 980;
 
   if (isBottomView) {
+    // Switch to mobile (bottom panel)
     sharedContentArea.classList.remove('relative');
     sharedContentArea.classList.add('absolute', 'bottom-0', 'w-screen');
     sharedContentArea.style.height = '33.33vh';
+
     modelContainer.style.height = '66.66vh';
     modelContainer.style.width = '100%';
+
     moreVideosContainer.classList.add('hidden');
   } else {
+    // Switch to desktop (side panel)
     sharedContentArea.classList.remove('absolute', 'bottom-0', 'w-screen');
     sharedContentArea.classList.add('relative');
     sharedContentArea.style.height = '100%';
     sharedContentArea.style.width = '33.33vw';
+
     modelContainer.style.width = '66.66vw';
     modelContainer.style.height = '100%';
+
     moreVideosContainer.classList.remove('hidden');
   }
 
   if (type === 'text') {
     sharedContentArea.classList.remove('bg-black', 'bg-opacity-90');
     sharedContentArea.classList.add('bg-white');
+
     contentArea.classList.remove('hidden');
     contentArea.classList.add('flex');
+
     contentArea.innerHTML = `<div class="content-wrapper">${html}</div>`;
   }
 
@@ -82,6 +90,7 @@ export function setupContentHandlers(metadata) {
   log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
   log('DEBUG', '[🧾] moreVideosPane innerHTML:\n' + moreVideosPane.innerHTML);
 
+  // Ensure pane starts hidden
   moreVideosPane.classList.add('hidden');
   moreVideosPane.classList.remove('flex');
 

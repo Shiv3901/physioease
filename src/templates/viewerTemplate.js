@@ -4,17 +4,8 @@ export function getViewerHTML() {
       <div id="modelContainer" class="w-full h-full relative">
         <canvas class="absolute top-0 left-0 w-full h-full z-[2]"></canvas>
 
-        <div id="UITopPanel" class="absolute top-0 left-0 w-full px-6 py-4 z-30 text-black">
-          <div class="flex justify-between items-start w-full gap-10">
-            <div class="flex flex-col gap-2 w-[280px] shrink-0">
-              <div id="selectedLabel" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono font-semibold text-sm shadow-sm leading-tight">
-                🧠 Selected: None
-              </div>
-              <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm shadow-sm leading-snug whitespace-pre-wrap break-words">
-                <div id="videoLinks" class="mt-2"></div>
-              </div>
-            </div>
-
+        <div id="UITopPanel" class="absolute top-3 left-3 right-3 z-30 text-black">
+          <div class="flex justify-end items-start w-full gap-10">
             <div class="flex flex-col w-[270px] shrink-0 gap-2">
               <div class="flex justify-end">
                 <button id="terminalHome" class="px-4 py-1 border border-dashed border-black rounded font-mono text-sm cursor-pointer hover:bg-black hover:text-white transition">
@@ -59,39 +50,54 @@ export function getViewerHTML() {
           </div>
         </div>
 
+        <!-- Bottom-left: Selected label & popup -->
+        <div id="bottomLeftInfo" class="absolute bottom-3 left-3 z-40 flex flex-col gap-2 w-[280px]">
+          <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm shadow-sm leading-snug whitespace-pre-wrap break-words">
+            <div id="videoLinks" class="mt-2"></div>
+          </div>  
+          <div id="selectedLabel" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono font-semibold text-sm shadow-sm leading-tight">
+            🧠 Selected: None
+          </div>
+        </div>
+
+        <!-- Center loading screen -->
         <div id="loadingScreen" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-center z-50">
           <div class="text-base mb-1.5 text-black">Loading <span id="loadingPercent">0%</span></div>
           <pre id="asciiBar" class="text-lg text-amber-700">[----------]</pre>
         </div>
 
-        <div id="moreVideosContainer" class="fixed bottom-3 left-3 z-[9999] flex flex-col items-start gap-1">
+        <!-- Top-left: More Videos -->
+        <div id="moreVideosContainer" class="fixed top-3 left-3 z-[9999] flex flex-col items-start gap-1">
           <div
             id="moreVideosPane"
-            class="hidden fixed bottom-12 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-45 max-h-64 overflow-y-auto flex-col gap-2"
-          >
+            class="hidden fixed top-[3.2rem] left-3 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-50 max-h-64 overflow-y-auto flex-col gap-2"
+          ></div>
+          <div id="moreVideosBtn" class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition">
+            🎬 More Animations
           </div>
-          <div id="moreVideosBtn" class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition">🎬 More Animations</div>
+        </div>
+
+        <!-- Overlay shared content -->
+        <div id="sharedContentArea" class="hidden absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-4 z-40">
+          <button id="closeContentBtn" class="absolute top-4 right-4 text-white text-xl hover:text-red-500 transition">✖️</button>
+
+          <div id="videoArea" class="hidden w-full max-w-3xl">
+            <video id="exerciseVideo" controls preload="metadata" muted class="w-full rounded">
+              <source src="" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div id="contentArea" class="hidden mt-4 w-full max-w-2xl text-white">
+            <div id="contentText" class="whitespace-pre-line"></div>
+          </div>
         </div>
       </div>
 
-      <div id="sharedContentArea" class="hidden absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-4 z-40">
-        <button id="closeContentBtn" class="absolute top-4 right-4 text-white text-xl hover:text-red-500 transition">✖️</button>
-
-        <div id="videoArea" class="hidden w-full max-w-3xl">
-          <video id="exerciseVideo" controls preload="metadata" muted class="w-full rounded">
-            <source src="" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-
-        <div id="contentArea" class="hidden mt-4 w-full max-w-2xl text-white">
-          <div id="contentText" class="whitespace-pre-line"></div>
-        </div>
+      <!-- Debug panel -->
+      <div id="debugDimensions" class="fixed bottom-3 right-3 bg-black/10 text-black text-sm font-mono px-3 py-1 rounded z-[9999] pointer-events-none">
+        📏 0 x 0
       </div>
-    </div>
-
-    <div id="debugDimensions" class="fixed bottom-2 right-3 bg-black/10 text-black text-sm font-mono px-3 py-1 rounded z-[9999] pointer-events-none" >
-      📏 0 x 0
     </div>
   `;
 }
