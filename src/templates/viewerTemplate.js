@@ -104,7 +104,7 @@ export function getViewerHTML() {
 
       <!-- Debug panel (compact, more padding, no Shared row) -->
       <div id="debugDimensions"
-        class="fixed bottom-2 right-2 bg-black/20 text-black text-[10px] leading-[1] font-mono px-1 py-1 rounded-sm z-[9999] pointer-events-none w-[135px]">
+        class="fixed bottom-2 right-2 bg-black/20 text-black text-[10px] leading-[1] font-mono px-1 py-1 rounded-sm z-[9999] pointer-events-none w-[140px]">
         <div class="flex items-center gap-1"><span>🖼️</span> Screen: 430 x 746</div>
         <div class="flex items-center gap-1"><span>🎨</span> Model: 430 x 746</div>
         <div class="flex items-center gap-1"><span>🧱</span> Layout: Column</div>

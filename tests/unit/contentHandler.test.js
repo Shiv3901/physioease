@@ -5,10 +5,6 @@ import {
   setupContentHandlers,
 } from '../../src/components/contentHandler';
 
-vi.mock('../../src/components/uiHelpers.js', () => ({
-  updateDebugDimensions: vi.fn(),
-}));
-
 vi.mock('../../src/components/animationHandler', () => ({
   playAnimationByName: vi.fn(),
 }));

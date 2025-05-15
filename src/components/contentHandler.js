@@ -1,4 +1,3 @@
-import { updateDebugDimensions } from './uiHelpers.js';
 import { playAnimationByName } from './animationHandler.js';
 import { log } from './utils.js';
 
@@ -45,7 +44,6 @@ function showContentPanel({ type, html = '' }) {
   }
 
   window.dispatchEvent(new Event('resize'));
-  updateDebugDimensions();
 }
 
 export function playAnimationPanel(name) {

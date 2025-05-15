@@ -7,7 +7,6 @@ import {
   playAnimationPanel,
   showContent,
 } from '../components/contentHandler.js';
-import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log, injectViewerHeadAssets } from '../components/utils.js';
@@ -101,7 +100,6 @@ export function loadAnkle(app) {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
-    updateDebugDimensions();
   }
 
   window.addEventListener('resize', handleResize);
@@ -118,6 +116,4 @@ export function loadAnkle(app) {
       window.dispatchEvent(new Event('popstate'));
     });
   }
-
-  updateDebugDimensions();
 }

@@ -3,7 +3,6 @@ import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
 import { setupContentHandlers } from '../components/contentHandler.js';
-import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log, injectViewerHeadAssets } from '../components/utils.js';
@@ -96,7 +95,6 @@ export function loadRotatorCuff(app) {
     camera.position.z += 1;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
-    updateDebugDimensions();
   }
 
   window.addEventListener('resize', handleResize);
@@ -110,6 +108,4 @@ export function loadRotatorCuff(app) {
     history.pushState({}, '', '/');
     window.dispatchEvent(new Event('popstate'));
   });
-
-  updateDebugDimensions();
 }
