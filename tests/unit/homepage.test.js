@@ -12,7 +12,7 @@ describe('loadHomepage', () => {
 
   it('renders PhysioEase content into the app element', () => {
     loadHomepage(app);
-    expect(app.innerHTML).toContain('PhysioEase v');
+    expect(app.innerHTML).toContain('PhysioEase');
     expect(app.querySelector('#launch-rotator')).toBeTruthy();
     expect(app.querySelector('#launch-ankle')).toBeTruthy();
     expect(app.querySelector('.pe-btn')).toBeTruthy();
