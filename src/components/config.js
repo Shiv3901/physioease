@@ -27,7 +27,7 @@ export const DEBUG_MODE = true;
 export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
 export const ROTATORCUFF_METADATA = {
-  base_model: model('rotatorcuff-compressed.glb'),
+  base_model: model('rotatorcuff-draco.glb'),
 
   // === GENERAL VIDEO CATEGORIES (used for "More Videos" section) ===
   base_videos: {
@@ -191,7 +191,7 @@ export const ANKLE_METADATA = {
 };
 
 export const LOWERBACK_METADATA = {
-  base_model: model('lowerback-compressed.glb'),
+  base_model: model('lowerback-draco.glb'),
   base_videos: {
     Flexion: { title: '🦾 Flexion', src: video('lowerback_flexion.mp4') },
     Extension: { title: '🦾 Extension', src: video('lowerback_extension.mp4') },
