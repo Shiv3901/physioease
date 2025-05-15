@@ -189,3 +189,33 @@ export const ANKLE_METADATA = {
     },
   },
 };
+
+export const LOWERBACK_METADATA = {
+  base_model: model('lowerback-compressed.glb'),
+  base_videos: {
+    Flexion: { title: '🦾 Flexion', src: video('lowerback_flexion.mp4') },
+    Extension: { title: '🦾 Extension', src: video('lowerback_extension.mp4') },
+    LeftLateralFlexion: {
+      title: '↔️ Left Lateral Flexion',
+      src: video('lowerback_left_lateral_flexion.mp4'),
+    },
+    RightLateralFlexion: {
+      title: '↔️ Right Lateral Flexion',
+      src: video('lowerback_right_lateral_flexion.mp4'),
+    },
+  },
+  specific_videos: {
+    UpperBody: {
+      info: 'The upper body includes the thoracic and cervical regions.',
+    },
+    LowerBody: {
+      info: 'The lower body includes the lumbar and sacral regions.',
+    },
+    LeftQuadratusLumborum: {
+      info: 'The left quadratus lumborum stabilizes the spine and assists in lateral flexion.',
+    },
+    RightQuadratusLumborum: {
+      info: 'The right quadratus lumborum stabilizes the spine and assists in lateral flexion.',
+    },
+  },
+};

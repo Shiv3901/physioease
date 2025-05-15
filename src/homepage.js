@@ -36,6 +36,9 @@ export function loadHomepage(app) {
           <button id="launch-ankle" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
             <span class="text-lg sm:text-xl">🦶</span> Ankle Viewer
           </button>
+          <button id="launch-lowerback" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
+            <span class="text-lg sm:text-xl">🦴</span> Lower Back Viewer
+          </button>
           <div class="relative">
             <button id="launch-knee" class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
               <span class="text-lg sm:text-xl">🦵</span> Knee Viewer
@@ -45,12 +48,6 @@ export function loadHomepage(app) {
           <div class="relative">
             <button id="launch-elbow" class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
               <span class="text-lg sm:text-xl">💪</span> Elbow Viewer
-            </button>
-            <span class="absolute bottom-2 right-4 text-xs text-gray-400">coming soon</span>
-          </div>
-          <div class="relative">
-            <button class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
-              <span class="text-lg sm:text-xl">🦴</span> Lower Back Viewer
             </button>
             <span class="absolute bottom-2 right-4 text-xs text-gray-400">coming soon</span>
           </div>
@@ -88,6 +85,11 @@ export function loadHomepage(app) {
 
   document.getElementById('launch-library')?.addEventListener('click', () => {
     history.pushState({}, '', '/library');
+    window.dispatchEvent(new Event('popstate'));
+  });
+
+  document.getElementById('launch-lowerback')?.addEventListener('click', () => {
+    history.pushState({}, '', '/lowerback');
     window.dispatchEvent(new Event('popstate'));
   });
 }

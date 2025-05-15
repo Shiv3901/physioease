@@ -2,6 +2,7 @@ import { loadHomepage } from './homepage.js';
 import { loadRotatorCuff } from './routes/rotatorcuff.js';
 import { loadAnkle } from './routes/ankle.js';
 import { loadLibrary } from './routes/library.js';
+import { loadLowerBack } from './routes/lowerback.js';
 
 function route() {
   const app = document.getElementById('app');
@@ -15,6 +16,8 @@ function route() {
     loadRotatorCuff(app);
   } else if (path === '/ankle') {
     loadAnkle(app);
+  } else if (path === '/lowerback') {
+    loadLowerBack(app);
   } else if (path === '/library') {
     loadLibrary(app);
   } else {

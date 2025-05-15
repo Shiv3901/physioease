@@ -16,7 +16,7 @@ export function getViewerHTML() {
               </button>
               <div
                 id="moreVideosPane"
-                class="hidden absolute mt-2 left-0 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-56 max-h-64 overflow-y-auto flex-col gap-2"
+                class="hidden absolute mt-2 left-0 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-60 max-h-64 overflow-y-auto flex-col gap-2"
               >
               </div>
             </div>

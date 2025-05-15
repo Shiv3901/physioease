@@ -56,7 +56,7 @@ describe('modelLoader', () => {
     expect(modelPath).toBe(testModelPath);
 
     const dummyScene = new THREE.Group();
-    onSuccess({ scene: dummyScene });
+    onSuccess({ scene: dummyScene, animations: [] });
 
     expect(scene.add).toHaveBeenCalledWith(dummyScene);
     expect(onLoaded).toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe('modelLoader', () => {
   it('sets model position and scale correctly', () => {
     const dummyScene = new THREE.Group();
     mockLoader.load.mockImplementation((_, onSuccess) => {
-      onSuccess({ scene: dummyScene });
+      onSuccess({ scene: dummyScene, animations: [] });
     });
 
     loadModel(scene, camera, controls, testModelPath, onLoaded);
@@ -116,7 +116,7 @@ describe('modelLoader', () => {
 
   it('handles null GLTF scene gracefully', () => {
     mockLoader.load.mockImplementation((_, onSuccess) => {
-      onSuccess({ scene: null });
+      onSuccess({ scene: null, animations: [] });
     });
 
     loadModel(scene, camera, controls, testModelPath, onLoaded, onProgress, onError);
