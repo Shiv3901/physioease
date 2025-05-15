@@ -1,47 +1,54 @@
+// ../templates/codeTemplate.js
+
 import * as THREE from 'three';
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
-import { setupContentHandlers } from '../components/contentHandler.js';
-import { getViewerHTML } from '../templates/viewerTemplate.js';
+import {
+  setupContentHandlers,
+  playAnimationPanel,
+  showContent,
+} from '../components/contentHandler.js';
+import { getViewerHTML } from './viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log, injectViewerHeadAssets } from '../components/utils.js';
-import { ROTATORCUFF_METADATA } from '../components/config.js';
-import { playAnimationPanel, showContent } from '../components/contentHandler.js';
 import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
-log('INFO', '🚀 Rotator Cuff Model Loaded');
+export function loadModelByKey(app, key, metadataMap) {
+  const metadata = metadataMap[key];
+  const displayName = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
 
-const clock = new THREE.Clock();
+  if (!metadata) {
+    console.error(`❌ No metadata found for model key: "${key}"`);
+    app.innerHTML = `<div class="text-red-500 p-4">❌ No model metadata found for "${key}".</div>`;
+    return;
+  }
 
-export function loadRotatorCuff(app) {
+  log('INFO', `🚀 ${displayName} Model Loaded (Tailwind Edition)`);
+
   injectViewerHeadAssets();
-
   app.innerHTML = getViewerHTML();
   mountLandscapeBlocker();
 
+  const clock = new THREE.Clock();
   const modelContainer = document.getElementById('modelContainer');
   const { scene, camera, renderer, controls } = setupViewer(modelContainer);
-
   modelContainer.appendChild(renderer.domElement);
 
   loadModel(
     scene,
     camera,
     controls,
-    ROTATORCUFF_METADATA.base_model,
+    metadata.base_model,
     ({ mixer, animations }) => {
-      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('loadingScreen')?.classList.add('hidden');
       setupAnimationHandler(mixer, animations);
     },
     (xhr) => {
-      const total = xhr.total;
-      const loaded = xhr.loaded;
-
-      // Guard against bad totals
+      const { total, loaded } = xhr;
       if (!total || total <= 0) {
-        console.warn('⚠️ Warning: Invalid total size during model loading.', xhr);
+        console.warn('⚠️ Invalid or missing total size during loading.', xhr);
         return;
       }
 
@@ -62,8 +69,9 @@ export function loadRotatorCuff(app) {
       }
     },
     (error) => {
-      console.error('❌ Failed to load model:', error);
-      document.getElementById('loadingScreen').innerHTML = '❌ Failed to load model.';
+      console.error(`❌ Failed to load ${key} model:`, error);
+      const screen = document.getElementById('loadingScreen');
+      if (screen) screen.innerHTML = `❌ Failed to load ${displayName} model.`;
     }
   );
 
@@ -71,12 +79,15 @@ export function loadRotatorCuff(app) {
     scene,
     camera,
     renderer.domElement,
-    ROTATORCUFF_METADATA,
-    (clickedObject) => {},
+    metadata,
+    (clickedObject) => {
+      // Optional: click logic
+    },
     playAnimationPanel,
     showContent
   );
-  setupContentHandlers(ROTATORCUFF_METADATA);
+
+  setupContentHandlers(metadata);
 
   function animate() {
     requestAnimationFrame(animate);
@@ -92,20 +103,22 @@ export function loadRotatorCuff(app) {
     const width = modelContainer.clientWidth;
     const height = modelContainer.clientHeight;
     camera.aspect = width / height;
-    camera.position.z += 1;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
   }
 
   window.addEventListener('resize', handleResize);
 
-  document.getElementById('terminalHome')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    cancelAnimationFrame(animate);
-    renderer.dispose();
-    renderer.domElement.remove();
-    window.removeEventListener('resize', handleResize);
-    history.pushState({}, '', '/');
-    window.dispatchEvent(new Event('popstate'));
-  });
+  const terminalHome = document.getElementById('terminalHome');
+  if (terminalHome) {
+    terminalHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      cancelAnimationFrame(animate);
+      renderer.dispose();
+      renderer.domElement.remove();
+      window.removeEventListener('resize', handleResize);
+      history.pushState({}, '', '/');
+      window.dispatchEvent(new Event('popstate'));
+    });
+  }
 }

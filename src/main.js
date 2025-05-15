@@ -1,8 +1,7 @@
 import { loadHomepage } from './homepage.js';
-import { loadRotatorCuff } from './routes/rotatorcuff.js';
-import { loadAnkle } from './routes/ankle.js';
 import { loadLibrary } from './routes/library.js';
-import { loadLowerBack } from './routes/lowerback.js';
+import { loadModelByKey } from './templates/codeTemplate.js';
+import { METADATA_MAP } from './components/config.js';
 
 function route() {
   const app = document.getElementById('app');
@@ -10,16 +9,19 @@ function route() {
 
   if (!app) return;
 
+  const modelRoutes = {
+    '/ankle': 'ankle',
+    '/lowerback': 'lowerback',
+    '/rotatorcuff': 'rotatorcuff',
+    // Add more routes as needed
+  };
+
   if (path === '/' || path === '/index.html') {
     loadHomepage(app);
-  } else if (path === '/rotatorcuff') {
-    loadRotatorCuff(app);
-  } else if (path === '/ankle') {
-    loadAnkle(app);
-  } else if (path === '/lowerback') {
-    loadLowerBack(app);
   } else if (path === '/library') {
     loadLibrary(app);
+  } else if (modelRoutes[path]) {
+    loadModelByKey(app, modelRoutes[path], METADATA_MAP);
   } else {
     app.innerHTML = '<h1>404 Not Found</h1>';
   }

@@ -219,3 +219,10 @@ export const LOWERBACK_METADATA = {
     },
   },
 };
+
+export const METADATA_MAP = {
+  ankle: ANKLE_METADATA,
+  lowerback: LOWERBACK_METADATA,
+  rotatorcuff: ROTATORCUFF_METADATA,
+  // Add other models here...
+};
