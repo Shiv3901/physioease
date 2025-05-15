@@ -42,6 +42,8 @@ export class InteractionHandler {
     this.selectedVideoLinks = document.getElementById('videoLinks');
 
     this.animationControlPanel = document.getElementById('animationControlPanel');
+    this.moreVideosPane = document.getElementById('moreVideosPane');
+    this.moreVideosBtn = document.getElementById('moreVideosBtn'); // <--- ADDED
 
     this.onClickCallback = onClickCallback;
     this.playAnimationPanel = playAnimationPanel;
@@ -50,9 +52,25 @@ export class InteractionHandler {
     this.holdTimeout = null;
     this.isLongPress = false;
 
+    // Touch/mouse detection for hover handling
+    this.isTouch = false;
+    window.addEventListener(
+      'touchstart',
+      () => {
+        this.isTouch = true;
+      },
+      { passive: true }
+    );
+    window.addEventListener(
+      'mousemove',
+      () => {
+        this.isTouch = false;
+      },
+      { passive: true }
+    );
+
     window.addEventListener('pointermove', this.onPointerMove.bind(this));
     window.addEventListener('pointerdown', this.onPointerDown.bind(this));
-    // Pass the event object to onPointerUp:
     window.addEventListener('pointerup', (e) => this.onPointerUp(e));
     window.addEventListener('pointercancel', this.clearHold.bind(this));
     window.addEventListener('pointerleave', this.clearHold.bind(this));
@@ -75,8 +93,12 @@ export class InteractionHandler {
   onPointerUp(event) {
     clearTimeout(this.holdTimeout);
 
-    // Ignore clicks inside animation panel
-    if (this.animationControlPanel && event && this.animationControlPanel.contains(event.target)) {
+    // Ignore clicks inside animation panel, more videos pane, or more videos button
+    if (
+      (this.animationControlPanel && event && this.animationControlPanel.contains(event.target)) ||
+      (this.moreVideosPane && event && this.moreVideosPane.contains(event.target)) ||
+      (this.moreVideosBtn && event && this.moreVideosBtn.contains(event.target))
+    ) {
       return;
     }
 
@@ -112,7 +134,9 @@ export class InteractionHandler {
     if (!object || !object.material || !object.material.emissive) return;
 
     if (type === 'hover') {
-      object.material.emissive.setHex(0x999900);
+      if (!this.isTouch) {
+        object.material.emissive.setHex(0x999900);
+      }
     } else if (type === 'click') {
       object.material.emissive.setHex(0x009900);
       this.updateSelectedInfo(object);
@@ -135,7 +159,7 @@ export class InteractionHandler {
 
         this.currentHovered = firstIntersect;
 
-        if (this.currentHovered !== this.currentClicked) {
+        if (!this.isTouch && this.currentHovered !== this.currentClicked) {
           this.setHighlight(this.currentHovered, 'hover');
         }
       }
