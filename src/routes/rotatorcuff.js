@@ -6,7 +6,7 @@ import { setupContentHandlers } from '../components/contentHandler.js';
 import { updateDebugDimensions } from '../components/uiHelpers.js';
 import { getViewerHTML } from '../templates/viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
-import { log } from '../components/utils.js';
+import { log, injectViewerHeadAssets } from '../components/utils.js';
 import { ROTATORCUFF_METADATA } from '../components/config.js';
 import { playAnimationPanel, showContent } from '../components/contentHandler.js';
 import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
@@ -17,14 +17,7 @@ log('INFO', '🚀 Rotator Cuff Model Loaded');
 const clock = new THREE.Clock();
 
 export function loadRotatorCuff(app) {
-  const styleId = 'viewer-css-link';
-  if (!document.getElementById(styleId)) {
-    const link = document.createElement('link');
-    link.id = styleId;
-    link.rel = 'stylesheet';
-    link.href = '/src/styles/viewer.css';
-    document.head.appendChild(link);
-  }
+  injectViewerHeadAssets();
 
   app.innerHTML = getViewerHTML();
   mountLandscapeBlocker();

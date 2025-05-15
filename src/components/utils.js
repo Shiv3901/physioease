@@ -36,3 +36,25 @@ export function log(level, ...args) {
     console.log(`%c[${level}]`, `color: ${color}; font-weight: bold;`, ...args);
   }
 }
+
+export function injectViewerHeadAssets() {
+  // Inject viewer.css if not already present
+  const styleId = 'viewer-css-link';
+  if (!document.getElementById(styleId)) {
+    const link = document.createElement('link');
+    link.id = styleId;
+    link.rel = 'stylesheet';
+    link.href = '/src/styles/viewer.css';
+    document.head.appendChild(link);
+  }
+
+  // Inject viewport meta tag if not already present
+  const viewportId = 'viewer-viewport-meta';
+  if (!document.getElementById(viewportId)) {
+    const meta = document.createElement('meta');
+    meta.id = viewportId;
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1.0';
+    document.head.appendChild(meta);
+  }
+}

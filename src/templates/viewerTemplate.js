@@ -8,12 +8,13 @@ export function getViewerHTML() {
           <div class="flex justify-end items-start w-full gap-10">
             <div class="flex flex-col w-[270px] shrink-0 gap-2">
               <div class="flex justify-end">
-                <button id="terminalHome" class="px-4 py-3 sm:py-1 sm:text-sm text-base border border-dashed border-black rounded font-mono cursor-pointer hover:bg-black hover:text-white transition">
+                <button id="terminalHome"
+                  class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                   Home
                 </button>
               </div>
 
-              <div class="w-full border border-dashed border-black bg-white px-4 py-3 rounded shadow-sm">
+              <div class="w-full border border-dashed border-black bg-white px-4 py-3 rounded">
                 <div class="flex items-center gap-2 mb-2 font-mono text-sm">
                   <span class="font-semibold">🎞️ Animation:</span>
                   <span id="animationNameText" class="font-small"></span>
@@ -31,17 +32,17 @@ export function getViewerHTML() {
 
                 <div class="flex justify-center gap-2">
                   <button id="stepBackBtn"
-                          class="px-4 py-3 sm:py-1.5 rounded-md border border-black font-mono text-base sm:text-sm hover:bg-black hover:text-white transition">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                     « 1ms
                   </button>
                   <button id="playAnimationsBtn" title="Toggle Play/Pause"
-                          class="px-4 py-3 sm:py-1 rounded-md border border-black hover:bg-black hover:text-white transition">
-                    <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
+                    <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
                   <button id="stepForwardBtn"
-                          class="px-4 py-3 sm:py-1.5 rounded-md border border-black font-mono text-base sm:text-sm hover:bg-black hover:text-white transition">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                     1ms »
                   </button>
                 </div>
@@ -52,10 +53,11 @@ export function getViewerHTML() {
 
         <!-- Bottom-left: Selected label & popup -->
         <div id="bottomLeftInfo" class="fixed bottom-3 left-3 z-40 flex flex-col gap-2 w-[280px]">
-          <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm shadow-sm leading-snug whitespace-pre-wrap break-words">
+          <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm leading-snug whitespace-pre-wrap break-words">
             <div id="videoLinks" class="mt-2"></div>
           </div>  
-          <div id="selectedLabel" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono font-semibold text-sm shadow-sm leading-tight">
+          <div id="selectedLabel"
+            class="border border-dashed border-black bg-white px-4 min-h-[40px] rounded font-mono font-semibold text-sm leading-tight flex items-center">
             🧠 Selected: None
           </div>
         </div>
@@ -74,7 +76,7 @@ export function getViewerHTML() {
           ></div>
           <button
             id="moreVideosBtn"
-            class="border border-dashed border-gray-600 bg-white px-4 py-3 sm:py-1 text-base sm:text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition focus:outline-none"
+            class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
           >
             🎬 More Animations
           </button>
@@ -82,7 +84,10 @@ export function getViewerHTML() {
 
         <!-- Overlay shared content -->
         <div id="sharedContentArea" class="hidden absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-4 z-40">
-          <button id="closeContentBtn" class="absolute top-4 right-4 text-white text-xl hover:text-red-500 transition">✖️</button>
+          <button id="closeContentBtn"
+            class="px-5 py-3 rounded-lg font-mono text-base font-semibold border border-black bg-black hover:bg-red-500 text-white transition absolute top-4 right-4 text-xl min-h-[36px] flex items-center justify-center">
+            ✖️
+          </button>
 
           <div id="videoArea" class="hidden w-full max-w-3xl">
             <video id="exerciseVideo" controls preload="metadata" muted class="w-full rounded">
