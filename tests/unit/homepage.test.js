@@ -10,19 +10,20 @@ describe('loadHomepage', () => {
     document.head.innerHTML = '';
   });
 
-  it('renders terminal content into the app element', () => {
+  it('renders PhysioEase content into the app element', () => {
     loadHomepage(app);
     expect(app.innerHTML).toContain('PhysioEase v');
-    expect(app.querySelector('.terminal-box')).toBeTruthy();
     expect(app.querySelector('#launch-rotator')).toBeTruthy();
     expect(app.querySelector('#launch-ankle')).toBeTruthy();
+    expect(app.querySelector('.pe-btn')).toBeTruthy();
   });
 
-  it('injects style tag into document head', () => {
+  it('does NOT inject legacy terminal-box style tag', () => {
     loadHomepage(app);
     const styles = [...document.head.querySelectorAll('style')];
+    // Expect no injected terminal-box styles anymore
     const hasTerminalStyles = styles.some((style) => style.innerHTML.includes('.terminal-box'));
-    expect(hasTerminalStyles).toBe(true);
+    expect(hasTerminalStyles).toBe(false);
   });
 
   it('clicking "Rotator Cuff Viewer" triggers history.pushState and popstate', () => {
