@@ -13,7 +13,7 @@ export function loadLibrary(app) {
   app.innerHTML = `
     <div class="fixed inset-0 overflow-y-auto bg-white text-black px-6 py-4 font-mono">
       <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">🎥 PhysioEase Video Library</h1>
+        <h1 class="text-2xl font-bold">🎥 Video Library</h1>
         <button id="terminalHome" class="px-4 py-1 border border-dashed border-black rounded font-mono text-sm cursor-pointer hover:bg-black hover:text-white transition">
           Home
         </button>
