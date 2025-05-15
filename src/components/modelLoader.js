@@ -1,6 +1,7 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { log } from './utils.js';
 
 export function centerModel(model, camera, controls) {
@@ -42,7 +43,8 @@ export function loadModel(
 ) {
   log('DEBUG', 'Initializing GLTFLoader...');
   log('INFO', `Model loader invoked for: ${modelPath}`);
-  // Sanity check: fetch file head before loading
+
+  // Optional: HEAD check for debugging
   fetch(modelPath, { method: 'HEAD' })
     .then((res) => {
       log(
@@ -57,7 +59,7 @@ export function loadModel(
       log('ERROR', `HEAD request failed: ${modelPath}`, e);
     });
 
-  // Optionally, fetch first few bytes to see if it's binary or HTML
+  // Optional: preview first 80 bytes
   fetch(modelPath)
     .then((res) => res.arrayBuffer())
     .then((buf) => {
@@ -75,7 +77,12 @@ export function loadModel(
       log('ERROR', `Preview fetch failed: ${modelPath}`, e);
     });
 
+  // ✅ DRACO support
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('/draco/'); // Folder in /public
+
   const loader = new GLTFLoader();
+  loader.setDRACOLoader(dracoLoader);
   loader.setMeshoptDecoder(MeshoptDecoder);
 
   log('INFO', `Starting to load model from ${modelPath}.`);
@@ -105,7 +112,6 @@ export function loadModel(
       scene.add(model);
       log('DEBUG2', 'Model added to scene.');
 
-      // Material cloning and update
       let meshCount = 0;
       model.traverse((child) => {
         if (child.isMesh) {
@@ -146,7 +152,7 @@ export function loadModel(
 
     (error) => {
       log('ERROR', `Error loading model: ${error.message || error}`);
-      log('ERROR', error); // Log full error object
+      log('ERROR', error);
       if (error && error.target) {
         log(
           'ERROR',

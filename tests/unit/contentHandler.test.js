@@ -9,6 +9,10 @@ vi.mock('../../src/components/animationHandler', () => ({
   playAnimationByName: vi.fn(),
 }));
 
+vi.mock('../../src/components/utils.js', () => ({
+  log: vi.fn(),
+}));
+
 import { playAnimationByName } from '../../src/components/animationHandler';
 
 const createDom = () => {

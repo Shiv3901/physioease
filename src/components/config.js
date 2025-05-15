@@ -102,7 +102,7 @@ export const ROTATORCUFF_METADATA = {
 };
 
 export const ANKLE_METADATA = {
-  base_model: model('ankle-compressed.glb'),
+  base_model: model('ankle-draco.glb'),
   base_videos: {
     Dorsiflexion: { title: '⬆️ Dorsiflexion', src: video('ankle_dorsiflexion.mp4') },
     Plantarflexion: { title: '⬇️ Plantarflexion', src: video('ankle_plantarflexion.mp4') },
