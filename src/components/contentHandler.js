@@ -59,9 +59,25 @@ export function showContent(html) {
 export function setupContentHandlers(metadata) {
   const moreVideosBtn = document.getElementById('moreVideosBtn');
   const moreVideosPane = document.getElementById('moreVideosPane');
+  const animationControlPanel = document.getElementById('animationControlPanel');
+
+  let wasOverlappingWhenOpened = false; // <-- NEW FLAG
 
   const videoData = metadata?.base_videos || {};
   let videoCount = 0;
+
+  // Helper to check if two elements overlap
+  function areElementsOverlapping(el1, el2) {
+    if (!el1 || !el2) return false;
+    const rect1 = el1.getBoundingClientRect();
+    const rect2 = el2.getBoundingClientRect();
+    return !(
+      rect1.right < rect2.left ||
+      rect1.left > rect2.right ||
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom
+    );
+  }
 
   Object.entries(videoData).forEach(([key, entry]) => {
     if (entry.src) {
@@ -81,9 +97,16 @@ export function setupContentHandlers(metadata) {
           .forEach((el) => el.classList.remove('bg-gray-200', 'text-black', 'selected'));
 
         btn.classList.add('bg-gray-200', 'text-black', 'selected');
-
         log('INFO', `[▶️] Playing animation "${key}"`);
         playAnimationPanel(key);
+
+        // Use the flag set when More Videos pane was opened!
+        if (wasOverlappingWhenOpened) {
+          moreVideosPane.classList.remove('flex');
+          moreVideosPane.classList.add('hidden');
+          if (animationControlPanel) animationControlPanel.classList.remove('hidden');
+          log('INFO', '[📁] More Videos pane closed (after select, overlap).');
+        }
       });
 
       moreVideosPane.appendChild(btn);
@@ -103,9 +126,24 @@ export function setupContentHandlers(metadata) {
       moreVideosPane.classList.remove('hidden');
       moreVideosPane.classList.add('flex');
       log('INFO', '[📁] More Videos pane opened.');
+
+      // Check overlap after opening and set flag!
+      setTimeout(() => {
+        if (
+          animationControlPanel &&
+          areElementsOverlapping(moreVideosPane, animationControlPanel)
+        ) {
+          animationControlPanel.classList.add('hidden');
+          wasOverlappingWhenOpened = true;
+        } else {
+          wasOverlappingWhenOpened = false;
+        }
+      }, 30);
     } else {
       moreVideosPane.classList.remove('flex');
       moreVideosPane.classList.add('hidden');
+      if (animationControlPanel) animationControlPanel.classList.remove('hidden');
+      wasOverlappingWhenOpened = false;
       log('INFO', '[📁] More Videos pane closed.');
     }
   });

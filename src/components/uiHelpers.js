@@ -8,9 +8,9 @@ export function updateDebugDimensions() {
   const { innerWidth: screenW, innerHeight: screenH } = window;
 
   const modelContainer = document.getElementById('modelContainer');
-  const sharedContentArea = document.getElementById('sharedContentArea');
-
   if (!modelContainer) log('DEBUG', 'No modelContainer.');
+
+  const sharedContentArea = document.getElementById('sharedContentArea');
   if (!sharedContentArea) log('DEBUG', 'No sharedContentArea.');
 
   const { clientWidth: modelW = 0, clientHeight: modelH = 0 } = modelContainer || {};

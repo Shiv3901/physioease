@@ -4,17 +4,31 @@ export function getViewerHTML() {
       <div id="modelContainer" class="w-full h-full relative">
         <canvas class="absolute top-0 left-0 w-full h-full z-[2]"></canvas>
 
+        <!-- Top header: Animations (left), Home (right) -->
         <div id="UITopPanel" class="absolute top-3 left-3 right-3 z-30 text-black">
-          <div class="flex justify-end items-start w-full gap-10">
-            <div class="flex flex-col w-[270px] shrink-0 gap-2">
-              <div class="flex justify-end">
-                <button id="terminalHome"
-                  class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
-                  Home
-                </button>
+          <div class="flex justify-between items-start w-full">
+            <div>
+              <button
+                id="moreVideosBtn"
+                class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
+              >
+                <span class="mr-2">🎬</span> Animations
+              </button>
+              <div
+                id="moreVideosPane"
+                class="hidden absolute mt-2 left-0 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-56 max-h-64 overflow-y-auto flex-col gap-2"
+              >
               </div>
-
-              <div class="w-full border border-dashed border-black bg-white px-4 py-3 rounded">
+            </div>
+            <!-- Right: Home + animation panel in a column -->
+            <div class="flex flex-col items-end gap-1 min-w-0 w-full">
+              <button
+                id="terminalHome"
+                class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
+              >
+                Home
+              </button>
+              <div id="animationControlPanel" class="border border-dashed border-black bg-white px-4 py-3 rounded mt-1 w-full max-w-[340px]">
                 <div class="flex items-center gap-2 mb-2 font-mono text-sm">
                   <span class="font-semibold">🎞️ Animation:</span>
                   <span id="animationNameText" class="font-small"></span>
@@ -51,13 +65,13 @@ export function getViewerHTML() {
           </div>
         </div>
 
-        <!-- Bottom-left: Selected label & popup -->
-        <div id="bottomLeftInfo" class="fixed bottom-3 left-3 z-40 flex flex-col gap-2 w-[280px]">
-          <div id="popup" class="border border-dashed border-black bg-white px-4 py-2 rounded font-mono text-sm leading-snug whitespace-pre-wrap break-words">
-            <div id="videoLinks" class="mt-2"></div>
+        <!-- Bottom-left: Selected label & popup (compact) -->
+        <div id="bottomLeftInfo" class="fixed bottom-3 left-3 z-40 flex flex-col gap-1 w-[200px]">
+          <div id="popup" class="border border-dashed border-black bg-white px-2 py-1 rounded-sm font-mono text-xs leading-tight whitespace-pre-wrap break-words">
+            <div id="videoLinks" class="mt-1"></div>
           </div>  
           <div id="selectedLabel"
-            class="border border-dashed border-black bg-white px-4 min-h-[40px] rounded font-mono font-semibold text-sm leading-tight flex items-center">
+            class="border border-dashed border-black bg-white px-2 min-h-[28px] rounded-sm font-mono font-semibold text-xs leading-tight flex items-center">
             🧠 Selected: None
           </div>
         </div>
@@ -66,20 +80,6 @@ export function getViewerHTML() {
         <div id="loadingScreen" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-center z-50">
           <div class="text-base mb-1.5 text-black">Loading <span id="loadingPercent">0%</span></div>
           <pre id="asciiBar" class="text-lg text-amber-700">[----------]</pre>
-        </div>
-
-        <!-- Top-left: More Videos -->
-        <div id="moreVideosContainer" class="fixed top-3 left-3 z-[9999] flex flex-col items-start gap-1">
-          <div
-            id="moreVideosPane"
-            class="hidden fixed top-[3.2rem] left-3 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-50 max-h-64 overflow-y-auto flex-col gap-2"
-          ></div>
-          <button
-            id="moreVideosBtn"
-            class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
-          >
-            🎬 More Animations
-          </button>
         </div>
 
         <!-- Overlay shared content -->
@@ -102,9 +102,12 @@ export function getViewerHTML() {
         </div>
       </div>
 
-      <!-- Debug panel -->
-      <div id="debugDimensions" class="fixed bottom-3 right-3 bg-black/10 text-black text-sm font-mono px-3 py-1 rounded z-[9999] pointer-events-none">
-        📏 0 x 0
+      <!-- Debug panel (compact, more padding, no Shared row) -->
+      <div id="debugDimensions"
+        class="fixed bottom-2 right-2 bg-black/20 text-black text-[10px] leading-[1] font-mono px-1 py-1 rounded-sm z-[9999] pointer-events-none w-[135px]">
+        <div class="flex items-center gap-1"><span>🖼️</span> Screen: 430 x 746</div>
+        <div class="flex items-center gap-1"><span>🎨</span> Model: 430 x 746</div>
+        <div class="flex items-center gap-1"><span>🧱</span> Layout: Column</div>
       </div>
     </div>
   `;
