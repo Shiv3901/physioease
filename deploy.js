@@ -10,12 +10,24 @@ export function main({ dryRun = false, noExit = false } = {}) {
     return;
   }
 
+  // Version bumping logic
+  let versionType = null;
+  if (/^patch:/i.test(commitMessage)) versionType = 'patch';
+  else if (/^minor:/i.test(commitMessage)) versionType = 'minor';
+  else if (/^major:/i.test(commitMessage)) versionType = 'major';
+
   try {
     log('INFO', '🧪 Running npm run test...');
     execSync('npm run test', { stdio: 'inherit' });
 
     log('INFO', '🧹 Running npm run format...');
     execSync('npm run format', { stdio: 'inherit' });
+
+    // Bump version BEFORE build (and before git add)
+    if (versionType) {
+      log('INFO', `🔢 Bumping npm version: ${versionType}`);
+      execSync(`npm version ${versionType} --no-git-tag-version`, { stdio: 'inherit' });
+    }
 
     log('INFO', '🏗️  Running npm run build...');
     execSync('npm run build', { stdio: 'inherit' });
