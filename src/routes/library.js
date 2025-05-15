@@ -1,6 +1,8 @@
 import { ANKLE_METADATA, ROTATORCUFF_METADATA } from '../components/config.js';
+import { createNotesToggleButton } from './chatbox.js';
 
 export function loadLibrary(app) {
+  createNotesToggleButton(false);
   const allVideos = {
     ...ANKLE_METADATA.base_videos,
     ...ROTATORCUFF_METADATA.base_videos,

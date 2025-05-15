@@ -60,6 +60,12 @@ export function setupAnimationHandler(
   }
 
   document.addEventListener('keydown', (e) => {
+    const target = e.target;
+    const isTyping =
+      target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+
+    if (isTyping) return;
+
     if (e.key === 'j') stepAnimation(-stepAmount);
     if (e.key === 'k') stepAnimation(stepAmount);
     if (e.code === 'Space') {

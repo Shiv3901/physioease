@@ -2,6 +2,7 @@ import { loadHomepage } from './homepage.js';
 import { loadLibrary } from './routes/library.js';
 import { loadModelByKey } from './templates/codeTemplate.js';
 import { METADATA_MAP } from './components/config.js';
+import { createNotesToggleButton, toggleNotesBox } from './routes/chatbox.js'; // <-- also import toggleNotesBox
 
 function route() {
   const app = document.getElementById('app');
@@ -13,8 +14,11 @@ function route() {
     '/ankle': 'ankle',
     '/lowerback': 'lowerback',
     '/rotatorcuff': 'rotatorcuff',
-    // Add more routes as needed
   };
+
+  const isNotesAllowed =
+    modelRoutes[path] !== undefined ||
+    !(path === '/' || path === '/index.html' || path === '/library');
 
   if (path === '/' || path === '/index.html') {
     loadHomepage(app);
@@ -24,6 +28,14 @@ function route() {
     loadModelByKey(app, modelRoutes[path], METADATA_MAP);
   } else {
     app.innerHTML = '<h1>404 Not Found</h1>';
+  }
+
+  createNotesToggleButton(); // ensures it's created once
+  toggleNotesBox(false); // always starts hidden
+  const button = document.getElementById('notes-toggle-btn');
+  if (button) {
+    const isMobile = window.innerWidth < 640;
+    button.disabled = !isNotesAllowed || isMobile;
   }
 
   window.dataLayer = window.dataLayer || [];

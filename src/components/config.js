@@ -206,10 +206,10 @@ export const LOWERBACK_METADATA = {
   },
   specific_videos: {
     UpperBody: {
-      info: 'The upper body includes the thoracic and cervical regions.',
+      info: 'The upper body includes all structures above the sacrum, encompassing the spine (above sacrum), ribcage, shoulders, arms, hands, neck, and head.',
     },
     LowerBody: {
-      info: 'The lower body includes the lumbar and sacral regions.',
+      info: 'The lower body includes the sacrum and all structures below it, comprising the pelvis, hips, legs, knees, ankles, and feet.',
     },
     LeftQuadratusLumborum: {
       info: 'The left quadratus lumborum stabilizes the spine and assists in lateral flexion.',
