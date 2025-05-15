@@ -8,7 +8,7 @@ export function getViewerHTML() {
           <div class="flex justify-end items-start w-full gap-10">
             <div class="flex flex-col w-[270px] shrink-0 gap-2">
               <div class="flex justify-end">
-                <button id="terminalHome" class="px-4 py-1 border border-dashed border-black rounded font-mono text-sm cursor-pointer hover:bg-black hover:text-white transition">
+                <button id="terminalHome" class="px-4 py-3 sm:py-1 sm:text-sm text-base border border-dashed border-black rounded font-mono cursor-pointer hover:bg-black hover:text-white transition">
                   Home
                 </button>
               </div>
@@ -31,17 +31,17 @@ export function getViewerHTML() {
 
                 <div class="flex justify-center gap-2">
                   <button id="stepBackBtn"
-                          class="px-3 py-1.5 rounded-md border border-black font-mono text-sm hover:bg-black hover:text-white transition">
+                          class="px-4 py-3 sm:py-1.5 rounded-md border border-black font-mono text-base sm:text-sm hover:bg-black hover:text-white transition">
                     « 1ms
                   </button>
                   <button id="playAnimationsBtn" title="Toggle Play/Pause"
-                          class="px-3 py-1 rounded-md border border-black hover:bg-black hover:text-white transition">
+                          class="px-4 py-3 sm:py-1 rounded-md border border-black hover:bg-black hover:text-white transition">
                     <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
                   <button id="stepForwardBtn"
-                          class="px-3 py-1.5 rounded-md border border-black font-mono text-sm hover:bg-black hover:text-white transition">
+                          class="px-4 py-3 sm:py-1.5 rounded-md border border-black font-mono text-base sm:text-sm hover:bg-black hover:text-white transition">
                     1ms »
                   </button>
                 </div>
@@ -74,7 +74,7 @@ export function getViewerHTML() {
           ></div>
           <button
             id="moreVideosBtn"
-            class="border border-dashed border-gray-600 bg-white px-4 py-1 text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition focus:outline-none"
+            class="border border-dashed border-gray-600 bg-white px-4 py-3 sm:py-1 text-base sm:text-sm font-mono rounded cursor-pointer hover:bg-black hover:text-white transition focus:outline-none"
           >
             🎬 More Animations
           </button>

@@ -15,9 +15,33 @@ export function loadHomepage(app) {
           <button id="launch-ankle" class="terminal-link">
             🦶 Ankle Viewer
           </button>
+          <div class="relative">
+            <button class="terminal-link opacity-50 cursor-not-allowed w-full text-left" disabled>
+              🦴 Lower Back Viewer
+            </button>
+            <span class="absolute bottom-1 right-2 text-[10px] text-gray-500">coming soon</span>
+          </div>
           <button id="launch-library" class="terminal-link">
             🎥 Video Library
           </button>
+          <div class="relative">
+            <button class="terminal-link opacity-50 cursor-not-allowed w-full text-left" disabled>
+              🧠 Neuro Viewer
+            </button>
+            <span class="absolute bottom-1 right-2 text-[10px] text-gray-500">coming soon</span>
+          </div>
+          <div class="relative">
+            <button class="terminal-link opacity-50 cursor-not-allowed w-full text-left" disabled>
+              🫁 Upper Back Viewer
+            </button>
+            <span class="absolute bottom-1 right-2 text-[10px] text-gray-500">coming soon</span>
+          </div>
+          <div class="relative">
+            <button class="terminal-link opacity-50 cursor-not-allowed w-full text-left" disabled>
+              🧍‍♀️ Neck Viewer
+            </button>
+            <span class="absolute bottom-1 right-2 text-[10px] text-gray-500">coming soon</span>
+          </div>
         </div>
 
         <div class="mt-4 text-sm">
@@ -43,9 +67,10 @@ export function loadHomepage(app) {
       transition: all 0.2s;
       font-size: 0.875rem;
       text-align: left;
+      width: 100%;
     }
 
-    .terminal-link:hover {
+    .terminal-link:hover:not([disabled]) {
       background-color: black;
       color: white;
     }
@@ -61,7 +86,6 @@ export function loadHomepage(app) {
   `;
   document.head.appendChild(style);
 
-  // Navigation handlers
   document.getElementById('launch-rotator')?.addEventListener('click', () => {
     history.pushState({}, '', '/rotatorcuff');
     window.dispatchEvent(new Event('popstate'));
