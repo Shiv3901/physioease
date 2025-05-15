@@ -10,7 +10,6 @@ export function main({ dryRun = false, noExit = false } = {}) {
     return;
   }
 
-  // Version bumping logic
   let versionType = null;
   if (/^patch:/i.test(commitMessage)) versionType = 'patch';
   else if (/^minor:/i.test(commitMessage)) versionType = 'minor';
@@ -23,7 +22,6 @@ export function main({ dryRun = false, noExit = false } = {}) {
     log('INFO', '🧹 Running npm run format...');
     execSync('npm run format', { stdio: 'inherit' });
 
-    // Bump version BEFORE build (and before git add)
     if (versionType) {
       log('INFO', `🔢 Bumping npm version: ${versionType}`);
       execSync(`npm version ${versionType} --no-git-tag-version`, { stdio: 'inherit' });
@@ -35,7 +33,7 @@ export function main({ dryRun = false, noExit = false } = {}) {
     log('INFO', '➕ Adding all files to git...');
     execSync('git add .', { stdio: 'inherit' });
 
-    const fullMessage = `changelog: ${commitMessage}`;
+    const fullMessage = `${commitMessage}`;
     log('INFO', `📝 Committing with message: "${fullMessage}"`);
     execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 

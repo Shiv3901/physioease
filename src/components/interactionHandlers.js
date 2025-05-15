@@ -41,6 +41,8 @@ export class InteractionHandler {
     this.selectedPopup = document.getElementById('popup');
     this.selectedVideoLinks = document.getElementById('videoLinks');
 
+    this.animationControlPanel = document.getElementById('animationControlPanel');
+
     this.onClickCallback = onClickCallback;
     this.playAnimationPanel = playAnimationPanel;
     this.showContentCallback = showContentCallback;
@@ -50,7 +52,8 @@ export class InteractionHandler {
 
     window.addEventListener('pointermove', this.onPointerMove.bind(this));
     window.addEventListener('pointerdown', this.onPointerDown.bind(this));
-    window.addEventListener('pointerup', this.onPointerUp.bind(this));
+    // Pass the event object to onPointerUp:
+    window.addEventListener('pointerup', (e) => this.onPointerUp(e));
     window.addEventListener('pointercancel', this.clearHold.bind(this));
     window.addEventListener('pointerleave', this.clearHold.bind(this));
   }
@@ -69,10 +72,15 @@ export class InteractionHandler {
     }, 500);
   }
 
-  onPointerUp() {
+  onPointerUp(event) {
     clearTimeout(this.holdTimeout);
 
-    if (!this.isLongPress && this.currentHovered) {
+    // Ignore clicks inside animation panel
+    if (this.animationControlPanel && event && this.animationControlPanel.contains(event.target)) {
+      return;
+    }
+
+    if (!this.isLongPress && this.currentHovered && this.isModelObject(this.currentHovered)) {
       log('DEBUG', 'Click detected on', this.currentHovered.name || this.currentHovered.id);
 
       if (this.currentClicked === this.currentHovered) {
@@ -205,5 +213,11 @@ export class InteractionHandler {
     }
 
     this.selectedPopup.style.display = 'block';
+  }
+
+  isModelObject(object) {
+    if (!object) return false;
+    const name = object.name || object.id;
+    return !!this.metadata?.specific_videos?.[name];
   }
 }

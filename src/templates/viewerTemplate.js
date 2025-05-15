@@ -46,17 +46,17 @@ export function getViewerHTML() {
 
                 <div class="flex justify-center gap-2">
                   <button id="stepBackBtn"
-                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-sm sm:text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                     « 1ms
                   </button>
                   <button id="playAnimationsBtn" title="Toggle Play/Pause"
-                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-sm sm:text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                     <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
                   <button id="stepForwardBtn"
-                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
+                    class="flex-1 min-h-[40px] px-3 rounded-lg font-mono text-sm sm:text-base font-semibold border border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center">
                     1ms »
                   </button>
                 </div>
