@@ -30,8 +30,8 @@ export function getViewerHTML() {
               </button>
               <div id="animationControlPanel" class="border border-dashed border-black bg-white px-4 py-3 rounded mt-1 w-full max-w-[340px]">
                 <div class="flex items-center gap-2 mb-2 font-mono text-sm">
-                  <span class="font-semibold">🎞️ Animation:</span>
-                  <span id="animationNameText" class="font-small"></span>
+                  <span class="font-semibold">🎞️</span>
+                  <span id="animationNameText" class="font-small truncate max-w-[130px] block text-[15px]"></span>
                 </div>
 
                 <input
