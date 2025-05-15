@@ -43,7 +43,9 @@ export function loadModelByKey(app, key, metadataMap) {
     metadata.base_model,
     ({ mixer, animations }) => {
       document.getElementById('loadingScreen')?.classList.add('hidden');
-      setupAnimationHandler(mixer, animations);
+      setupAnimationHandler(mixer, animations, {
+        enableAnimation: metadata?.enableAnimation !== false,
+      });
     },
     (xhr) => {
       const { total, loaded } = xhr;

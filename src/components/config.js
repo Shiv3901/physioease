@@ -28,9 +28,10 @@ export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
 export const ROTATORCUFF_METADATA = {
   base_model: model('rotatorcuff-draco.glb'),
+  enableAnimation: false,
 
   // === GENERAL VIDEO CATEGORIES (used for "More Videos" section) ===
-  base_videos: {
+  animations: {
     // Abduction: {
     //   title: '🦴 Ab/Adduction',
     //   src: video('rotatorcuff_ab_adduction.mp4'),
@@ -103,7 +104,7 @@ export const ROTATORCUFF_METADATA = {
 
 export const ANKLE_METADATA = {
   base_model: model('ankle-draco.glb'),
-  base_videos: {
+  animations: {
     Dorsiflexion: { title: '⬆️ Dorsiflexion', src: video('ankle_dorsiflexion.mp4') },
     Plantarflexion: { title: '⬇️ Plantarflexion', src: video('ankle_plantarflexion.mp4') },
     Eversion: { title: '↔️ Eversion', src: video('ankle_eversion.mp4') },
@@ -192,7 +193,7 @@ export const ANKLE_METADATA = {
 
 export const LOWERBACK_METADATA = {
   base_model: model('lowerback-draco.glb'),
-  base_videos: {
+  animations: {
     Flexion: { title: '🦾 Flexion', src: video('lowerback_flexion.mp4') },
     Extension: { title: '🦾 Extension', src: video('lowerback_extension.mp4') },
     LeftLateralFlexion: {

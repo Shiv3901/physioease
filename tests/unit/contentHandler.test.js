@@ -52,7 +52,7 @@ describe('contentHandler.js', () => {
 
   it('moreVideosBtn toggles metadata buttons', () => {
     const metadata = {
-      base_videos: {
+      animations: {
         videoA: { title: 'Video A', src: 'a.mp4' },
       },
     };
@@ -67,7 +67,7 @@ describe('contentHandler.js', () => {
 
   it('clicking flat video entry plays animation', () => {
     const metadata = {
-      base_videos: {
+      animations: {
         simple: { src: 'flat.mp4', title: 'Flat Video' },
       },
     };
@@ -95,7 +95,7 @@ describe('contentHandler.js', () => {
 
   it('applies correct layout styles to moreVideosPane', () => {
     const metadata = {
-      base_videos: {
+      animations: {
         x: { src: 'x.mp4' },
       },
     };

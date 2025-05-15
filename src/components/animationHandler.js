@@ -12,8 +12,20 @@ let duration = 0;
 export function setupAnimationHandler(
   mixerInstance,
   clips,
-  { sliderId = 'animationSlider', playButtonId = 'playAnimationsBtn' } = {}
+  {
+    sliderId = 'animationSlider',
+    playButtonId = 'playAnimationsBtn',
+    enableAnimation = true, // <-- default to true
+  } = {}
 ) {
+  if (enableAnimation !== true) {
+    log('INFO', '⚠️ Animations disabled or not provided. Skipping animation setup.');
+    const controlsWrapper = document.getElementById('animationControlsWrapper');
+    if (controlsWrapper) controlsWrapper.style.display = 'none';
+    updateAnimationName('None');
+    return;
+  }
+
   mixer = mixerInstance;
   animations = clips;
 

@@ -61,7 +61,7 @@ export function setupContentHandlers(metadata) {
 
   let wasOverlappingWhenOpened = false; // <-- NEW FLAG
 
-  const videoData = metadata?.base_videos || {};
+  const videoData = metadata?.animations || {};
   let videoCount = 0;
 
   // Helper to check if two elements overlap
@@ -77,40 +77,52 @@ export function setupContentHandlers(metadata) {
     );
   }
 
-  Object.entries(videoData).forEach(([key, entry]) => {
-    if (entry.src) {
-      const btn = document.createElement('div');
-      btn.className =
-        'py-1 rounded border border-dashed border-gray-400 font-mono text-sm text-black cursor-pointer w-full text-left transition hover:bg-gray-200 active:bg-gray-200';
+  moreVideosPane.innerHTML = '';
 
-      const label = document.createElement('span');
-      label.className = 'px-3';
-      label.textContent = entry.title || key;
+  if (metadata?.enableAnimation === false) {
+    const comingSoonMsg = document.createElement('div');
+    comingSoonMsg.className =
+      'p-4 text-sm text-gray-500 font-mono border border-dashed border-gray-300 rounded';
+    comingSoonMsg.textContent = '🎥 More animations coming soon.';
+    moreVideosPane.appendChild(comingSoonMsg);
+    log('INFO', '[ℹ️] Animations are disabled or not available – showing "coming soon" notice.');
+  } else {
+    Object.entries(videoData).forEach(([key, entry]) => {
+      if (entry.src) {
+        const btn = document.createElement('div');
+        btn.className =
+          'py-1 rounded border border-dashed border-gray-400 font-mono text-sm text-black cursor-pointer w-full text-left transition hover:bg-gray-200 active:bg-gray-200';
 
-      btn.appendChild(label);
+        const label = document.createElement('span');
+        label.className = 'px-3';
+        label.textContent = entry.title || key;
 
-      btn.addEventListener('click', () => {
-        document
-          .querySelectorAll('#moreVideosPane .selected')
-          .forEach((el) => el.classList.remove('bg-gray-200', 'text-black', 'selected'));
+        btn.appendChild(label);
 
-        btn.classList.add('bg-gray-200', 'text-black', 'selected');
-        log('INFO', `[▶️] Playing animation "${key}"`);
-        playAnimationPanel(key);
+        btn.addEventListener('click', () => {
+          document
+            .querySelectorAll('#moreVideosPane .selected')
+            .forEach((el) => el.classList.remove('bg-gray-200', 'text-black', 'selected'));
 
-        // Use the flag set when More Videos pane was opened!
-        if (wasOverlappingWhenOpened) {
-          moreVideosPane.classList.remove('flex');
-          moreVideosPane.classList.add('hidden');
-          if (animationControlPanel) animationControlPanel.classList.remove('hidden');
-          log('INFO', '[📁] More Videos pane closed (after select, overlap).');
-        }
-      });
+          btn.classList.add('bg-gray-200', 'text-black', 'selected');
+          log('INFO', `[▶️] Playing animation "${key}"`);
+          playAnimationPanel(key);
 
-      moreVideosPane.appendChild(btn);
-      videoCount++;
-    }
-  });
+          if (wasOverlappingWhenOpened) {
+            moreVideosPane.classList.remove('flex');
+            moreVideosPane.classList.add('hidden');
+            if (animationControlPanel) animationControlPanel.classList.remove('hidden');
+            log('INFO', '[📁] More Videos pane closed (after select, overlap).');
+          }
+        });
+
+        moreVideosPane.appendChild(btn);
+        videoCount++;
+      }
+    });
+
+    log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
+  }
 
   log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
 

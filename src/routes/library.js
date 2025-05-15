@@ -4,8 +4,8 @@ import { createNotesToggleButton } from './chatbox.js';
 export function loadLibrary(app) {
   createNotesToggleButton(false);
   const allVideos = {
-    ...ANKLE_METADATA.base_videos,
-    ...ROTATORCUFF_METADATA.base_videos,
+    ...ANKLE_METADATA.animations,
+    ...ROTATORCUFF_METADATA.animations,
   };
 
   const videoCards = Object.entries(allVideos)
