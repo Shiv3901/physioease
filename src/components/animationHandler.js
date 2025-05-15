@@ -99,6 +99,7 @@ function playAnimation(clip) {
   currentAction.setLoop(THREE.LoopRepeat, Infinity);
   currentAction.reset();
   currentAction.setEffectiveWeight(1);
+  currentAction.setEffectiveTimeScale(0.5);
   currentAction.play();
   currentAction.paused = !isPlaying;
 
