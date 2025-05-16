@@ -16,17 +16,16 @@ export function loadAboutUs(app) {
 
       <div class="max-w-5xl mx-auto my-6 px-6 sm:px-8 py-8">
         <div class="bg-white rounded-lg shadow border border-gray-200 px-3 py-6 sm:px-8 sm:py-8">
-          <h1 class="text-xl sm:text-2xl font-bold mb-3 text-gray-900 font-mono">About PhysioEase</h1>
-          <p class="text-sm sm:text-base mb-8 text-gray-700 font-sans">A tool to support clearer, faster physio consults.</p>
+          <h1 class="text-xl sm:text-2xl font-bold mb-3 text-gray-900 font-mono">About Us</h1>
 
-          <div class="mb-8 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+          <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Our Product</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
               <span class="font-bold text-gray-900 font-mono">PhysioEase</span> helps physiotherapists explain injuries with interactive 3D movement animations and assignable videos—so patients and their families actually “get it” and recover with confidence.
             </p>
           </div>
 
-        <div class="mb-8 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+        <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Why We Built It</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans mb-4">
                 PhysioEase reduces repetitive explanations and helps structure consults. It makes it easier to explain conditions, exercises, and recovery plans.
@@ -37,7 +36,7 @@ export function loadAboutUs(app) {
         </div>
 
 
-        <div class="mb-8 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+        <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
         <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Photos</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
