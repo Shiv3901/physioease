@@ -2,6 +2,7 @@ import { loadHomepage } from './homepage.js';
 import { loadLibrary } from './routes/library.js';
 import { loadModelByKey } from './templates/codeTemplate.js';
 import { METADATA_MAP } from './components/config.js';
+import { loadAboutUs } from './routes/aboutus.js';
 import { createNotesToggleButton, toggleNotesBox } from './routes/chatbox.js'; // <-- also import toggleNotesBox
 
 function route() {
@@ -24,6 +25,8 @@ function route() {
     loadHomepage(app);
   } else if (path === '/library') {
     loadLibrary(app);
+  } else if (path === '/aboutus') {
+    loadAboutUs(app);
   } else if (modelRoutes[path]) {
     loadModelByKey(app, modelRoutes[path], METADATA_MAP);
   } else {

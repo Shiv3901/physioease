@@ -63,6 +63,9 @@ export function loadHomepage(app) {
           <button id="launch-library" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
             <span class="text-lg sm:text-xl">🎥</span> Video Library
           </button>
+          <button id="launch-aboutus" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
+            <span class="text-lg sm:text-xl">🛈</span> About Us
+          </button>
           <div class="flex items-center justify-between">
             <div>
               <span class="text-base text-gray-500">&gt; <span class="inline-block w-2 animate-blink">_</span></span>
@@ -93,6 +96,11 @@ export function loadHomepage(app) {
 
   document.getElementById('launch-lowerback')?.addEventListener('click', () => {
     history.pushState({}, '', '/lowerback');
+    window.dispatchEvent(new Event('popstate'));
+  });
+
+  document.getElementById('launch-aboutus')?.addEventListener('click', () => {
+    history.pushState({}, '', '/aboutus');
     window.dispatchEvent(new Event('popstate'));
   });
 }
