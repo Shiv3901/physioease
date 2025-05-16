@@ -19,7 +19,7 @@ function route() {
 
   const isNotesAllowed =
     modelRoutes[path] !== undefined ||
-    !(path === '/' || path === '/index.html' || path === '/library');
+    !(path === '/' || path === '/index.html' || path === '/library' || path === '/aboutus');
 
   if (path === '/' || path === '/index.html') {
     loadHomepage(app);
