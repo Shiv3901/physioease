@@ -43,7 +43,7 @@ export class InteractionHandler {
 
     this.animationControlPanel = document.getElementById('animationControlPanel');
     this.moreVideosPane = document.getElementById('moreVideosPane');
-    this.moreVideosBtn = document.getElementById('moreVideosBtn'); // <--- ADDED
+    this.moreVideosBtn = document.getElementById('moreVideosBtn');
 
     this.onClickCallback = onClickCallback;
     this.playAnimationPanel = playAnimationPanel;
@@ -52,28 +52,15 @@ export class InteractionHandler {
     this.holdTimeout = null;
     this.isLongPress = false;
 
-    // Touch/mouse detection for hover handling
-    this.isTouch = false;
-    window.addEventListener(
-      'touchstart',
-      () => {
-        this.isTouch = true;
-      },
-      { passive: true }
-    );
-    window.addEventListener(
-      'mousemove',
-      () => {
-        this.isTouch = false;
-      },
-      { passive: true }
-    );
+    this.isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    this.isPointerDown = false;
 
-    window.addEventListener('pointermove', this.onPointerMove.bind(this));
-    window.addEventListener('pointerdown', this.onPointerDown.bind(this));
-    window.addEventListener('pointerup', (e) => this.onPointerUp(e));
-    window.addEventListener('pointercancel', this.clearHold.bind(this));
-    window.addEventListener('pointerleave', this.clearHold.bind(this));
+    // Pointer events on canvas only
+    this.canvas.addEventListener('pointermove', this.onPointerMove.bind(this));
+    this.canvas.addEventListener('pointerdown', this.onPointerDown.bind(this));
+    this.canvas.addEventListener('pointerup', this.onPointerUp.bind(this));
+    this.canvas.addEventListener('pointercancel', this.clearHold.bind(this));
+    this.canvas.addEventListener('pointerleave', this.clearHold.bind(this));
   }
 
   onPointerMove(event) {
@@ -82,42 +69,48 @@ export class InteractionHandler {
     this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   }
 
-  onPointerDown() {
-    this.isLongPress = false;
+  onPointerDown(event) {
+    this.isPointerDown = true;
     this.holdTimeout = setTimeout(() => {
       this.isLongPress = true;
       log('DEBUG', 'Long press detected');
-    }, 500);
+    }, 600);
+    this.isLongPress = false;
+    this.lastPointerDownTarget = event.target;
+    log('DEBUG2', '[pointerdown] Pointer down on', event.target.tagName);
   }
 
   onPointerUp(event) {
+    this.isPointerDown = false;
     clearTimeout(this.holdTimeout);
+    log('DEBUG2', '[pointerup] Pointer up on', event.target.tagName);
 
-    // Ignore clicks inside animation panel, more videos pane, or more videos button
+    // Ignore clicks inside UI panels
     if (
-      (this.animationControlPanel && event && this.animationControlPanel.contains(event.target)) ||
-      (this.moreVideosPane && event && this.moreVideosPane.contains(event.target)) ||
-      (this.moreVideosBtn && event && this.moreVideosBtn.contains(event.target))
+      this.animationControlPanel?.contains(event.target) ||
+      this.moreVideosPane?.contains(event.target) ||
+      this.moreVideosBtn?.contains(event.target)
     ) {
+      log('DEBUG2', '[pointerup] Click ignored due to UI panel');
       return;
     }
 
     if (!this.isLongPress && this.currentHovered && this.isModelObject(this.currentHovered)) {
-      log('DEBUG', 'Click detected on', this.currentHovered.name || this.currentHovered.id);
+      const name = this.currentHovered.name || this.currentHovered.id;
+      log('DEBUG', 'Click detected on', name);
 
       if (this.currentClicked === this.currentHovered) {
         this.setHighlight(this.currentClicked, 'restore');
         this.currentClicked = null;
         this.updateSelectedInfo(null);
-        log('DEBUG2', 'Unselected:', this.currentHovered.name || this.currentHovered.id);
+        log('DEBUG2', 'Unselected:', name);
       } else {
         if (this.currentClicked) {
           this.setHighlight(this.currentClicked, 'restore');
         }
-
         this.currentClicked = this.currentHovered;
         this.setHighlight(this.currentClicked, 'click');
-        log('DEBUG2', 'Selected:', this.currentClicked.name || this.currentClicked.id);
+        log('DEBUG2', 'Selected:', name);
       }
 
       if (typeof this.onClickCallback === 'function') {
@@ -128,19 +121,32 @@ export class InteractionHandler {
 
   clearHold() {
     clearTimeout(this.holdTimeout);
+    this.isPointerDown = false;
+    log('DEBUG2', '[clearHold] Pointer cleared');
   }
 
   setHighlight(object, type) {
-    if (!object || !object.material || !object.material.emissive) return;
+    if (!object?.material?.emissive) {
+      log('DEBUG2', '[setHighlight] Skipping: no material/emissive');
+      return;
+    }
+
+    const name = object.name || object.id || '(unnamed)';
 
     if (type === 'hover') {
-      if (!this.isTouch) {
-        object.material.emissive.setHex(0x999900);
-      }
+      log('DEBUG2', `[hover] Attempting highlight on: ${name}`);
+      log(
+        'DEBUG2',
+        `[hover] isTouch=${this.isTouch}, isPointerDown=${this.isPointerDown}, isClicked=${this.currentClicked?.name === name}`
+      );
+      log('DEBUG2', `[hover] Highlighting ${name} with yellow`);
+      object.material.emissive.setHex(0x999900);
     } else if (type === 'click') {
+      log('DEBUG2', `[click] Highlighting ${name} with green`);
       object.material.emissive.setHex(0x009900);
       this.updateSelectedInfo(object);
     } else if (type === 'restore') {
+      log('DEBUG2', `[restore] Clearing highlight on ${name}`);
       object.material.emissive.setHex(0x000000);
     }
   }
@@ -151,6 +157,7 @@ export class InteractionHandler {
 
     if (intersects.length > 0) {
       const firstIntersect = intersects[0].object;
+      const name = firstIntersect.name || firstIntersect.id;
 
       if (this.currentHovered !== firstIntersect) {
         if (this.currentHovered && this.currentHovered !== this.currentClicked) {
@@ -159,8 +166,10 @@ export class InteractionHandler {
 
         this.currentHovered = firstIntersect;
 
-        if (!this.isTouch && this.currentHovered !== this.currentClicked) {
+        if (this.currentHovered !== this.currentClicked) {
           this.setHighlight(this.currentHovered, 'hover');
+        } else {
+          log('DEBUG2', `[update] Skipped hover due to conditions`);
         }
       }
     } else {
@@ -205,11 +214,7 @@ export class InteractionHandler {
 
         if (type === 'video' && src) {
           btn.addEventListener('click', () => {
-            if (typeof this.playAnimationPanel === 'function') {
-              this.playAnimationPanel(src);
-            } else {
-              window.open(src, '_blank');
-            }
+            this.playAnimationPanel?.(src) ?? window.open(src, '_blank');
           });
           this.selectedVideoLinks.appendChild(btn);
         }
@@ -217,25 +222,18 @@ export class InteractionHandler {
         if (type === 'content' && path) {
           log('DEBUG', 'Content path:', path);
           btn.addEventListener('click', () => {
-            if (typeof this.showContentCallback === 'function') {
-              loadHTMLContent(path).then((html) => {
-                html = html.replace(/%IMAGE_BASE%/g, IMAGE_BASE_URL);
-                this.showContentCallback(html);
-              });
-            }
+            loadHTMLContent(path).then((html) => {
+              html = html.replace(/%IMAGE_BASE%/g, IMAGE_BASE_URL);
+              this.showContentCallback?.(html);
+            });
           });
           this.selectedVideoLinks.appendChild(btn);
         }
       });
     }
 
-    if (this.selectedVideoLinks.children.length > 0) {
-      this.selectedVideoLinks.style.display = 'flex';
-      this.selectedPopup.appendChild(this.selectedVideoLinks);
-    } else {
-      this.selectedVideoLinks.style.display = 'none';
-    }
-
+    const hasLinks = this.selectedVideoLinks.children.length > 0;
+    this.selectedVideoLinks.style.display = hasLinks ? 'flex' : 'none';
     this.selectedPopup.style.display = 'block';
   }
 

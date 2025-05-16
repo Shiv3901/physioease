@@ -27,7 +27,7 @@ export function toggleNotesBox(show) {
 
   const isMobile = window.innerWidth < 640;
   const path = window.location.pathname;
-  const disallowedRoutes = ['/', '/index.html', '/library'];
+  const disallowedRoutes = ['/', '/index.html', '/library', '/aboutus'];
   const isAllowedRoute = !disallowedRoutes.includes(path);
 
   if (toggleBtn) {

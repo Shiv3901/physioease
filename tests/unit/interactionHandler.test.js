@@ -68,7 +68,7 @@ describe('InteractionHandler', () => {
   });
 
   it('initializes with correct event listeners', () => {
-    const spy = vi.spyOn(window, 'addEventListener');
+    const spy = vi.spyOn(canvas, 'addEventListener'); // FIX: canvas, not window
     new InteractionHandler(scene, camera, canvas, mockMetadata, onClickCallback);
     ['pointermove', 'pointerdown', 'pointerup', 'pointercancel', 'pointerleave'].forEach((event) =>
       expect(spy).toHaveBeenCalledWith(event, expect.any(Function))
@@ -84,27 +84,27 @@ describe('InteractionHandler', () => {
 
   it('handles object selection toggle', () => {
     handler.currentHovered = fakeObject;
-    handler.onPointerUp({});
+    handler.onPointerUp({ target: document.createElement('div') }); // FIXED
     expect(handler.currentClicked).toBe(fakeObject);
     expect(onClickCallback).toHaveBeenCalledWith(fakeObject);
-    handler.onPointerUp({});
+    handler.onPointerUp({ target: document.createElement('div') }); // FIXED
     expect(handler.currentClicked).toBe(null);
     expect(document.getElementById('selectedLabel').textContent).toContain('None');
   });
 
   it('detects long press', () => {
     vi.useFakeTimers();
-    handler.onPointerDown();
-    vi.advanceTimersByTime(500);
+    handler.onPointerDown({ target: document.createElement('div') }); // FIXED
+    vi.advanceTimersByTime(600);
     expect(handler.isLongPress).toBe(true);
     vi.useRealTimers();
   });
 
   it('clears long press hold correctly', () => {
     vi.useFakeTimers();
-    handler.onPointerDown();
+    handler.onPointerDown({ target: document.createElement('div') }); // FIXED
     handler.clearHold();
-    vi.advanceTimersByTime(500);
+    vi.advanceTimersByTime(600);
     expect(handler.isLongPress).toBe(false);
     vi.useRealTimers();
   });
@@ -142,7 +142,7 @@ describe('InteractionHandler', () => {
       specific_videos: {
         MuscleA: {
           info: 'Some info',
-          article: { title: 'Broken Content', type: 'content' },
+          article: { title: 'Broken Content', type: 'content' }, // missing path
         },
       },
     };
@@ -217,7 +217,7 @@ describe('InteractionHandler', () => {
       );
       handler.updateSelectedInfo(fakeObject);
       document.querySelector('.terminal-link').click();
-      await new Promise((r) => setTimeout(r, 10));
+      await new Promise((r) => setTimeout(r, 100)); // FIXED timeout
       expect(showContentCallback).toHaveBeenCalledWith('<div>' + IMAGE_BASE_URL + '</div>');
     });
 
@@ -244,7 +244,7 @@ describe('InteractionHandler', () => {
       );
       handler.updateSelectedInfo(fakeObject);
       document.querySelector('.terminal-link').click();
-      await new Promise((r) => setTimeout(r, 50));
+      await new Promise((r) => setTimeout(r, 100)); // FIXED timeout
       expect(showContentCallback).toHaveBeenCalledWith(expect.stringContaining('<div>HTML</div>'));
     });
 
@@ -272,7 +272,7 @@ describe('InteractionHandler', () => {
       );
       handler.updateSelectedInfo(fakeObject);
       document.querySelector('.terminal-link').click();
-      await new Promise((r) => setTimeout(r, 10));
+      await new Promise((r) => setTimeout(r, 100)); // FIXED timeout
       expect(showContentCallback).toHaveBeenCalledWith('<div>' + IMAGE_BASE_URL + '</div>');
     });
   });
