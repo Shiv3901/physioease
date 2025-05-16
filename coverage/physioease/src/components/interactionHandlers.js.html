@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.73% </span>
+                <span class="strong">90.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>186/205</span>
+                <span class='fraction'>189/208</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.73% </span>
+                <span class="strong">90.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>186/205</span>
+                <span class='fraction'>189/208</span>
             </div>
         
             
@@ -306,7 +306,9 @@
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -446,7 +448,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -638,9 +642,9 @@ export class InteractionHandler {
 &nbsp;
     // Ignore clicks inside UI panels
     if (
-      (this.animationControlPanel<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target)) ||
-      (this.moreVideosPane<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target)) ||
-      (this.moreVideosBtn<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target))
+      this.animationControlPanel<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target) ||
+      this.moreVideosPane<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target) ||
+      this.moreVideosBtn<span class="branch-0 cbranch-no" title="branch not covered" >?.contains(</span>event.target)
     ) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      log('DEBUG2', '[pointerup] Click ignored due to UI panel');</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -686,10 +690,12 @@ export class InteractionHandler {
 &nbsp;
     if (type === 'hover') {
       log('DEBUG2', `[hover] Attempting highlight on: ${name}`);
-      log('DEBUG2', `[hover] isTouch=${this.isTouch}, isPointerDown=${this.isPointerDown}, isClicked=${this.currentClicked<span class="branch-0 cbranch-no" title="branch not covered" >?.name </span>=== name}`);
+      log(
+        'DEBUG2',
+        `[hover] isTouch=${this.isTouch}, isPointerDown=${this.isPointerDown}, isClicked=${this.currentClicked<span class="branch-0 cbranch-no" title="branch not covered" >?.name </span>=== name}`
+      );
       log('DEBUG2', `[hover] Highlighting ${name} with yellow`);
-object.material.emissive.setHex(0x999900);
-&nbsp;
+      object.material.emissive.setHex(0x999900);
     } else if (type === 'click') {
       log('DEBUG2', `[click] Highlighting ${name} with green`);
       object.material.emissive.setHex(0x009900);
@@ -716,8 +722,8 @@ object.material.emissive.setHex(0x999900);
 <span class="cstat-no" title="statement not covered" >        this.currentHovered = firstIntersect;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if (this.currentHovered !== this.currentClicked) {</span>
-<span class="cstat-no" title="statement not covered" >  this.setHighlight(this.currentHovered, 'hover');</span>
-<span class="cstat-no" title="statement not covered" >} else {</span>
+<span class="cstat-no" title="statement not covered" >          this.setHighlight(this.currentHovered, 'hover');</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
 <span class="cstat-no" title="statement not covered" >          log('DEBUG2', `[update] Skipped hover due to conditions`);</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
@@ -799,7 +805,7 @@ object.material.emissive.setHex(0x999900);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-16T05:30:58.928Z
+                at 2025-05-16T05:38:34.753Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

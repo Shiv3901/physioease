@@ -1,4 +1,5 @@
 import './../styles/viewer.css';
+import { isNotesAllowedPath } from './permissions.js';
 
 let notesVisible = false;
 
@@ -27,8 +28,7 @@ export function toggleNotesBox(show) {
 
   const isMobile = window.innerWidth < 640;
   const path = window.location.pathname;
-  const disallowedRoutes = ['/', '/index.html', '/library', '/aboutus'];
-  const isAllowedRoute = !disallowedRoutes.includes(path);
+  const isAllowedRoute = isNotesAllowedPath(path);
 
   if (toggleBtn) {
     toggleBtn.disabled = !isAllowedRoute || isMobile;

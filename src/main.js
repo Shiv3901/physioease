@@ -4,6 +4,7 @@ import { loadModelByKey } from './templates/codeTemplate.js';
 import { METADATA_MAP } from './components/config.js';
 import { loadAboutUs } from './routes/aboutus.js';
 import { createNotesToggleButton, toggleNotesBox } from './routes/chatbox.js'; // <-- also import toggleNotesBox
+import { isNotesAllowedPath } from './routes/permissions.js';
 
 function route() {
   const app = document.getElementById('app');
@@ -17,10 +18,6 @@ function route() {
     '/rotatorcuff': 'rotatorcuff',
   };
 
-  const isNotesAllowed =
-    modelRoutes[path] !== undefined ||
-    !(path === '/' || path === '/index.html' || path === '/library' || path === '/aboutus');
-
   if (path === '/' || path === '/index.html') {
     loadHomepage(app);
   } else if (path === '/library') {
@@ -33,12 +30,12 @@ function route() {
     app.innerHTML = '<h1>404 Not Found</h1>';
   }
 
-  createNotesToggleButton(); // ensures it's created once
-  toggleNotesBox(false); // always starts hidden
+  createNotesToggleButton();
+  toggleNotesBox(false);
   const button = document.getElementById('notes-toggle-btn');
   if (button) {
     const isMobile = window.innerWidth < 640;
-    button.disabled = !isNotesAllowed || isMobile;
+    button.disabled = !isNotesAllowedPath() || isMobile;
   }
 
   window.dataLayer = window.dataLayer || [];
@@ -49,4 +46,6 @@ function route() {
 }
 
 window.addEventListener('DOMContentLoaded', route);
-window.addEventListener('popstate', route);
+window.addEventListener('popstate', () => {
+  route();
+});
