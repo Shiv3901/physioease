@@ -26,6 +26,35 @@ export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;
 export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
+export const ABOUTUS_METADATA = {
+  photos: {
+    photo1: {
+      src: image('lowerback_model.png'),
+      alt: 'Lower Back Model',
+      caption: 'Our Lower Back Model',
+    },
+    photo2: {
+      src: image('ankle_model.png'),
+      alt: 'Ankle Model',
+      caption: 'Our Ankle Model',
+    },
+  },
+  videos: {
+    demo1: {
+      src: video('ankle_dorsiflexion.mp4'),
+      title: 'Ankle Dorsiflexion',
+      description:
+        "Dorsiflexion is the movement of the foot upwards towards the shin. It's important for walking, running, and climbing stairs.",
+    },
+    demo2: {
+      src: video('ankle_plantarflexion.mp4'),
+      title: 'Ankle Plantarflexion',
+      description:
+        "Plantarflexion is the movement of the foot downwards away from the shin. It's crucial for pushing off during walking and running.",
+    },
+  },
+};
+
 export const ROTATORCUFF_METADATA = {
   base_model: model('rotatorcuff-draco.glb'),
   enableAnimation: false,
