@@ -40,7 +40,7 @@ export function main({ dryRun = false, noExit = false } = {}) {
     execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 
     log('INFO', FILE_LOG_LEVEL, '🚀 Pushing to GitHub...');
-    execSync('git push', { stdio: 'inherit' });
+    execSync('git push --set-upstream origin HEAD', { stdio: 'inherit' });
 
     log('INFO', FILE_LOG_LEVEL, '✅ Done!');
   } catch (error) {
