@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import { loadHTMLContent, InteractionHandler } from '../../src/components/interactionHandlers';
 import * as THREE from 'three';
-import { IMAGE_BASE_URL } from '../../src/components/config';
+import { GIF_BASE_URL } from '../../src/components/config';
 
 vi.mock('../../src/components/utils', () => ({
   log: vi.fn(),
@@ -194,7 +194,7 @@ describe('InteractionHandler', () => {
     });
 
     it('loads and shows HTML content for content entry', async () => {
-      const mockHTML = '<div>%IMAGE_BASE%</div>';
+      const mockHTML = '<div>%GIF_BASE%</div>';
       global.fetch = vi.fn(() =>
         Promise.resolve({ ok: true, text: () => Promise.resolve(mockHTML) })
       );
@@ -218,7 +218,7 @@ describe('InteractionHandler', () => {
       handler.updateSelectedInfo(fakeObject);
       document.querySelector('.terminal-link').click();
       await new Promise((r) => setTimeout(r, 100)); // FIXED timeout
-      expect(showContentCallback).toHaveBeenCalledWith('<div>' + IMAGE_BASE_URL + '</div>');
+      expect(showContentCallback).toHaveBeenCalledWith('<div>' + GIF_BASE_URL + '</div>');
     });
 
     it('loads HTML and calls showContentCallback', async () => {
@@ -248,8 +248,8 @@ describe('InteractionHandler', () => {
       expect(showContentCallback).toHaveBeenCalledWith(expect.stringContaining('<div>HTML</div>'));
     });
 
-    it('replaces %IMAGE_BASE% and shows content', async () => {
-      const mockHTML = '<div>%IMAGE_BASE%</div>';
+    it('replaces %GIF_BASE% and shows content', async () => {
+      const mockHTML = '<div>%GIF_BASE%</div>';
       global.fetch = vi.fn(() =>
         Promise.resolve({ ok: true, text: () => Promise.resolve(mockHTML) })
       );
@@ -273,7 +273,7 @@ describe('InteractionHandler', () => {
       handler.updateSelectedInfo(fakeObject);
       document.querySelector('.terminal-link').click();
       await new Promise((r) => setTimeout(r, 100)); // FIXED timeout
-      expect(showContentCallback).toHaveBeenCalledWith('<div>' + IMAGE_BASE_URL + '</div>');
+      expect(showContentCallback).toHaveBeenCalledWith('<div>' + GIF_BASE_URL + '</div>');
     });
   });
 });
