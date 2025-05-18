@@ -1,7 +1,13 @@
-import { LOG_LEVEL } from './config.js';
+import { LOG_LEVEL, DEBUG_MODE } from './config.js';
 
 export function log(level, ...args) {
-  const levels = {
+  const baseLevels = {
+    INFO: 0,
+    WARN: 1,
+    ERROR: 2,
+  };
+
+  const debugLevels = {
     INFO: 0,
     DEBUG: 1,
     DEBUG2: 2,
@@ -9,9 +15,11 @@ export function log(level, ...args) {
     ERROR: 4,
   };
 
+  const levels = DEBUG_MODE ? debugLevels : baseLevels;
+
   const alwaysLog = level === 'WARN' || level === 'ERROR';
 
-  if (alwaysLog || levels[level] <= levels[LOG_LEVEL]) {
+  if (levels[level] !== undefined && (alwaysLog || levels[level] <= levels[LOG_LEVEL])) {
     let color;
     switch (level) {
       case 'INFO':
