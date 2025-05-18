@@ -36,17 +36,15 @@ export function loadAboutUs(app) {
         </div>
 
         <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
-          <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">GIFs</h2>
+          <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Animations</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <!-- GIF 1 -->
             <!-- div class="flex flex-col items-center">
               <img src="${gifs.gif1.src}" alt="${gifs.gif1.alt}" 
                   class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
               <span class="text-base text-gray-600 mt-2 font-sans text-center">${gifs.gif1.caption}</span>
             </div -->
 
-            <!-- GIF 2 -->
             <div class="flex flex-col items-center">
               <img src="${gifs.gif2.src}" alt="${gifs.gif2.alt}" 
                   class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
