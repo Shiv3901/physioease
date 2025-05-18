@@ -21,7 +21,6 @@ export function loadModelByKey(app, key, metadataMap) {
 
   if (!metadata) {
     console.error(`❌ No metadata found for model key: "${key}"`);
-    app.innerHTML = `<div class="text-red-500 p-4">❌ No model metadata found for "${key}".</div>`;
     return;
   }
 
@@ -36,12 +35,27 @@ export function loadModelByKey(app, key, metadataMap) {
   const { scene, camera, renderer, controls } = setupViewer(modelContainer);
   modelContainer.appendChild(renderer.domElement);
 
+  const startTime = performance.now();
+
   loadModel(
     scene,
     camera,
     controls,
     metadata.base_model,
     ({ mixer, animations }) => {
+      const endTime = performance.now();
+      const loadTime = ((endTime - startTime) / 1000).toFixed(2);
+
+      const timeBox = document.getElementById('loading-timebox');
+      if (timeBox) {
+        timeBox.className =
+          'fixed bottom-18 right-5 bg-white text-black text-sm font-mono px-4 py-2 rounded-lg shadow-lg z-5';
+        timeBox.textContent = `⏱: ${loadTime}s`;
+        timeBox.classList.remove('hidden');
+        setTimeout(() => {
+          if (timeBox) timeBox.classList.add('hidden');
+        }, 5000);
+      }
       document.getElementById('loadingScreen')?.classList.add('hidden');
       setupAnimationHandler(mixer, animations, {
         enableAnimation: metadata?.enableAnimation !== false,

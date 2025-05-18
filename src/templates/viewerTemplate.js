@@ -67,19 +67,23 @@ export function getViewerHTML() {
 
         <!-- Bottom-left: Selected label & popup (compact) -->
         <div id="bottomLeftInfo" class="fixed bottom-3 left-3 z-40 flex flex-col gap-1 w-[200px]">
-          <div id="popup" class="border border-dashed border-black bg-white px-2 py-1 rounded-sm font-mono text-xs leading-tight whitespace-pre-wrap break-words">
+          <div id="popup" class="border border-dashed border-black bg-white px-2 py-1 rounded-sm font-mono text-s leading-tight whitespace-pre-wrap break-words">
             <div id="videoLinks" class="mt-1"></div>
           </div>  
           <div id="selectedLabel"
-            class="border border-dashed border-black bg-white px-2 min-h-[28px] rounded-sm font-mono font-semibold text-xs leading-tight flex items-center">
+            class="border border-dashed border-black bg-white px-2 min-h-[28px] rounded-sm font-mono font-semibold text-s leading-tight flex items-center">
             🧠 Selected: None
           </div>
         </div>
 
         <!-- Center loading screen -->
-        <div id="loadingScreen" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-center z-50">
-          <div class="text-base mb-1.5 text-black">Loading <span id="loadingPercent">0%</span></div>
-          <pre id="asciiBar" class="text-lg text-amber-700">[----------]</pre>
+        <div id="loadingScreen" class="fixed inset-0 flex items-center justify-center bg-white/80 font-mono text-center z-50">
+          <div>
+            <div class="text-base mb-1.5 text-black">
+              Loading <span id="loadingPercent">0%</span>
+            </div>
+            <pre id="asciiBar" class="text-lg text-amber-700">[----------]</pre>
+          </div>
         </div>
 
         <!-- Overlay shared content -->

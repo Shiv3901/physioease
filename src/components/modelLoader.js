@@ -47,16 +47,19 @@ export function loadModel(
   // Optional: HEAD check for debugging
   fetch(modelPath, { method: 'HEAD' })
     .then((res) => {
+      log('DEBUG', `HEAD: ${modelPath} -> status: ${res.status}`);
       log(
         'DEBUG',
-        `HEAD: ${modelPath} -> status: ${res.status}, content-type: ${res.headers.get('content-type')}, size: ${res.headers.get('content-length')}`
+        `Headers: content-type=${res.headers.get('content-type')}, content-length=${res.headers.get(
+          'content-length'
+        )}`
       );
       if (res.status !== 200) {
-        log('ERROR', `File not found or error: ${modelPath}, status: ${res.status}`);
+        log('ERROR', `HEAD request error: Status ${res.status}, URL: ${modelPath}`);
       }
     })
     .catch((e) => {
-      log('ERROR', `HEAD request failed: ${modelPath}`, e);
+      log('ERROR', `HEAD request failed: ${modelPath}`, e.message || e);
     });
 
   // Optional: preview first 80 bytes
@@ -68,68 +71,71 @@ export function loadModel(
       try {
         preview = new TextDecoder().decode(buf.slice(0, 80));
       } catch (e) {
-        preview = '[binary]';
+        preview = '[binary content]';
       }
-      log('DEBUG', `First 80 bytes: ${preview}`);
-      log('DEBUG', `Model file length: ${len}`);
+      log('DEBUG', `Preview (first 80 bytes): ${preview}`);
+      log('DEBUG', `Model file size: ${len} bytes`);
     })
     .catch((e) => {
-      log('ERROR', `Preview fetch failed: ${modelPath}`, e);
+      log('ERROR', `Model preview fetch failed: ${modelPath}`);
+      log('ERROR', e.message || e);
     });
 
-  // ✅ DRACO support
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('/draco/'); // Folder in /public
+  dracoLoader.setDecoderPath('/draco/');
 
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
   loader.setMeshoptDecoder(MeshoptDecoder);
 
+  log('DEBUG', `User-Agent: ${navigator.userAgent}`);
+  log('DEBUG', `Timestamp: ${new Date().toISOString()}`);
   log('INFO', `Starting to load model from ${modelPath}.`);
+
+  const startTime = performance.now();
 
   loader.load(
     modelPath,
     (gltf) => {
-      log('DEBUG', 'Model loaded successfully.');
-      log('DEBUG', `GLTF content keys: ${Object.keys(gltf)}`);
+      const endTime = performance.now();
+      const loadTime = ((endTime - startTime) / 1000).toFixed(2);
 
       const model = gltf.scene;
 
       if (!model || typeof model !== 'object') {
-        log('ERROR', 'Loaded GLTF scene is null or invalid.');
-        onError(new Error('Invalid model scene'));
+        const message = '❌ Loaded GLTF scene is null or invalid.';
+        log('ERROR', message);
+        displayLoadError(message);
+        onError(new Error(message));
         return;
       }
 
-      log('DEBUG2', 'Model exists and is an object.');
       model.position.set(0, -1, 0);
       model.scale.set(1.5, 1.5, 1.5);
-      log(
-        'DEBUG2',
-        `Model position set to ${model.position.toArray()}, scale set to ${model.scale.toArray()}`
-      );
-
       scene.add(model);
-      log('DEBUG2', 'Model added to scene.');
 
       let meshCount = 0;
       model.traverse((child) => {
         if (child.isMesh) {
           meshCount++;
-          log('DEBUG2', `Cloning material for mesh: ${child.name || '[unnamed mesh]'}`);
           child.material = child.material.clone();
           if (child.material.map) {
-            log('DEBUG2', `Cloning texture map for mesh: ${child.name || '[unnamed mesh]'}`);
             child.material.map = child.material.map.clone();
             child.material.map.needsUpdate = true;
           }
           child.material.needsUpdate = true;
         }
       });
-      log('DEBUG2', `Materials cloned for ${meshCount} mesh(es).`);
 
       centerModel(model, camera, controls);
       const mixer = new THREE.AnimationMixer(model);
+
+      const timeBox = document.getElementById('loadingTimeBox');
+      if (timeBox) {
+        timeBox.textContent = `⏱ Model loaded in ${loadTime}s`;
+        timeBox.classList.remove('hidden', 'bg-red-700');
+        timeBox.classList.add('bg-black', 'text-white');
+      }
 
       log('INFO', 'Model fully loaded and centered.');
       log('DEBUG', `Animations loaded: ${gltf.animations.length}`);
@@ -151,21 +157,37 @@ export function loadModel(
     },
 
     (error) => {
-      log('ERROR', `Error loading model: ${error.message || error}`);
+      const message = `❌ Failed to load model: ${error.message || 'Unknown error'}`;
+      log('ERROR', message);
       log('ERROR', error);
+
+      const timeBox = document.getElementById('loadingTimeBox');
+      if (timeBox) {
+        timeBox.textContent = message;
+        timeBox.classList.remove('hidden');
+        timeBox.classList.add('bg-red-700', 'text-white');
+      }
+
       if (error && error.target) {
-        log(
-          'ERROR',
-          `Error target: status=${error.target.status}, responseURL=${error.target.responseURL}`
-        );
-        if (error.target.response) {
-          log(
-            'ERROR',
-            `Error response (first 200 chars): ${String(error.target.response).substring(0, 200)}`
-          );
+        const { status, responseURL, response } = error.target;
+        log('ERROR', `Target error → status: ${status}, URL: ${responseURL}`);
+        if (response) {
+          const preview = String(response).substring(0, 200);
+          log('ERROR', `Partial response preview: ${preview}`);
         }
       }
+
+      log('ERROR', `Stack or object:`, error.stack || error);
       onError(error);
     }
   );
+}
+
+function displayLoadError(message) {
+  const timeBox = document.getElementById('loading-timebox');
+  if (timeBox) {
+    timeBox.textContent = message;
+    timeBox.classList.remove('hidden');
+    timeBox.classList.add('bg-red-700', 'text-white');
+  }
 }

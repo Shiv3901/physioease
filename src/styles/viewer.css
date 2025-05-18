@@ -23,7 +23,7 @@ body {
 }
 
 #modelContainer canvas {
-  background: red !important; /* Visual rendering proof */
+  background: white !important; /* Visual rendering proof */
   position: absolute;
   top: 0;
   left: 0;

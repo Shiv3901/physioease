@@ -12,11 +12,7 @@ let duration = 0;
 export function setupAnimationHandler(
   mixerInstance,
   clips,
-  {
-    sliderId = 'animationSlider',
-    playButtonId = 'playAnimationsBtn',
-    enableAnimation = true, // <-- default to true
-  } = {}
+  { sliderId = 'animationSlider', playButtonId = 'playAnimationsBtn', enableAnimation = true } = {}
 ) {
   if (enableAnimation !== true) {
     log('INFO', '⚠️ Animations disabled or not provided. Skipping animation setup.');
