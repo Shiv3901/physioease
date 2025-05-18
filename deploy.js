@@ -1,11 +1,13 @@
 import { execSync } from 'child_process';
 import { log } from './src/components/utils.js';
 
+const FILE_LOG_LEVEL = 'DEPLOY';
+
 export function main({ dryRun = false, noExit = false } = {}) {
   const commitMessage = process.argv.slice(2).join(' ').trim();
 
   if (!commitMessage) {
-    console.error('❌ Commit message required.');
+    log('ERROR', FILE_LOG_LEVEL, '❌ Commit message required.');
     if (!noExit) process.exit(1);
     return;
   }
@@ -16,33 +18,33 @@ export function main({ dryRun = false, noExit = false } = {}) {
   else if (/^major:/i.test(commitMessage)) versionType = 'major';
 
   try {
-    log('INFO', '🧪 Running npm run test...');
+    log('INFO', FILE_LOG_LEVEL, '🧪 Running npm run test...');
     execSync('npm run test', { stdio: 'inherit' });
 
-    log('INFO', '🧹 Running npm run format...');
+    log('INFO', FILE_LOG_LEVEL, '🧹 Running npm run format...');
     execSync('npm run format', { stdio: 'inherit' });
 
     if (versionType) {
-      log('INFO', `🔢 Bumping npm version: ${versionType}`);
+      log('INFO', FILE_LOG_LEVEL, `🔢 Bumping npm version: ${versionType}`);
       execSync(`npm version ${versionType} --no-git-tag-version`, { stdio: 'inherit' });
     }
 
-    log('INFO', '🏗️  Running npm run build...');
+    log('INFO', FILE_LOG_LEVEL, '🏗️  Running npm run build...');
     execSync('npm run build', { stdio: 'inherit' });
 
-    log('INFO', '➕ Adding all files to git...');
+    log('INFO', FILE_LOG_LEVEL, '➕ Adding all files to git...');
     execSync('git add .', { stdio: 'inherit' });
 
     const fullMessage = `${commitMessage}`;
-    log('INFO', `📝 Committing with message: "${fullMessage}"`);
+    log('INFO', FILE_LOG_LEVEL, `📝 Committing with message: "${fullMessage}"`);
     execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
 
-    log('INFO', '🚀 Pushing to GitHub...');
+    log('INFO', FILE_LOG_LEVEL, '🚀 Pushing to GitHub...');
     execSync('git push', { stdio: 'inherit' });
 
-    log('INFO', '✅ Done!');
+    log('INFO', FILE_LOG_LEVEL, '✅ Done!');
   } catch (error) {
-    console.error('❌ Something went wrong:', error.message);
+    log('ERROR', FILE_LOG_LEVEL, `❌ Error: ${error.message}`);
     if (!noExit) process.exit(1);
   }
 }

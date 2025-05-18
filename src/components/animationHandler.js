@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { log } from './utils.js';
 
+const FILE_LOG_LEVEL = 'ANIMATION_HANDLER';
+
 let mixer;
 let animations = [];
 let isPlaying = false;
@@ -15,7 +17,11 @@ export function setupAnimationHandler(
   { sliderId = 'animationSlider', playButtonId = 'playAnimationsBtn', enableAnimation = true } = {}
 ) {
   if (enableAnimation !== true) {
-    log('INFO', '⚠️ Animations disabled or not provided. Skipping animation setup.');
+    log(
+      'INFO',
+      FILE_LOG_LEVEL,
+      '⚠️ Animations disabled or not provided. Skipping animation setup.'
+    );
     const controlsWrapper = document.getElementById('animationControlsWrapper');
     if (controlsWrapper) controlsWrapper.style.display = 'none';
     updateAnimationName('None');
@@ -25,9 +31,13 @@ export function setupAnimationHandler(
   mixer = mixerInstance;
   animations = clips;
 
-  log('INFO', `🎞️ ${animations.length} animation(s) loaded.`);
+  log('INFO', FILE_LOG_LEVEL, `🎞️ ${animations.length} animation(s) loaded.`);
   animations.forEach((clip, index) => {
-    log('INFO', `   [${index}] Name: "${clip.name}" Duration: ${clip.duration.toFixed(3)}s`);
+    log(
+      'DEBUG',
+      FILE_LOG_LEVEL,
+      `   [${index}] Name: "${clip.name}" Duration: ${clip.duration.toFixed(3)}s`
+    );
   });
 
   duration = Math.max(...clips.map((clip) => clip.duration || 0), 0.1);
@@ -45,7 +55,7 @@ export function setupAnimationHandler(
       if (!isPlaying) {
         const time = parseFloat(e.target.value);
         setAnimationTime(time);
-        log('DEBUG2', `Slider moved to ${time.toFixed(2)}s`);
+        log('DEBUG2', FILE_LOG_LEVEL, `Slider moved to ${time.toFixed(2)}s`);
       }
     });
   }
@@ -89,7 +99,7 @@ export function setupAnimationHandler(
     setAnimationTime(newTime);
     if (sliderElement) sliderElement.value = newTime.toFixed(3);
 
-    log('DEBUG', `⏯️ Stepped to ${newTime.toFixed(2)}s`);
+    log('DEBUG', FILE_LOG_LEVEL, `⏯️ Stepped to ${newTime.toFixed(2)}s`);
   }
 
   if (animations.length > 0) {
@@ -98,13 +108,17 @@ export function setupAnimationHandler(
     setAnimationTime(0);
     updateAnimationName(animations[0].name);
     if (controlsWrapper) controlsWrapper.style.display = 'flex';
-    log('INFO', `🎬 Default animation loaded: ${animations[0].name}`);
+    log('DEBUG', FILE_LOG_LEVEL, `🎬 Default animation loaded: ${animations[0].name}`);
   } else {
     updateAnimationName('None');
     if (controlsWrapper) controlsWrapper.style.display = 'none';
   }
 
-  log('INFO', `✅ Animation handler initialized. Duration: ${duration.toFixed(2)}s`);
+  log(
+    'INFO',
+    FILE_LOG_LEVEL,
+    `✅ Animation handler initialized. Duration: ${duration.toFixed(2)}s`
+  );
 }
 
 function playAnimation(clip) {
@@ -140,7 +154,7 @@ export function playAnimationByName(name) {
   const controlsWrapper = document.getElementById('animationControlsWrapper');
 
   if (!clip) {
-    log('WARN', `❌ Animation "${name}" not found.`);
+    log('WARN', FILE_LOG_LEVEL, `❌ Animation "${name}" not found.`);
     updateAnimationName('None');
     if (controlsWrapper) controlsWrapper.style.display = 'none';
     return;
@@ -152,7 +166,7 @@ export function playAnimationByName(name) {
   updateAnimationName(clip.name);
   if (controlsWrapper) controlsWrapper.style.display = 'flex';
 
-  log('INFO', `🎬 Animation started: ${name}`);
+  log('INFO', FILE_LOG_LEVEL, `🎬 Animation started: ${name}`);
 }
 
 export function togglePlay() {
@@ -166,11 +180,11 @@ export function togglePlay() {
   }
 
   if (isPlaying) {
-    log('INFO', '▶️ Playing current animation...');
+    log('DEBUG', FILE_LOG_LEVEL, '▶️ Playing current animation...');
     if (currentAction) currentAction.paused = false;
     if (sliderElement) sliderElement.disabled = true;
   } else {
-    log('INFO', '⏸️ Paused. Manual slider active.');
+    log('DEBUG', FILE_LOG_LEVEL, '⏸️ Paused. Manual slider active.');
     if (currentAction) currentAction.paused = true;
     mixer.update(0);
     if (sliderElement) sliderElement.disabled = false;
@@ -191,11 +205,15 @@ export function updateAnimationHandler(delta) {
 
 export function setAnimationTime(seconds) {
   if (!mixer || isPlaying) {
-    log('DEBUG', '⏭ Ignoring setAnimationTime — either mixer is missing or currently playing.');
+    log(
+      'DEBUG',
+      FILE_LOG_LEVEL,
+      '⏭ Ignoring setAnimationTime — either mixer is missing or currently playing.'
+    );
     return;
   }
 
-  log('DEBUG', `🔧 Setting animation time to ${seconds.toFixed(3)}s`);
+  log('DEBUG', FILE_LOG_LEVEL, `🔧 Setting animation time to ${seconds.toFixed(3)}s`);
   mixer.setTime(seconds);
 
   if (currentAction) {
@@ -204,6 +222,7 @@ export function setAnimationTime(seconds) {
     currentAction.play();
     log(
       'DEBUG2',
+      FILE_LOG_LEVEL,
       ` → Current Clip "${currentAction._clip.name}": time=${currentAction.time.toFixed(3)}`
     );
   }
@@ -214,7 +233,7 @@ export function setAnimationTime(seconds) {
     if (obj.isMesh) obj.updateMatrixWorld(true);
   });
 
-  log('DEBUG', `✅ Pose applied at ${seconds.toFixed(3)}s`);
+  log('DEBUG', FILE_LOG_LEVEL, `✅ Pose applied at ${seconds.toFixed(3)}s`);
 }
 
 export function isAnimationPlaying() {

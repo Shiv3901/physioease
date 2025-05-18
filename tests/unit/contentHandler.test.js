@@ -25,8 +25,8 @@ const createDom = () => {
     <div id="animationNameText"></div>
     <div id="animationControlsWrapper" style="display: flex;"></div>
     <button id="closeContentBtn"></button>
-    <div id="moreVideosBtn"></div>
-    <div id="moreVideosPane" class="hidden"></div>
+    <div id="animationsBtn"></div>
+    <div id="animationsPane" class="hidden"></div>
   `;
 };
 
@@ -50,7 +50,7 @@ describe('contentHandler.js', () => {
     expect(contentArea.innerHTML).toContain('Hello');
   });
 
-  it('moreVideosBtn toggles metadata buttons', () => {
+  it('animationsBtn toggles metadata buttons', () => {
     const metadata = {
       animations: {
         videoA: { title: 'Video A', src: 'a.mp4' },
@@ -58,9 +58,9 @@ describe('contentHandler.js', () => {
     };
 
     setupContentHandlers(metadata);
-    document.getElementById('moreVideosBtn').click();
+    document.getElementById('animationsBtn').click();
 
-    const pane = document.getElementById('moreVideosPane');
+    const pane = document.getElementById('animationsPane');
     expect(pane.classList.contains('flex')).toBe(true);
     expect(pane.querySelectorAll('div').length).toBeGreaterThan(0);
   });
@@ -73,9 +73,9 @@ describe('contentHandler.js', () => {
     };
 
     setupContentHandlers(metadata);
-    document.getElementById('moreVideosBtn').click();
+    document.getElementById('animationsBtn').click();
 
-    const flatBtn = document.querySelector('#moreVideosPane div');
+    const flatBtn = document.querySelector('#animationsPane div');
     expect(flatBtn).toBeTruthy();
 
     flatBtn.click();
@@ -93,16 +93,16 @@ describe('contentHandler.js', () => {
     expect(model.style.height).toBe('66.66vh');
   });
 
-  it('applies correct layout styles to moreVideosPane', () => {
+  it('applies correct layout styles to animationsPane', () => {
     const metadata = {
       animations: {
         x: { src: 'x.mp4' },
       },
     };
     setupContentHandlers(metadata);
-    document.getElementById('moreVideosBtn').click();
+    document.getElementById('animationsBtn').click();
 
-    const pane = document.getElementById('moreVideosPane');
+    const pane = document.getElementById('animationsPane');
     expect(pane.classList.contains('flex')).toBe(true);
   });
 });

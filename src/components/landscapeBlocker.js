@@ -1,3 +1,7 @@
+import { log } from './utils.js';
+
+const FILE_LOG_LEVEL = 'LANDSCAPE_BLOCKER';
+
 export function mountLandscapeBlocker() {
   let warning = document.getElementById('landscapeWarning');
 
@@ -43,4 +47,6 @@ export function mountLandscapeBlocker() {
   checkOrientation();
   window.addEventListener('resize', checkOrientation);
   window.addEventListener('orientationchange', checkOrientation);
+
+  log('DEBUG', FILE_LOG_LEVEL, 'Landscape blocker mounted.');
 }

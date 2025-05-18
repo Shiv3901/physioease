@@ -4,29 +4,39 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { log } from './utils.js';
 
+const FILE_LOG_LEVEL = 'MODEL_LOADER';
+
 export function centerModel(model, camera, controls) {
-  log('DEBUG2', 'Centering model based on bounding box.');
+  log('DEBUG2', FILE_LOG_LEVEL, 'Centering model based on bounding box.');
 
   const box = new THREE.Box3().setFromObject(model);
-  log('DEBUG2', `Bounding box min: ${box.min.toArray()}, max: ${box.max.toArray()}`);
+  log(
+    'DEBUG2',
+    FILE_LOG_LEVEL,
+    `Bounding box min: ${box.min.toArray()}, max: ${box.max.toArray()}`
+  );
 
   const center = box.getCenter(new THREE.Vector3());
   const size = box.getSize(new THREE.Vector3());
-  log('DEBUG2', `Calculated center: ${center.toArray()}, size: ${size.toArray()}`);
+  log('DEBUG2', FILE_LOG_LEVEL, `Calculated center: ${center.toArray()}, size: ${size.toArray()}`);
 
   const distance = Math.max(size.x, size.y, size.z) / (2 * Math.atan((Math.PI * camera.fov) / 360));
-  log('DEBUG2', `Calculated camera distance: ${distance}`);
+  log('DEBUG2', FILE_LOG_LEVEL, `Calculated camera distance: ${distance}`);
 
   camera.position.copy(center);
   camera.position.z += distance * 1.2;
   camera.position.y += distance * 0.2;
   camera.lookAt(center);
 
-  log('DEBUG2', `Camera positioned at: ${camera.position.toArray()}`);
+  log('DEBUG2', FILE_LOG_LEVEL, `Camera positioned at: ${camera.position.toArray()}`);
   controls.target.copy(center);
   controls.update();
 
-  log('DEBUG2', `Model centered at ${center.toArray()} with camera distance ${distance}.`);
+  log(
+    'DEBUG2',
+    FILE_LOG_LEVEL,
+    `Model centered at ${center.toArray()} with camera distance ${distance}.`
+  );
 }
 
 /**
@@ -41,25 +51,26 @@ export function loadModel(
   onProgress = () => {},
   onError = (err) => log('ERROR', err)
 ) {
-  log('DEBUG', 'Initializing GLTFLoader...');
-  log('INFO', `Model loader invoked for: ${modelPath}`);
+  log('DEBUG', FILE_LOG_LEVEL, 'Initializing GLTFLoader...');
+  log('INFO', FILE_LOG_LEVEL, `Model loader invoked for: ${modelPath}`);
 
   // Optional: HEAD check for debugging
   fetch(modelPath, { method: 'HEAD' })
     .then((res) => {
-      log('DEBUG', `HEAD: ${modelPath} -> status: ${res.status}`);
+      log('DEBUG', FILE_LOG_LEVEL, `HEAD: ${modelPath} -> status: ${res.status}`);
       log(
         'DEBUG',
+        FILE_LOG_LEVEL,
         `Headers: content-type=${res.headers.get('content-type')}, content-length=${res.headers.get(
           'content-length'
         )}`
       );
       if (res.status !== 200) {
-        log('ERROR', `HEAD request error: Status ${res.status}, URL: ${modelPath}`);
+        log('ERROR', FILE_LOG_LEVEL, `HEAD request error: Status ${res.status}, URL: ${modelPath}`);
       }
     })
     .catch((e) => {
-      log('ERROR', `HEAD request failed: ${modelPath}`, e.message || e);
+      log('ERROR', FILE_LOG_LEVEL, `HEAD request failed: ${modelPath}`, e.message || e);
     });
 
   // Optional: preview first 80 bytes
@@ -73,12 +84,12 @@ export function loadModel(
       } catch (e) {
         preview = '[binary content]';
       }
-      log('DEBUG', `Preview (first 80 bytes): ${preview}`);
-      log('DEBUG', `Model file size: ${len} bytes`);
+      log('DEBUG', FILE_LOG_LEVEL, `Preview (first 80 bytes): ${preview}`);
+      log('DEBUG', FILE_LOG_LEVEL, `Model file size: ${len} bytes`);
     })
     .catch((e) => {
-      log('ERROR', `Model preview fetch failed: ${modelPath}`);
-      log('ERROR', e.message || e);
+      log('ERROR', FILE_LOG_LEVEL, `Model preview fetch failed: ${modelPath}`);
+      log('ERROR', FILE_LOG_LEVEL, e.message || e);
     });
 
   const dracoLoader = new DRACOLoader();
@@ -88,9 +99,9 @@ export function loadModel(
   loader.setDRACOLoader(dracoLoader);
   loader.setMeshoptDecoder(MeshoptDecoder);
 
-  log('DEBUG', `User-Agent: ${navigator.userAgent}`);
-  log('DEBUG', `Timestamp: ${new Date().toISOString()}`);
-  log('INFO', `Starting to load model from ${modelPath}.`);
+  log('DEBUG', FILE_LOG_LEVEL, `User-Agent: ${navigator.userAgent}`);
+  log('DEBUG', FILE_LOG_LEVEL, `Timestamp: ${new Date().toISOString()}`);
+  log('INFO', FILE_LOG_LEVEL, `Starting to load model from ${modelPath}.`);
 
   const startTime = performance.now();
 
@@ -104,7 +115,7 @@ export function loadModel(
 
       if (!model || typeof model !== 'object') {
         const message = '❌ Loaded GLTF scene is null or invalid.';
-        log('ERROR', message);
+        log('ERROR', FILE_LOG_LEVEL, message);
         displayLoadError(message);
         onError(new Error(message));
         return;
@@ -137,8 +148,8 @@ export function loadModel(
         timeBox.classList.add('bg-black', 'text-white');
       }
 
-      log('INFO', 'Model fully loaded and centered.');
-      log('DEBUG', `Animations loaded: ${gltf.animations.length}`);
+      log('INFO', FILE_LOG_LEVEL, 'Model fully loaded and centered.');
+      log('DEBUG', FILE_LOG_LEVEL, `Animations loaded: ${gltf.animations.length}`);
       onLoaded({ mixer, animations: gltf.animations, model });
     },
 
@@ -148,6 +159,7 @@ export function loadModel(
         percentComplete = (xhr.loaded / xhr.total) * 100;
         log(
           'DEBUG2',
+          FILE_LOG_LEVEL,
           `Loading model: ${percentComplete.toFixed(2)}% complete. (${xhr.loaded}/${xhr.total} bytes)`
         );
       } else {
@@ -158,8 +170,8 @@ export function loadModel(
 
     (error) => {
       const message = `❌ Failed to load model: ${error.message || 'Unknown error'}`;
-      log('ERROR', message);
-      log('ERROR', error);
+      log('ERROR', FILE_LOG_LEVEL, message);
+      log('ERROR', FILE_LOG_LEVEL, error);
 
       const timeBox = document.getElementById('loadingTimeBox');
       if (timeBox) {
@@ -170,14 +182,14 @@ export function loadModel(
 
       if (error && error.target) {
         const { status, responseURL, response } = error.target;
-        log('ERROR', `Target error → status: ${status}, URL: ${responseURL}`);
+        log('ERROR', FILE_LOG_LEVEL, `Target error → status: ${status}, URL: ${responseURL}`);
         if (response) {
           const preview = String(response).substring(0, 200);
-          log('ERROR', `Partial response preview: ${preview}`);
+          log('ERROR', FILE_LOG_LEVEL, `Partial response preview: ${preview}`);
         }
       }
 
-      log('ERROR', `Stack or object:`, error.stack || error);
+      log('ERROR', FILE_LOG_LEVEL, `Stack or object:`, error.stack || error);
       onError(error);
     }
   );

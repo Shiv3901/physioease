@@ -1,6 +1,6 @@
 import { LOG_LEVEL, DEBUG_MODE } from './config.js';
 
-export function log(level, ...args) {
+export function log(level, trace, ...args) {
   const baseLevels = {
     INFO: 0,
     WARN: 1,
@@ -22,26 +22,26 @@ export function log(level, ...args) {
   if (levels[level] !== undefined && (alwaysLog || levels[level] <= levels[LOG_LEVEL])) {
     let color;
     switch (level) {
-      case 'INFO':
-        color = 'blue';
+      case 'DEBUG2':
+        color = '#999999'; // Light gray
         break;
       case 'DEBUG':
-        color = 'orange';
+        color = '#6666cc'; // Soft indigo
         break;
-      case 'DEBUG2':
-        color = 'purple';
+      case 'INFO':
+        color = '#007acc'; // Bright blue
         break;
       case 'WARN':
-        color = 'goldenrod';
+        color = '#e6b800'; // Amber
         break;
       case 'ERROR':
-        color = 'red';
+        color = '#cc0000'; // Red
         break;
       default:
         color = 'black';
     }
 
-    console.log(`%c[${level}]`, `color: ${color}; font-weight: bold;`, ...args);
+    console.log(`%c[${level}] [${trace}]`, `color: ${color}; font-weight: bold;`, ...args);
   }
 }
 
@@ -65,4 +65,6 @@ export function injectViewerHeadAssets() {
     meta.content = 'width=device-width, initial-scale=1.0';
     document.head.appendChild(meta);
   }
+
+  log('DEBUG', 'VIEWER', 'Viewer head assets injected.');
 }

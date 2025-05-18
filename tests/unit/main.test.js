@@ -18,6 +18,8 @@ vi.mock('../../src/components/config.js', () => ({
     rotatorcuff: { mock: true },
     lowerback: { mock: true },
   },
+  LOG_LEVEL: 'DEBUG',
+  DEBUG_MODE: true,
 }));
 
 describe('main.js routing (refactored)', () => {
