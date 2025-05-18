@@ -26,5 +26,6 @@ dist-ssr
 # Ignore only media files in public/
 public/**/*.mp4
 public/**/*.glb
+public/**/*.gif
 
 coverage/*
