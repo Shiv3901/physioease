@@ -3,17 +3,12 @@ import {
   playAnimationPanel,
   showContent,
   setupContentHandlers,
+  registerAnimationHandler,
 } from '../../src/components/contentHandler';
-
-vi.mock('../../src/components/animationHandler', () => ({
-  playAnimationByName: vi.fn(),
-}));
 
 vi.mock('../../src/components/utils.js', () => ({
   log: vi.fn(),
 }));
-
-import { playAnimationByName } from '../../src/components/animationHandler';
 
 const createDom = () => {
   document.body.innerHTML = `
@@ -31,14 +26,20 @@ const createDom = () => {
 };
 
 describe('contentHandler.js', () => {
+  let fakeHandler;
+
   beforeEach(() => {
     createDom();
     vi.clearAllMocks();
+    fakeHandler = {
+      playByName: vi.fn(),
+    };
+    registerAnimationHandler(fakeHandler);
   });
 
-  it('playAnimationPanel passes name to animation handler', () => {
+  it('playAnimationPanel calls handler.playByName', () => {
     playAnimationPanel('flat.mp4');
-    expect(playAnimationByName).toHaveBeenCalledWith('flat.mp4');
+    expect(fakeHandler.playByName).toHaveBeenCalledWith('flat.mp4');
   });
 
   it('showContent sets HTML content and shows content area', () => {
@@ -65,7 +66,7 @@ describe('contentHandler.js', () => {
     expect(pane.querySelectorAll('div').length).toBeGreaterThan(0);
   });
 
-  it('clicking flat video entry plays animation', () => {
+  it('clicking animation entry plays animation using handler', () => {
     const metadata = {
       animations: {
         simple: { src: 'flat.mp4', title: 'Flat Video' },
@@ -79,7 +80,7 @@ describe('contentHandler.js', () => {
     expect(flatBtn).toBeTruthy();
 
     flatBtn.click();
-    expect(playAnimationByName).toHaveBeenCalledWith('simple');
+    expect(fakeHandler.playByName).toHaveBeenCalledWith('simple');
   });
 
   it('handles small viewport layout', () => {
