@@ -1,18 +1,16 @@
-// ../templates/codeTemplate.js
-
 import * as THREE from 'three';
 import { setupViewer } from '../components/viewerSetup.js';
 import { loadModel } from '../components/modelLoader.js';
 import { InteractionHandler } from '../components/interactionHandlers.js';
 import {
+  registerAnimationHandler,
   setupContentHandlers,
-  playAnimationPanel,
   showContent,
 } from '../components/contentHandler.js';
 import { getViewerHTML } from './viewerTemplate.js';
 import { mountLandscapeBlocker } from '../components/landscapeBlocker.js';
 import { log, injectViewerHeadAssets } from '../components/utils.js';
-import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
+import { AnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
 const FILE_LOG_LEVEL = 'AUTOGEN_MODEL';
@@ -45,12 +43,15 @@ export function loadModelByKey(app, key, metadataMap) {
 
   const startTime = performance.now();
 
+  // animationHandler is scoped so it gets disposed when switching models
+  let animationHandler = null;
+
   loadModel(
     scene,
     camera,
     controls,
     metadata.base_model,
-    ({ mixer, animations }) => {
+    ({ mixer, animations, model }) => {
       const endTime = performance.now();
       const loadTime = ((endTime - startTime) / 1000).toFixed(2);
 
@@ -64,11 +65,19 @@ export function loadModelByKey(app, key, metadataMap) {
           if (timeBox) timeBox.classList.add('hidden');
         }, 5000);
       }
+
       document.getElementById('loadingScreen')?.classList.add('hidden');
       log('DEBUG', FILE_LOG_LEVEL, `Model load time: ${loadTime}s`);
 
-      setupAnimationHandler(mixer, animations, {
-        enableAnimation: metadata?.enableAnimation !== false,
+      if (animationHandler) {
+        animationHandler.dispose();
+        log('DEBUG', FILE_LOG_LEVEL, 'Disposed previous animation handler.');
+      }
+
+      animationHandler = new AnimationHandler({
+        clips: animations,
+        model,
+        enable: metadata?.enableAnimation !== false,
       });
 
       log('DEBUG2', FILE_LOG_LEVEL, `Animation enabled: ${metadata?.enableAnimation !== false}`);
@@ -111,10 +120,10 @@ export function loadModelByKey(app, key, metadataMap) {
     (clickedObject) => {
       // Optional: click logic
     },
-    playAnimationPanel,
+    animationHandler ? animationHandler.playByName.bind(animationHandler) : () => {},
     showContent
   );
-
+  registerAnimationHandler(animationHandler);
   setupContentHandlers(metadata);
 
   function animate() {
@@ -123,7 +132,7 @@ export function loadModelByKey(app, key, metadataMap) {
     controls.update();
     renderer.render(scene, camera);
     const delta = clock.getDelta();
-    updateAnimationHandler(delta);
+    if (animationHandler) animationHandler.update(delta);
   }
   animate();
 
@@ -146,6 +155,7 @@ export function loadModelByKey(app, key, metadataMap) {
       renderer.dispose();
       renderer.domElement.remove();
       window.removeEventListener('resize', handleResize);
+      animationHandler?.dispose();
       history.pushState({}, '', '/');
       window.dispatchEvent(new Event('popstate'));
     });

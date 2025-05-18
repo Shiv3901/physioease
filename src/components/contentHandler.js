@@ -1,7 +1,20 @@
-import { playAnimationByName } from './animationHandler.js';
 import { log } from './utils.js';
 
 const FILE_LOG_LEVEL = 'CONTENT_HANDLER';
+
+let _animationHandlerRef = null;
+
+export function registerAnimationHandler(handler) {
+  _animationHandlerRef = handler;
+}
+
+export function playAnimationPanel(name) {
+  if (_animationHandlerRef) {
+    _animationHandlerRef.playByName(name);
+  } else {
+    console.warn('⚠️ No AnimationHandler registered for playAnimationPanel');
+  }
+}
 
 function showContentPanel({ type, html = '' }) {
   const sharedContentArea = document.getElementById('sharedContentArea');
@@ -46,10 +59,6 @@ function showContentPanel({ type, html = '' }) {
   }
 
   window.dispatchEvent(new Event('resize'));
-}
-
-export function playAnimationPanel(name) {
-  playAnimationByName(name);
 }
 
 export function showContent(html) {

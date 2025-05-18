@@ -3,239 +3,248 @@ import { log } from './utils.js';
 
 const FILE_LOG_LEVEL = 'ANIMATION_HANDLER';
 
-let mixer;
-let animations = [];
-let isPlaying = false;
-let sliderElement = null;
-let playButtonElement = null;
-let currentAction = null;
-let duration = 0;
+export class AnimationHandler {
+  constructor({
+    clips,
+    model,
+    sliderId = 'animationSlider',
+    playButtonId = 'playAnimationsBtn',
+    enable = true,
+  }) {
+    if (!enable || !clips?.length || !model) {
+      log('INFO', FILE_LOG_LEVEL, '⚠️ Animations disabled or missing. Skipping setup.');
+      this._hideControls();
+      return;
+    }
 
-export function setupAnimationHandler(
-  mixerInstance,
-  clips,
-  { sliderId = 'animationSlider', playButtonId = 'playAnimationsBtn', enableAnimation = true } = {}
-) {
-  if (enableAnimation !== true) {
+    this.model = model;
+    this.clips = clips;
+    this.mixer = new THREE.AnimationMixer(model);
+    this.duration = Math.max(...clips.map((c) => c.duration || 0.1), 0.1);
+    this.slider = document.getElementById(sliderId);
+    this.playButton = document.getElementById(playButtonId);
+    this.isPlaying = false;
+    this.currentAction = null;
+    this.currentTime = 0; // Track manually
+
+    this._setupControls();
+    this._logClipInfo();
+    this._loadDefaultClip();
+
     log(
       'INFO',
       FILE_LOG_LEVEL,
-      '⚠️ Animations disabled or not provided. Skipping animation setup.'
+      `✅ AnimationHandler ready. Duration: ${this.duration.toFixed(2)}s`
     );
-    const controlsWrapper = document.getElementById('animationControlsWrapper');
-    if (controlsWrapper) controlsWrapper.style.display = 'none';
-    updateAnimationName('None');
-    return;
   }
 
-  mixer = mixerInstance;
-  animations = clips;
+  _setupControls() {
+    if (this.slider) {
+      this.slider.max = this.duration.toString();
+      this.slider.step = '0.01';
+      this.slider.value = '0';
+      this.slider.addEventListener('input', (e) => {
+        if (!this.isPlaying) this.setTime(parseFloat(e.target.value));
+      });
+    }
 
-  log('INFO', FILE_LOG_LEVEL, `🎞️ ${animations.length} animation(s) loaded.`);
-  animations.forEach((clip, index) => {
-    log(
-      'DEBUG',
-      FILE_LOG_LEVEL,
-      `   [${index}] Name: "${clip.name}" Duration: ${clip.duration.toFixed(3)}s`
-    );
-  });
+    if (this.playButton) {
+      this.playButton.addEventListener('click', () => this.togglePlay());
+    }
 
-  duration = Math.max(...clips.map((clip) => clip.duration || 0), 0.1);
+    const stepAmount = 0.1;
+    document.getElementById('stepBackBtn')?.addEventListener('click', () => this.step(-stepAmount));
+    document
+      .getElementById('stepForwardBtn')
+      ?.addEventListener('click', () => this.step(stepAmount));
 
-  sliderElement = document.getElementById(sliderId);
-  playButtonElement = document.getElementById(playButtonId);
-  const controlsWrapper = document.getElementById('animationControlsWrapper');
-
-  if (sliderElement) {
-    sliderElement.max = duration.toString();
-    sliderElement.step = '0.01';
-    sliderElement.value = '0';
-
-    sliderElement.addEventListener('input', (e) => {
-      if (!isPlaying) {
-        const time = parseFloat(e.target.value);
-        setAnimationTime(time);
-        log('DEBUG2', FILE_LOG_LEVEL, `Slider moved to ${time.toFixed(2)}s`);
+    document.addEventListener('keydown', (e) => {
+      const target = e.target;
+      if (['INPUT', 'TEXTAREA'].includes(target.tagName) || target.isContentEditable) return;
+      if (e.key === 'j') this.step(-stepAmount);
+      if (e.key === 'k') this.step(stepAmount);
+      if (e.code === 'Space') {
+        e.preventDefault();
+        this.togglePlay();
       }
     });
   }
 
-  if (playButtonElement) {
-    playButtonElement.addEventListener('click', () => {
-      togglePlay();
+  _logClipInfo() {
+    log('INFO', FILE_LOG_LEVEL, `🎞️ ${this.clips.length} animation(s) loaded.`);
+    this.clips.forEach((clip, i) => {
+      log('DEBUG', FILE_LOG_LEVEL, `   [${i}] "${clip.name}" - ${clip.duration.toFixed(2)}s`);
     });
   }
 
-  const stepAmount = 0.1;
-  const stepBackBtn = document.getElementById('stepBackBtn');
-  const stepForwardBtn = document.getElementById('stepForwardBtn');
-
-  if (stepBackBtn) {
-    stepBackBtn.addEventListener('click', () => stepAnimation(-stepAmount));
-  }
-  if (stepForwardBtn) {
-    stepForwardBtn.addEventListener('click', () => stepAnimation(stepAmount));
-  }
-
-  document.addEventListener('keydown', (e) => {
-    const target = e.target;
-    const isTyping =
-      target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
-
-    if (isTyping) return;
-
-    if (e.key === 'j') stepAnimation(-stepAmount);
-    if (e.key === 'k') stepAnimation(stepAmount);
-    if (e.code === 'Space') {
-      e.preventDefault();
-      togglePlay();
-    }
-  });
-
-  function stepAnimation(offset) {
-    if (!mixer || isPlaying || !currentAction) return;
-
-    const newTime = Math.max(0, Math.min(currentAction.time + offset, duration));
-    setAnimationTime(newTime);
-    if (sliderElement) sliderElement.value = newTime.toFixed(3);
-
-    log('DEBUG', FILE_LOG_LEVEL, `⏯️ Stepped to ${newTime.toFixed(2)}s`);
-  }
-
-  if (animations.length > 0) {
-    stopCurrentAction();
-    playAnimation(animations[0]);
-    setAnimationTime(0);
-    updateAnimationName(animations[0].name);
-    if (controlsWrapper) controlsWrapper.style.display = 'flex';
-    log('DEBUG', FILE_LOG_LEVEL, `🎬 Default animation loaded: ${animations[0].name}`);
-  } else {
-    updateAnimationName('None');
-    if (controlsWrapper) controlsWrapper.style.display = 'none';
-  }
-
-  log(
-    'INFO',
-    FILE_LOG_LEVEL,
-    `✅ Animation handler initialized. Duration: ${duration.toFixed(2)}s`
-  );
-}
-
-function playAnimation(clip) {
-  currentAction = mixer.clipAction(clip);
-  currentAction.enabled = true;
-  currentAction.setLoop(THREE.LoopRepeat, Infinity);
-  currentAction.reset();
-  currentAction.setEffectiveWeight(1);
-  currentAction.setEffectiveTimeScale(0.5);
-  currentAction.play();
-  currentAction.paused = !isPlaying;
-
-  updateAnimationName(clip.name);
-}
-
-function stopCurrentAction() {
-  if (currentAction) {
-    currentAction.stop();
-    currentAction = null;
-  }
-}
-
-function updateAnimationName(name) {
-  const nameTextEl = document.getElementById('animationNameText');
-  if (nameTextEl) {
-    nameTextEl.textContent = name || 'None';
-    nameTextEl.title = name || 'None';
-  }
-}
-
-export function playAnimationByName(name) {
-  const clip = animations.find((clip) => clip.name === name);
-  const controlsWrapper = document.getElementById('animationControlsWrapper');
-
-  if (!clip) {
-    log('WARN', FILE_LOG_LEVEL, `❌ Animation "${name}" not found.`);
-    updateAnimationName('None');
-    if (controlsWrapper) controlsWrapper.style.display = 'none';
-    return;
-  }
-
-  stopCurrentAction();
-  playAnimation(clip);
-  setAnimationTime(0);
-  updateAnimationName(clip.name);
-  if (controlsWrapper) controlsWrapper.style.display = 'flex';
-
-  log('INFO', FILE_LOG_LEVEL, `🎬 Animation started: ${name}`);
-}
-
-export function togglePlay() {
-  isPlaying = !isPlaying;
-
-  const playIcon = document.getElementById('playIcon');
-  if (playIcon?.tagName.toLowerCase() === 'svg') {
-    playIcon.innerHTML = isPlaying
-      ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />' // Pause icon
-      : '<path d="M8 5v14l11-7z" />'; // Play icon
-  }
-
-  if (isPlaying) {
-    log('DEBUG', FILE_LOG_LEVEL, '▶️ Playing current animation...');
-    if (currentAction) currentAction.paused = false;
-    if (sliderElement) sliderElement.disabled = true;
-  } else {
-    log('DEBUG', FILE_LOG_LEVEL, '⏸️ Paused. Manual slider active.');
-    if (currentAction) currentAction.paused = true;
-    mixer.update(0);
-    if (sliderElement) sliderElement.disabled = false;
-  }
-}
-
-export function updateAnimationHandler(delta) {
-  if (!mixer) return;
-
-  if (isPlaying) {
-    mixer.update(delta);
-
-    if (sliderElement && currentAction) {
-      sliderElement.value = Math.min(currentAction.time, duration).toFixed(3);
+  _loadDefaultClip() {
+    if (this.clips.length > 0) {
+      this.play(this.clips[0].name);
+      this.setTime(0);
+      this._showControls();
+    } else {
+      this._hideControls();
     }
   }
-}
 
-export function setAnimationTime(seconds) {
-  if (!mixer || isPlaying) {
-    log(
-      'DEBUG',
-      FILE_LOG_LEVEL,
-      '⏭ Ignoring setAnimationTime — either mixer is missing or currently playing.'
-    );
-    return;
+  play(name) {
+    const clip = this.clips.find((c) => c.name === name);
+    if (!clip) {
+      log('WARN', FILE_LOG_LEVEL, `❌ Animation "${name}" not found.`);
+      this._updateName('None');
+      this._hideControls();
+      return;
+    }
+
+    if (this.currentAction) {
+      this.currentAction.stop();
+    }
+
+    this.currentAction = this.mixer.clipAction(clip);
+    this.currentAction.enabled = true;
+    this.currentAction.setLoop(THREE.LoopRepeat, Infinity);
+    this.currentAction.reset();
+    this.currentAction.setEffectiveWeight(1);
+    this.currentAction.setEffectiveTimeScale(0.5);
+    this.currentAction.play();
+    this.currentAction.paused = !this.isPlaying;
+
+    this._updateName(clip.name);
+    log('INFO', FILE_LOG_LEVEL, `🎬 Animation started: ${name}`);
   }
 
-  log('DEBUG', FILE_LOG_LEVEL, `🔧 Setting animation time to ${seconds.toFixed(3)}s`);
-  mixer.setTime(seconds);
+  playByName(name) {
+    const clip = this.clips.find((c) => c.name === name);
+    if (!clip) {
+      log('WARN', FILE_LOG_LEVEL, `❌ Animation "${name}" not found.`);
+      this._updateName('None');
+      this._hideControls();
+      return;
+    }
 
-  if (currentAction) {
-    currentAction.time = seconds;
-    currentAction.paused = true;
-    currentAction.play();
-    log(
-      'DEBUG2',
-      FILE_LOG_LEVEL,
-      ` → Current Clip "${currentAction._clip.name}": time=${currentAction.time.toFixed(3)}`
-    );
+    if (this.currentAction) this.currentAction.stop();
+
+    this.currentAction = this.mixer.clipAction(clip);
+    this.currentAction.enabled = true;
+    this.currentAction.setLoop(THREE.LoopRepeat, Infinity);
+    this.currentAction.reset();
+    this.currentAction.setEffectiveWeight(1);
+    this.currentAction.setEffectiveTimeScale(0.5);
+    this.currentAction.play();
+    this.currentAction.paused = !this.isPlaying;
+
+    this._updateName(clip.name);
+    this._showControls();
+
+    log('INFO', FILE_LOG_LEVEL, `🎬 Animation started: ${name}`);
   }
 
-  mixer.update(0);
+  togglePlay() {
+    this.isPlaying = !this.isPlaying;
 
-  mixer.getRoot().traverse((obj) => {
-    if (obj.isMesh) obj.updateMatrixWorld(true);
-  });
+    if (this.currentAction) {
+      this.currentAction.paused = !this.isPlaying;
+    }
 
-  log('DEBUG', FILE_LOG_LEVEL, `✅ Pose applied at ${seconds.toFixed(3)}s`);
-}
+    if (this.slider) {
+      this.slider.disabled = this.isPlaying;
+    }
 
-export function isAnimationPlaying() {
-  return isPlaying;
+    const playIcon = document.getElementById('playIcon');
+    if (playIcon?.tagName.toLowerCase() === 'svg') {
+      playIcon.innerHTML = this.isPlaying
+        ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />'
+        : '<path d="M8 5v14l11-7z" />';
+    }
+
+    log('DEBUG', FILE_LOG_LEVEL, this.isPlaying ? '▶️ Playing' : '⏸️ Paused');
+  }
+
+  update(delta) {
+    if (!this.isPlaying || !this.mixer || !this.currentAction) return;
+
+    this.mixer.update(delta);
+    this.currentTime = Math.min(
+      this.currentTime + delta * this.currentAction.getEffectiveTimeScale(),
+      this.duration
+    );
+
+    if (this.slider) {
+      this.slider.value = this.currentTime.toFixed(3);
+    }
+  }
+
+  setTime(time) {
+    if (this.isPlaying || !this.mixer || !this.currentAction) {
+      log(
+        'DEBUG',
+        FILE_LOG_LEVEL,
+        '⏭ Ignoring setTime — either playing, missing mixer, or no action.'
+      );
+      return;
+    }
+
+    try {
+      this.currentTime = time;
+      this.currentAction.enabled = true;
+      this.currentAction.paused = true;
+      this.currentAction.time = time;
+      this.currentAction.play(); // Ensures pose is active and bindings correct
+
+      this.mixer.update(0.001); // Small tick to force pose evaluation
+
+      this.model?.traverse((obj) => obj.isMesh && obj.updateMatrixWorld(true));
+
+      if (this.slider) {
+        this.slider.value = time.toFixed(3);
+      }
+
+      log('DEBUG', FILE_LOG_LEVEL, `🔧 Time set to ${time.toFixed(3)}s`);
+    } catch (e) {
+      log('ERROR', FILE_LOG_LEVEL, `❌ setTime failed: ${e.message}`, e);
+    }
+  }
+
+  step(offset) {
+    if (!this.currentAction || this.isPlaying || !this.mixer) {
+      log('DEBUG', FILE_LOG_LEVEL, '⏮ Step ignored — no current action or is playing.');
+      return;
+    }
+
+    const newTime = Math.max(0, Math.min(this.currentTime + offset, this.duration));
+    this.setTime(newTime);
+  }
+
+  dispose() {
+    if (this.currentAction) this.currentAction.stop();
+    if (this.mixer) {
+      this.mixer.stopAllAction();
+      try {
+        this.mixer.uncacheRoot(this.model);
+      } catch (e) {
+        log('WARN', FILE_LOG_LEVEL, '⚠️ Mixer root not found or already disposed.');
+      }
+    }
+    this._updateName('None');
+    this._hideControls();
+    log('INFO', FILE_LOG_LEVEL, '🧹 AnimationHandler disposed.');
+  }
+
+  _updateName(name) {
+    const el = document.getElementById('animationNameText');
+    if (el) {
+      el.textContent = name;
+      el.title = name;
+    }
+  }
+
+  _showControls() {
+    const wrapper = document.getElementById('animationControlsWrapper');
+    if (wrapper) wrapper.style.display = 'flex';
+  }
+
+  _hideControls() {
+    const wrapper = document.getElementById('animationControlsWrapper');
+    if (wrapper) wrapper.style.display = 'none';
+  }
 }
