@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import _ from 'lodash';
 import { log } from './utils.js';
-import { GIF_BASE_URL } from './config.js';
 
 export async function loadHTMLContent(path) {
   try {
@@ -215,17 +214,6 @@ export class InteractionHandler {
         if (type === 'video' && src) {
           btn.addEventListener('click', () => {
             this.playAnimationPanel?.(src) ?? window.open(src, '_blank');
-          });
-          this.selectedVideoLinks.appendChild(btn);
-        }
-
-        if (type === 'content' && path) {
-          log('DEBUG', 'Content path:', path);
-          btn.addEventListener('click', () => {
-            loadHTMLContent(path).then((html) => {
-              html = html.replace(/%GIF_BASE%/g, GIF_BASE_URL);
-              this.showContentCallback?.(html);
-            });
           });
           this.selectedVideoLinks.appendChild(btn);
         }
