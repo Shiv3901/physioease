@@ -13,28 +13,28 @@ const CONTENT_BASE_URL = isDev
   ? './content/'
   : 'https://re-cors-proxy.physioeaseau.workers.dev/content/';
 
-export const IMAGE_BASE_URL = isDev
-  ? './images/'
-  : 'https://re-cors-proxy.physioeaseau.workers.dev/images/';
+export const GIF_BASE_URL = isDev
+  ? './gifs/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/gifs/';
 
 export const video = (filename) => VIDEO_BASE_URL + filename;
 export const model = (filename) => MODEL_BASE_URL + filename;
 export const content = (filename) => CONTENT_BASE_URL + filename;
-export const image = (filename) => IMAGE_BASE_URL + filename;
+export const gif = (filename) => GIF_BASE_URL + filename;
 
 export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;
 export const LOG_LEVEL = 'DEBUG2'; // Choose: 'INFO', 'DEBUG', 'DEBUG2'
 
 export const ABOUTUS_METADATA = {
-  photos: {
-    photo1: {
-      src: image('lowerback_model.png'),
+  gifs: {
+    gif1: {
+      src: gif('lowerback_model.gif'),
       alt: 'Lower Back Model',
       caption: 'Our Lower Back Model',
     },
-    photo2: {
-      src: image('ankle_model.png'),
+    gif2: {
+      src: gif('ankle_model.gif'),
       alt: 'Ankle Model',
       caption: 'Our Ankle Model',
     },
