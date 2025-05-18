@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import _ from 'lodash';
 import { log } from './utils.js';
-import { IMAGE_BASE_URL } from './config.js';
+import { GIF_BASE_URL } from './config.js';
 
 export async function loadHTMLContent(path) {
   try {
@@ -223,7 +223,7 @@ export class InteractionHandler {
           log('DEBUG', 'Content path:', path);
           btn.addEventListener('click', () => {
             loadHTMLContent(path).then((html) => {
-              html = html.replace(/%IMAGE_BASE%/g, IMAGE_BASE_URL);
+              html = html.replace(/%GIF_BASE%/g, GIF_BASE_URL);
               this.showContentCallback?.(html);
             });
           });

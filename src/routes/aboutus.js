@@ -2,7 +2,7 @@ import { log, injectViewerHeadAssets } from '../components/utils.js';
 import { ABOUTUS_METADATA } from '../components/config.js';
 
 export function loadAboutUs(app) {
-  const photos = ABOUTUS_METADATA.photos;
+  const gifs = ABOUTUS_METADATA.gifs;
   const videos = ABOUTUS_METADATA.videos;
   injectViewerHeadAssets();
 
@@ -35,28 +35,24 @@ export function loadAboutUs(app) {
             </p>
         </div>
 
-
         <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
-        <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Photos</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Animations</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <!-- Photo 1 -->
+            <!-- div class="flex flex-col items-center">
+              <img src="${gifs.gif1.src}" alt="${gifs.gif1.alt}" 
+                  class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
+              <span class="text-base text-gray-600 mt-2 font-sans text-center">${gifs.gif1.caption}</span>
+            </div -->
+
             <div class="flex flex-col items-center">
-            <img src="${photos.photo1.src}" alt="${photos.photo1.alt}" 
-                class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
-            <span class="text-base text-gray-600 mt-2 font-sans text-center">${photos.photo1.caption}</span>
+              <img src="${gifs.gif2.src}" alt="${gifs.gif2.alt}" 
+                  class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
+              <span class="text-base text-gray-600 mt-2 font-sans text-center">${gifs.gif2.caption}</span>
             </div>
 
-            <!-- Photo 2 -->
-            <div class="flex flex-col items-center">
-            <img src="${photos.photo2.src}" alt="${photos.photo2.alt}" 
-                class="w-full max-w-3xl h-auto rounded border border-gray-300 bg-gray-200 shadow-sm" />
-            <span class="text-base text-gray-600 mt-2 font-sans text-center">${photos.photo2.caption}</span>
-            </div>
-            
+          </div>
         </div>
-        </div>
-
 
         <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Demo Videos</h2>
