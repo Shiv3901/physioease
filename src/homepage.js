@@ -107,5 +107,33 @@ export function loadHomepage(app) {
     window.dispatchEvent(new Event('popstate'));
   });
 
+  // Show help modal only if not seen before
+  if (!localStorage.getItem('pe_help_seen')) {
+    const helpModal = document.createElement('div');
+    helpModal.innerHTML = `
+    <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md font-mono text-sm text-gray-800 relative">
+        <h2 class="text-lg font-bold mb-2">🧭 How to Use PhysioEase</h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><b>Rotate:</b> Left-click + drag</li>
+          <li><b>Change axis:</b> Shift + Left-click + drag</li>
+          <li><b>Play/Pause:</b> Top-right controls</li>
+          <li><b>Step frames:</b> Use &lt;&lt;1ms, &gt;&gt;1ms or <kbd>J</kbd>/<kbd>K</kbd></li>
+          <li><b>Change animation:</b> Top-left dropdown</li>
+          <li><b>Notes:</b> Saved in browser; cleared on close</li>
+        </ul>
+        <button id="close-help-modal" class="mt-4 px-4 py-1 border border-gray-400 rounded hover:bg-gray-100">Got it</button>
+      </div>
+    </div>
+  `;
+    document.body.appendChild(helpModal);
+
+    // Close modal logic
+    document.getElementById('close-help-modal')?.addEventListener('click', () => {
+      document.getElementById('help-modal')?.remove();
+      localStorage.setItem('pe_help_seen', 'true');
+    });
+  }
+
   log('INFO', FILE_LOG_LEVEL, '[🏠] Homepage loaded.');
 }
