@@ -6,6 +6,9 @@ let _animationHandlerRef = null;
 
 export function registerAnimationHandler(handler) {
   _animationHandlerRef = handler;
+  if (_animationHandlerRef) {
+    log('DEBUG', FILE_LOG_LEVEL, '[📁] AnimationHandler registered.');
+  }
 }
 
 export function playAnimationPanel(name) {
