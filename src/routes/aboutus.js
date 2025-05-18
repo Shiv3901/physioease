@@ -33,7 +33,7 @@ export function loadAboutUs(app) {
                 PhysioEase reduces repetitive explanations and helps structure consults. It makes it easier to explain conditions, exercises, and recovery plans.
             </p>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
-                Visual tools help patients understand key points faster—saving time and improving communication during sessions.
+                Visual tools help patients understand key points faster—saving time and improving communication during sessions, especially when there's a language barrier.
             </p>
         </div>
 
