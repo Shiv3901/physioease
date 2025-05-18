@@ -1,5 +1,6 @@
 import { loadHomepage } from './homepage.js';
 import { loadLibrary } from './routes/library.js';
+import { loadNotFoundPage } from './routes/404.js';
 import { loadModelByKey } from './templates/codeTemplate.js';
 import { METADATA_MAP } from './components/config.js';
 import { loadAboutUs } from './routes/aboutus.js';
@@ -27,7 +28,7 @@ function route() {
   } else if (modelRoutes[path]) {
     loadModelByKey(app, modelRoutes[path], METADATA_MAP);
   } else {
-    app.innerHTML = '<h1>404 Not Found</h1>';
+    loadNotFoundPage(app);
   }
 
   createNotesToggleButton();
