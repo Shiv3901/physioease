@@ -1,11 +1,7 @@
 {
   "name": "physioease",
   "private": true,
-<<<<<<< HEAD
-  "version": "0.83.16",
-=======
-  "version": "0.83.15",
->>>>>>> origin/vite-3d-viewer
+  "version": "0.83.17",
   "type": "module",
   "scripts": {
     "dev": "vite",
