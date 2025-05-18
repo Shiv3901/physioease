@@ -15,16 +15,18 @@ import { log, injectViewerHeadAssets } from '../components/utils.js';
 import { setupAnimationHandler, updateAnimationHandler } from '../components/animationHandler.js';
 import '../styles/viewer.css';
 
+const FILE_LOG_LEVEL = 'AUTOGEN_MODEL';
+
 export function loadModelByKey(app, key, metadataMap) {
   const metadata = metadataMap[key];
   const displayName = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
 
   if (!metadata) {
-    console.error(`❌ No metadata found for model key: "${key}"`);
+    log('ERROR', FILE_LOG_LEVEL, `No metadata found for model key: "${key}"`);
     return;
   }
 
-  log('INFO', `🚀 ${displayName} Model Loaded (Tailwind Edition)`);
+  log('INFO', FILE_LOG_LEVEL, `🚀 ${displayName} Model Loaded (Tailwind Edition)`);
 
   injectViewerHeadAssets();
   app.innerHTML = getViewerHTML();
@@ -34,6 +36,12 @@ export function loadModelByKey(app, key, metadataMap) {
   const modelContainer = document.getElementById('modelContainer');
   const { scene, camera, renderer, controls } = setupViewer(modelContainer);
   modelContainer.appendChild(renderer.domElement);
+
+  log(
+    'DEBUG2',
+    FILE_LOG_LEVEL,
+    `Viewer initialized with dimensions: ${modelContainer.clientWidth}x${modelContainer.clientHeight}`
+  );
 
   const startTime = performance.now();
 
@@ -57,14 +65,18 @@ export function loadModelByKey(app, key, metadataMap) {
         }, 5000);
       }
       document.getElementById('loadingScreen')?.classList.add('hidden');
+      log('DEBUG', FILE_LOG_LEVEL, `Model load time: ${loadTime}s`);
+
       setupAnimationHandler(mixer, animations, {
         enableAnimation: metadata?.enableAnimation !== false,
       });
+
+      log('DEBUG2', FILE_LOG_LEVEL, `Animation enabled: ${metadata?.enableAnimation !== false}`);
     },
     (xhr) => {
       const { total, loaded } = xhr;
       if (!total || total <= 0) {
-        console.warn('⚠️ Invalid or missing total size during loading.', xhr);
+        log('DEBUG', FILE_LOG_LEVEL, 'Invalid or missing total size during loading.', xhr);
         return;
       }
 
@@ -85,7 +97,7 @@ export function loadModelByKey(app, key, metadataMap) {
       }
     },
     (error) => {
-      console.error(`❌ Failed to load ${key} model:`, error);
+      log('ERROR', FILE_LOG_LEVEL, `❌ Failed to load ${key} model:`, error);
       const screen = document.getElementById('loadingScreen');
       if (screen) screen.innerHTML = `❌ Failed to load ${displayName} model.`;
     }
@@ -121,6 +133,7 @@ export function loadModelByKey(app, key, metadataMap) {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
+    log('DEBUG2', FILE_LOG_LEVEL, `Viewer resized to: ${width}x${height}`);
   }
 
   window.addEventListener('resize', handleResize);

@@ -9,13 +9,13 @@ export function getViewerHTML() {
           <div class="flex justify-between items-start w-full">
             <div>
               <button
-                id="moreVideosBtn"
+                id="animationsBtn"
                 class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
               >
                 <span class="mr-2">🎬</span> Animations
               </button>
               <div
-                id="moreVideosPane"
+                id="animationsPane"
                 class="hidden absolute mt-2 left-0 z-50 bg-white border border-dashed rounded-md px-2 py-2 w-60 max-h-64 overflow-y-auto flex-col gap-2"
               >
               </div>

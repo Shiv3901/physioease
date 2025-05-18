@@ -2,16 +2,19 @@ import * as THREE from 'three';
 import _ from 'lodash';
 import { log } from './utils.js';
 
+const FILE_LOG_LEVEL = 'INTERACTION_HANDLER';
+
 export async function loadHTMLContent(path) {
   try {
     const res = await fetch(path);
     if (!res.ok) {
-      log('WARN', `[loadHTMLContent] Failed to load: ${path}`);
+      log('WARN', FILE_LOG_LEVEL, `[loadHTMLContent] Failed to load: ${path}`);
       return '';
     }
+    log('INFO', FILE_LOG_LEVEL, `[loadHTMLContent] Loaded: ${path}`);
     return await res.text();
   } catch (err) {
-    log('ERROR', `[loadHTMLContent] Error fetching ${path}: ${err.message}`);
+    log('ERROR', FILE_LOG_LEVEL, `[loadHTMLContent] Error fetching ${path}: ${err.message}`);
     return '';
   }
 }
@@ -41,8 +44,8 @@ export class InteractionHandler {
     this.selectedVideoLinks = document.getElementById('videoLinks');
 
     this.animationControlPanel = document.getElementById('animationControlPanel');
-    this.moreVideosPane = document.getElementById('moreVideosPane');
-    this.moreVideosBtn = document.getElementById('moreVideosBtn');
+    this.animationsPane = document.getElementById('animationsPane');
+    this.animationsBtn = document.getElementById('animationsBtn');
 
     this.onClickCallback = onClickCallback;
     this.playAnimationPanel = playAnimationPanel;
@@ -54,7 +57,8 @@ export class InteractionHandler {
     this.isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     this.isPointerDown = false;
 
-    // Pointer events on canvas only
+    log('INFO', FILE_LOG_LEVEL, 'InteractionHandler initialized');
+
     this.canvas.addEventListener('pointermove', this.onPointerMove.bind(this));
     this.canvas.addEventListener('pointerdown', this.onPointerDown.bind(this));
     this.canvas.addEventListener('pointerup', this.onPointerUp.bind(this));
@@ -72,44 +76,43 @@ export class InteractionHandler {
     this.isPointerDown = true;
     this.holdTimeout = setTimeout(() => {
       this.isLongPress = true;
-      log('DEBUG', 'Long press detected');
+      log('DEBUG', FILE_LOG_LEVEL, 'Long press detected');
     }, 600);
     this.isLongPress = false;
     this.lastPointerDownTarget = event.target;
-    log('DEBUG2', '[pointerdown] Pointer down on', event.target.tagName);
+    log('DEBUG2', FILE_LOG_LEVEL, '[pointerdown] Pointer down on', event.target.tagName);
   }
 
   onPointerUp(event) {
     this.isPointerDown = false;
     clearTimeout(this.holdTimeout);
-    log('DEBUG2', '[pointerup] Pointer up on', event.target.tagName);
+    log('DEBUG2', FILE_LOG_LEVEL, '[pointerup] Pointer up on', event.target.tagName);
 
-    // Ignore clicks inside UI panels
     if (
       this.animationControlPanel?.contains(event.target) ||
-      this.moreVideosPane?.contains(event.target) ||
-      this.moreVideosBtn?.contains(event.target)
+      this.animationsPane?.contains(event.target) ||
+      this.animationsBtn?.contains(event.target)
     ) {
-      log('DEBUG2', '[pointerup] Click ignored due to UI panel');
+      log('DEBUG2', FILE_LOG_LEVEL, '[pointerup] Click ignored due to UI panel');
       return;
     }
 
     if (!this.isLongPress && this.currentHovered && this.isModelObject(this.currentHovered)) {
       const name = this.currentHovered.name || this.currentHovered.id;
-      log('DEBUG', 'Click detected on', name);
+      log('DEBUG', FILE_LOG_LEVEL, 'Click detected on', name);
 
       if (this.currentClicked === this.currentHovered) {
         this.setHighlight(this.currentClicked, 'restore');
         this.currentClicked = null;
         this.updateSelectedInfo(null);
-        log('DEBUG2', 'Unselected:', name);
+        log('DEBUG2', FILE_LOG_LEVEL, 'Unselected:', name);
       } else {
         if (this.currentClicked) {
           this.setHighlight(this.currentClicked, 'restore');
         }
         this.currentClicked = this.currentHovered;
         this.setHighlight(this.currentClicked, 'click');
-        log('DEBUG2', 'Selected:', name);
+        log('DEBUG2', FILE_LOG_LEVEL, 'Selected:', name);
       }
 
       if (typeof this.onClickCallback === 'function') {
@@ -121,31 +124,32 @@ export class InteractionHandler {
   clearHold() {
     clearTimeout(this.holdTimeout);
     this.isPointerDown = false;
-    log('DEBUG2', '[clearHold] Pointer cleared');
+    log('DEBUG2', FILE_LOG_LEVEL, '[clearHold] Pointer cleared');
   }
 
   setHighlight(object, type) {
     if (!object?.material?.emissive) {
-      log('DEBUG2', '[setHighlight] Skipping: no material/emissive');
+      log('DEBUG2', FILE_LOG_LEVEL, '[setHighlight] Skipping: no material/emissive');
       return;
     }
 
     const name = object.name || object.id || '(unnamed)';
 
     if (type === 'hover') {
-      log('DEBUG2', `[hover] Attempting highlight on: ${name}`);
+      log('DEBUG2', FILE_LOG_LEVEL, `[hover] Attempting highlight on: ${name}`);
       log(
         'DEBUG2',
+        FILE_LOG_LEVEL,
         `[hover] isTouch=${this.isTouch}, isPointerDown=${this.isPointerDown}, isClicked=${this.currentClicked?.name === name}`
       );
-      log('DEBUG2', `[hover] Highlighting ${name} with yellow`);
+      log('DEBUG2', FILE_LOG_LEVEL, `[hover] Highlighting ${name} with yellow`);
       object.material.emissive.setHex(0x999900);
     } else if (type === 'click') {
-      log('DEBUG2', `[click] Highlighting ${name} with green`);
+      log('DEBUG2', FILE_LOG_LEVEL, `[click] Highlighting ${name} with green`);
       object.material.emissive.setHex(0x009900);
       this.updateSelectedInfo(object);
     } else if (type === 'restore') {
-      log('DEBUG2', `[restore] Clearing highlight on ${name}`);
+      log('DEBUG2', FILE_LOG_LEVEL, `[restore] Clearing highlight on ${name}`);
       object.material.emissive.setHex(0x000000);
     }
   }
@@ -168,7 +172,7 @@ export class InteractionHandler {
         if (this.currentHovered !== this.currentClicked) {
           this.setHighlight(this.currentHovered, 'hover');
         } else {
-          log('DEBUG2', `[update] Skipped hover due to conditions`);
+          log('DEBUG2', FILE_LOG_LEVEL, `[update] Skipped hover due to conditions`);
         }
       }
     } else {
@@ -190,6 +194,8 @@ export class InteractionHandler {
     const selectedName = object.name || object.id || 'Unnamed';
     const formattedName = _.startCase(selectedName);
     const entry = this.metadata?.specific_videos?.[selectedName];
+
+    log('INFO', FILE_LOG_LEVEL, `Selected object info updated for: ${selectedName}`);
 
     this.selectedLabel.textContent = `🧠 Selected: ${formattedName}`;
     this.selectedPopup.innerHTML = '';

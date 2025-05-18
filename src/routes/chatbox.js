@@ -1,5 +1,8 @@
 import './../styles/viewer.css';
 import { isNotesAllowedPath } from './permissions.js';
+import { log } from '../components/utils.js';
+
+const FILE_LOG_LEVEL = 'CHATBOX';
 
 let notesVisible = false;
 
@@ -19,6 +22,8 @@ export function createNotesToggleButton() {
     notesVisible = !notesVisible;
     toggleNotesBox(notesVisible);
   });
+
+  log('DEBUG', FILE_LOG_LEVEL, 'Notes toggle button created.');
 }
 
 export function toggleNotesBox(show) {
@@ -55,6 +60,8 @@ export function toggleNotesBox(show) {
   `;
 
   setupNotesPersistence();
+
+  log('DEBUG', FILE_LOG_LEVEL, 'Notes box toggled.');
 }
 
 function setupNotesPersistence() {

@@ -1,6 +1,8 @@
 import { log, injectViewerHeadAssets } from '../components/utils.js';
 import { ABOUTUS_METADATA } from '../components/config.js';
 
+const FILE_LOG_LEVEL = 'ABOUTUS';
+
 export function loadAboutUs(app) {
   const animations = ABOUTUS_METADATA.animations;
   const videos = ABOUTUS_METADATA.videos;
@@ -107,4 +109,6 @@ export function loadAboutUs(app) {
     history.pushState({}, '', '/');
     window.dispatchEvent(new Event('popstate'));
   });
+
+  log('INFO', FILE_LOG_LEVEL, '[ℹ️] About Us page loaded.');
 }

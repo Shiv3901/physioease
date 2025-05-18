@@ -67,7 +67,7 @@ describe('InteractionHandler', () => {
   });
 
   it('initializes with correct event listeners', () => {
-    const spy = vi.spyOn(canvas, 'addEventListener'); // FIX: canvas, not window
+    const spy = vi.spyOn(canvas, 'addEventListener');
     new InteractionHandler(scene, camera, canvas, mockMetadata, onClickCallback);
     ['pointermove', 'pointerdown', 'pointerup', 'pointercancel', 'pointerleave'].forEach((event) =>
       expect(spy).toHaveBeenCalledWith(event, expect.any(Function))
@@ -83,17 +83,17 @@ describe('InteractionHandler', () => {
 
   it('handles object selection toggle', () => {
     handler.currentHovered = fakeObject;
-    handler.onPointerUp({ target: document.createElement('div') }); // FIXED
+    handler.onPointerUp({ target: document.createElement('div') });
     expect(handler.currentClicked).toBe(fakeObject);
     expect(onClickCallback).toHaveBeenCalledWith(fakeObject);
-    handler.onPointerUp({ target: document.createElement('div') }); // FIXED
+    handler.onPointerUp({ target: document.createElement('div') });
     expect(handler.currentClicked).toBe(null);
     expect(document.getElementById('selectedLabel').textContent).toContain('None');
   });
 
   it('detects long press', () => {
     vi.useFakeTimers();
-    handler.onPointerDown({ target: document.createElement('div') }); // FIXED
+    handler.onPointerDown({ target: document.createElement('div') });
     vi.advanceTimersByTime(600);
     expect(handler.isLongPress).toBe(true);
     vi.useRealTimers();
@@ -101,7 +101,7 @@ describe('InteractionHandler', () => {
 
   it('clears long press hold correctly', () => {
     vi.useFakeTimers();
-    handler.onPointerDown({ target: document.createElement('div') }); // FIXED
+    handler.onPointerDown({ target: document.createElement('div') });
     handler.clearHold();
     vi.advanceTimersByTime(600);
     expect(handler.isLongPress).toBe(false);
@@ -141,7 +141,7 @@ describe('InteractionHandler', () => {
       specific_videos: {
         MuscleA: {
           info: 'Some info',
-          article: { title: 'Broken Content', type: 'content' }, // missing path
+          article: { title: 'Broken Content', type: 'content' },
         },
       },
     };
@@ -179,6 +179,7 @@ describe('InteractionHandler', () => {
       const result = await loadHTMLContent('/bad.html');
       expect(log).toHaveBeenCalledWith(
         'WARN',
+        'INTERACTION_HANDLER',
         expect.stringContaining('[loadHTMLContent] Failed to load')
       );
       expect(result).toBe('');
@@ -188,7 +189,11 @@ describe('InteractionHandler', () => {
       global.fetch = vi.fn(() => Promise.reject(new Error('network fail')));
       const { log } = await import('../../src/components/utils');
       const result = await loadHTMLContent('/broken');
-      expect(log).toHaveBeenCalledWith('ERROR', expect.stringContaining('network fail'));
+      expect(log).toHaveBeenCalledWith(
+        'ERROR',
+        'INTERACTION_HANDLER',
+        expect.stringContaining('network fail')
+      );
       expect(result).toBe('');
     });
   });

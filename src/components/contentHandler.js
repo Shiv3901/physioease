@@ -1,6 +1,8 @@
 import { playAnimationByName } from './animationHandler.js';
 import { log } from './utils.js';
 
+const FILE_LOG_LEVEL = 'CONTENT_HANDLER';
+
 function showContentPanel({ type, html = '' }) {
   const sharedContentArea = document.getElementById('sharedContentArea');
   const contentArea = document.getElementById('contentArea');
@@ -55,8 +57,8 @@ export function showContent(html) {
 }
 
 export function setupContentHandlers(metadata) {
-  const moreVideosBtn = document.getElementById('moreVideosBtn');
-  const moreVideosPane = document.getElementById('moreVideosPane');
+  const animationsBtn = document.getElementById('animationsBtn');
+  const animationsPane = document.getElementById('animationsPane');
   const animationControlPanel = document.getElementById('animationControlPanel');
 
   let wasOverlappingWhenOpened = false; // <-- NEW FLAG
@@ -77,15 +79,19 @@ export function setupContentHandlers(metadata) {
     );
   }
 
-  moreVideosPane.innerHTML = '';
+  animationsPane.innerHTML = '';
 
   if (metadata?.enableAnimation === false) {
     const comingSoonMsg = document.createElement('div');
     comingSoonMsg.className =
       'p-4 text-sm text-gray-500 font-mono border border-dashed border-gray-300 rounded';
     comingSoonMsg.textContent = '🎥 More animations coming soon.';
-    moreVideosPane.appendChild(comingSoonMsg);
-    log('INFO', '[ℹ️] Animations are disabled or not available – showing "coming soon" notice.');
+    animationsPane.appendChild(comingSoonMsg);
+    log(
+      'INFO',
+      FILE_LOG_LEVEL,
+      '[ℹ️] Animations are disabled or not available – showing "coming soon" notice.'
+    );
   } else {
     Object.entries(videoData).forEach(([key, entry]) => {
       if (entry.src) {
@@ -101,47 +107,47 @@ export function setupContentHandlers(metadata) {
 
         btn.addEventListener('click', () => {
           document
-            .querySelectorAll('#moreVideosPane .selected')
+            .querySelectorAll('#animationsPane .selected')
             .forEach((el) => el.classList.remove('bg-gray-200', 'text-black', 'selected'));
 
           btn.classList.add('bg-gray-200', 'text-black', 'selected');
-          log('INFO', `[▶️] Playing animation "${key}"`);
+          log('DEBUG', FILE_LOG_LEVEL, `[▶️] Playing animation "${key}"`);
           playAnimationPanel(key);
 
           if (wasOverlappingWhenOpened) {
-            moreVideosPane.classList.remove('flex');
-            moreVideosPane.classList.add('hidden');
+            animationsPane.classList.remove('flex');
+            animationsPane.classList.add('hidden');
             if (animationControlPanel) animationControlPanel.classList.remove('hidden');
-            log('INFO', '[📁] More Videos pane closed (after select, overlap).');
+            log('DEBUG', FILE_LOG_LEVEL, '[📁] More Videos pane closed (after select, overlap).');
           }
         });
 
-        moreVideosPane.appendChild(btn);
+        animationsPane.appendChild(btn);
         videoCount++;
       }
     });
 
-    log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
+    log('INDEBUGFO', FILE_LOG_LEVEL, `[🎬] Loaded ${videoCount} video animation options.`);
   }
 
-  log('INFO', `[🎬] Loaded ${videoCount} video animation options.`);
+  log('DEBUG', FILE_LOG_LEVEL, `[🎬] Loaded ${videoCount} video animation options.`);
 
-  moreVideosPane.classList.add('hidden');
-  moreVideosPane.classList.remove('flex');
+  animationsPane.classList.add('hidden');
+  animationsPane.classList.remove('flex');
 
-  moreVideosBtn?.addEventListener('click', () => {
-    const isHidden = moreVideosPane.classList.contains('hidden');
+  animationsBtn?.addEventListener('click', () => {
+    const isHidden = animationsPane.classList.contains('hidden');
 
     if (isHidden) {
-      moreVideosPane.classList.remove('hidden');
-      moreVideosPane.classList.add('flex');
-      log('INFO', '[📁] More Videos pane opened.');
+      animationsPane.classList.remove('hidden');
+      animationsPane.classList.add('flex');
+      log('DEBUG', FILE_LOG_LEVEL, '[📁] More Videos pane opened.');
 
       // Check overlap after opening and set flag!
       setTimeout(() => {
         if (
           animationControlPanel &&
-          areElementsOverlapping(moreVideosPane, animationControlPanel)
+          areElementsOverlapping(animationsPane, animationControlPanel)
         ) {
           animationControlPanel.classList.add('hidden');
           wasOverlappingWhenOpened = true;
@@ -150,11 +156,11 @@ export function setupContentHandlers(metadata) {
         }
       }, 30);
     } else {
-      moreVideosPane.classList.remove('flex');
-      moreVideosPane.classList.add('hidden');
+      animationsPane.classList.remove('flex');
+      animationsPane.classList.add('hidden');
       if (animationControlPanel) animationControlPanel.classList.remove('hidden');
       wasOverlappingWhenOpened = false;
-      log('INFO', '[📁] More Videos pane closed.');
+      log('DEBUG', FILE_LOG_LEVEL, '[📁] More Videos pane closed.');
     }
   });
 }

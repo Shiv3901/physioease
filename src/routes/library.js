@@ -1,5 +1,8 @@
 import { ANKLE_METADATA, ROTATORCUFF_METADATA } from '../components/config.js';
 import { createNotesToggleButton } from './chatbox.js';
+import { log } from '../components/utils.js';
+
+const FILE_LOG_LEVEL = 'VIDEO_LIBRARY';
 
 export function loadLibrary(app) {
   createNotesToggleButton(false);
@@ -28,6 +31,8 @@ export function loadLibrary(app) {
       </div>
     </div>
   `;
+
+  log('INFO', FILE_LOG_LEVEL, '[🎥] Video library loaded.');
 
   document.getElementById('terminalHome')?.addEventListener('click', (e) => {
     e.preventDefault();

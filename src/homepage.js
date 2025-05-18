@@ -1,6 +1,9 @@
 import pkg from '../package.json';
 const { version } = pkg;
 import './style.css';
+import { log } from './components/utils';
+
+const FILE_LOG_LEVEL = 'HOMEPAGE';
 
 export function loadHomepage(app) {
   if (!document.querySelector('meta[name="viewport"]')) {
@@ -103,4 +106,6 @@ export function loadHomepage(app) {
     history.pushState({}, '', '/aboutus');
     window.dispatchEvent(new Event('popstate'));
   });
+
+  log('INFO', FILE_LOG_LEVEL, '[🏠] Homepage loaded.');
 }
