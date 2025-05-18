@@ -22,12 +22,26 @@ export function getViewerHTML() {
             </div>
             <!-- Right: Home + animation panel in a column -->
             <div class="flex flex-col items-end gap-1 min-w-0 w-full">
-              <button
-                id="terminalHome"
-                class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
-              >
-                Home
-              </button>
+              <div class="flex flex-col items-end gap-1 min-w-0 w-full">
+                <div class="flex flex-row items-center gap-2">
+                  <!-- Help button on the left -->
+                  <button
+                    id="helpButton"
+                    title="Help"
+                    class="w-8 h-8 rounded-full font-mono text-sm font-bold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
+                  >
+                    i
+                  </button>
+
+                  <!-- Home button on the right -->
+                  <button
+                    id="terminalHome"
+                    class="min-h-[40px] px-6 rounded-lg font-mono text-base font-semibold border border-dashed border-black bg-white hover:bg-black hover:text-white transition flex items-center justify-center"
+                  >
+                    Home
+                  </button>
+                </div>
+              </div>
               <div id="animationControlPanel" class="border border-dashed border-black bg-white px-4 py-3 rounded mt-1 w-full max-w-[340px]">
                 <div class="flex items-center gap-2 mb-2 font-mono text-sm">
                   <span class="font-semibold">🎞️</span>

@@ -28,6 +28,7 @@ export function loadModelByKey(app, key, metadataMap) {
 
   injectViewerHeadAssets();
   app.innerHTML = getViewerHTML();
+
   mountLandscapeBlocker();
 
   const clock = new THREE.Clock();
@@ -162,4 +163,53 @@ export function loadModelByKey(app, key, metadataMap) {
       window.dispatchEvent(new Event('popstate'));
     });
   }
+
+  document.getElementById('helpButton').addEventListener('click', () => {
+    const helpModal = document.createElement('div');
+    helpModal.innerHTML = `
+      <div id="help-modal" class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 opacity-0 transition-opacity duration-300 px-4">
+        <div id="help-box" class="bg-white rounded-xl shadow-lg p-4 sm:p-6 w-full max-w-md font-mono text-xs sm:text-sm text-gray-800 relative">
+          <h2 class="text-base sm:text-lg font-bold mb-2">🧭 How to Use PhysioEase</h2>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><b>Rotate:</b> Left-click + drag</li>
+            <li><b>Change axis:</b> Shift + Left-click + drag</li>
+            <li><b>Play/Pause:</b> Top-right controls</li>
+            <li><b>Step frames:</b> Use &lt;&lt;1ms, &gt;&gt;1ms or <kbd>J</kbd>/<kbd>K</kbd></li>
+            <li><b>Change animation:</b> Top-left dropdown</li>
+            <li><b>Notes:</b> Saved in browser; cleared on close</li>
+          </ul>
+          <button id="close-help-modal" class="mt-4 px-3 py-1 border border-gray-400 rounded hover:bg-gray-100 text-xs sm:text-sm">Got it</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(helpModal);
+
+    // Trigger fade-in
+    requestAnimationFrame(() => {
+      helpModal.querySelector('#help-modal').classList.remove('opacity-0');
+      helpModal.querySelector('#help-modal').classList.add('opacity-100');
+    });
+
+    const modal = document.getElementById('help-modal');
+
+    // Close button
+    document.getElementById('close-help-modal').addEventListener('click', () => {
+      closeModal(modal);
+    });
+
+    // Click outside to close
+    modal.addEventListener('click', (e) => {
+      const helpBox = document.getElementById('help-box');
+      if (!helpBox.contains(e.target)) {
+        closeModal(modal);
+      }
+    });
+
+    function closeModal(modalEl) {
+      modalEl.classList.remove('opacity-100');
+      modalEl.classList.add('opacity-0');
+      setTimeout(() => modalEl.remove(), 300);
+    }
+  });
 }
