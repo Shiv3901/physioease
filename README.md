@@ -18,28 +18,46 @@ Interactive 3D rotator cuff anatomy viewer built with **Three.js**.
 
 ## Setup
 
-```
+```bash
 git clone git@github.com:your-username/physioease.git
 cd physioease
 npm install
 npm run dev
 ```
 
-## Deploy Instructions
+## Deployment
 
-To format, build, commit, and push your changes:
+To format, test, build, commit, and push your changes:
 
+```bash
+npm run deploy "your commit message"
 ```
-node deploy.js "your commit message"
+
+### Commit Message Guidelines
+
+You can optionally prefix your commit message to bump the version automatically (without creating a git tag):
+
+- `patch: Fix bug or minor change`
+- `minor: Add feature in a backward-compatible way`
+- `major: Introduce breaking changes`
+
+Examples:
+
+```bash
+npm run deploy "patch: fix button alignment on mobile"
+npm run deploy "minor: add hamstring viewer"
+npm run deploy "update styles and refactor homepage"
 ```
 
-This will:
+This script performs the following steps:
 
-- Run `npm run format`
-- Run `npm run build`
-- Add all changes
-- Commit with message prefixed by `change log:`
-- Push to your current Git branch
+1. Run unit tests (`npm run test`)
+2. Format code (`npm run format`)
+3. Optionally bump version based on commit prefix
+4. Build project (`npm run build`)
+5. Add all changes to git
+6. Commit using your message
+7. Push to the current Git branch
 
 ## Project Structure
 
@@ -51,6 +69,7 @@ src/
   components/
     interactionHandler.js
     modelLoader.js
+    utils.js
     ...
   routes/
     rotatorcuff.js
@@ -61,8 +80,8 @@ src/
   templates/
     rotatorcuffTemplate.js
     ...
-  main.js
   homepage.js
+  main.js
 deploy.js
 index.html
 README.md
