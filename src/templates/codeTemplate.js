@@ -80,6 +80,8 @@ export function loadModelByKey(app, key, metadataMap) {
         enable: metadata?.enableAnimation !== false,
       });
 
+      registerAnimationHandler(animationHandler);
+
       log('DEBUG2', FILE_LOG_LEVEL, `Animation enabled: ${metadata?.enableAnimation !== false}`);
     },
     (xhr) => {
@@ -123,7 +125,7 @@ export function loadModelByKey(app, key, metadataMap) {
     animationHandler ? animationHandler.playByName.bind(animationHandler) : () => {},
     showContent
   );
-  registerAnimationHandler(animationHandler);
+
   setupContentHandlers(metadata);
 
   function animate() {
