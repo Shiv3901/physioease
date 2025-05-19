@@ -103,8 +103,9 @@ export function loadAboutUs(app) {
           <div class="mt-8 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Contact Us</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
-              Want a different model? Want any other feature? Or just want to talk? Reach out here:
-              <a href="mailto:physioeaseau@gmail.com" class="text-blue-600 hover:underline">physioeaseau@gmail.com</a>
+              Want a different model? Want any other feature? Or just want to talk? Reach out here: <br />
+              <a href="mailto:physioeaseau@gmail.com" class="text-blue-600 hover:underline">physioeaseau@gmail.com</a><br />
+              <a href="tel:0411297539" class="text-blue-600 hover:underline">0411 297 539</a>
             </p>
           </div>
 
