@@ -80,7 +80,23 @@ export function loadHomepage(app) {
         </div>
       </div>
     </div>
+
+    <!-- Mobile warning -->
+<div id="device-warning" class="fixed top-4 left-4 right-4 sm:hidden bg-white text-gray-800 text-sm font-medium p-3 rounded-xl shadow-md border border-neutral-200 z-50 transition-opacity duration-500">
+  ⚠️ This website is computationally heavy. Please open it on an iPad, laptop, or PC for the best experience.
+</div>
+
+
   `;
+
+  // Fade out and remove the warning after 5 seconds
+  setTimeout(() => {
+    const warning = document.getElementById('device-warning');
+    if (warning) {
+      warning.style.opacity = '0';
+      setTimeout(() => warning.remove(), 500); // Allow transition to finish
+    }
+  }, 5000);
 
   document.getElementById('launch-rotator')?.addEventListener('click', () => {
     history.pushState({}, '', '/rotatorcuff');
