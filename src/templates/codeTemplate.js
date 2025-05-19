@@ -173,7 +173,7 @@ export function loadModelByKey(app, key, metadataMap) {
           <ul class="list-disc pl-4 space-y-1">
             <li><b>Rotate:</b> Left-click + drag</li>
             <li><b>Change axis:</b> Shift + Left-click + drag</li>
-            <li><b>Play/Pause:</b> Top-right controls</li>
+            <li><b>Play/Pause:</b> Top-right controls or spacebar</li>
             <li><b>Step frames:</b> Use &lt;&lt;1ms, &gt;&gt;1ms or <kbd>J</kbd>/<kbd>K</kbd></li>
             <li><b>Change animation:</b> Top-left dropdown</li>
             <li><b>Notes:</b> Saved in browser; cleared on close</li>
