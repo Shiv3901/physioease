@@ -23,7 +23,7 @@ export function loadAboutUs(app) {
           <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Our Product</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
-              <span class="font-bold text-gray-900 font-mono">PhysioEase</span> helps physiotherapists explain injuries with interactive 3D movement animations and assignable videos—so patients and their families actually “get it” and recover with confidence.
+              <span class="font-bold text-gray-900 font-mono">PhysioEase</span> helps physiotherapists explain injuries and movements with interactive 3D movement animations and assignable videos—so patients and their families actually “get it” and recover with confidence.
             </p>
           </div>
 
