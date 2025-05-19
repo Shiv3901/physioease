@@ -1,7 +1,7 @@
 {
   "name": "physioease",
   "private": true,
-  "version": "0.83.25",
+  "version": "0.83.26",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -43,7 +43,7 @@ export function loadHomepage(app) {
             <button id="launch-rotator" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
               <span class="text-lg sm:text-xl">💪🏼</span> Rotator Cuff Viewer
             </button>
-            <span class="absolute bottom-2 right-4 text-xs text-gray-400">wip</span>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-400">work in progress</span>
           </div>
           <div class="relative">
             <button id="launch-knee" class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
