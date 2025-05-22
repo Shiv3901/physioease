@@ -20,6 +20,43 @@ export function loadAboutUs(app) {
         <div class="bg-white rounded-lg shadow border border-gray-200 px-3 py-6 sm:px-8 sm:py-8">
           <h1 class="text-xl sm:text-2xl font-bold mb-3 text-gray-900 font-mono">About Us</h1>
 
+          <!-- How to Use Section -->
+          <div class="mb-6 mt-6 p-4 sm:p-6 border border-dashed border-gray-400 rounded-lg bg-gray-50">
+            <h2 class="text-xl sm:text-2xl font-bold mb-8 text-center font-mono text-gray-900">How to Use PhysioEase</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+
+              <!-- Step 1 -->
+              <div class="flex flex-col items-center">
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Fast</h3>
+                <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
+                  <img src="../../public/images/first.png" alt="Share Fast" class="w-full h-full object-cover" />
+                </div>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Communicate complex information efficiently during consults.</p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="flex flex-col items-center">
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Visual Clarity</h3>
+                <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
+                  <img src="../../public/images/second.png" alt="Patient Understanding" class="w-full h-full object-cover" />
+                </div>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Enhance patient understanding through clear 3D visuals.</p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="flex flex-col items-center">
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Knowledge</h3>
+                <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
+                  <img src="../../public/images/third.png" alt="Share with Family" class="w-full h-full object-cover" />
+                </div>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Empower patients and families with accessible shared knowledge.</p>
+              </div>
+
+            </div>
+          </div>
+
+
           <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Our Product</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
