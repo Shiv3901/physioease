@@ -13,9 +13,14 @@ const CONTENT_BASE_URL = isDev
   ? './content/'
   : 'https://re-cors-proxy.physioeaseau.workers.dev/content/';
 
+const IMAGE_BASE_URL = isDev
+  ? './images/'
+  : 'https://re-cors-proxy.physioeaseau.workers.dev/images/';
+
 export const video = (filename) => VIDEO_BASE_URL + filename;
 export const model = (filename) => MODEL_BASE_URL + filename;
 export const content = (filename) => CONTENT_BASE_URL + filename;
+export const image = (filename) => IMAGE_BASE_URL + filename;
 
 export const MOBILE_BREAKPOINT = 980;
 export const DEBUG_MODE = true;
@@ -46,6 +51,23 @@ export const ABOUTUS_METADATA = {
       title: 'Ankle Plantarflexion',
       description:
         "Plantarflexion is the movement of the foot downwards away from the shin. It's crucial for pushing off during walking and running.",
+    },
+  },
+  howtouse: {
+    step1: {
+      img: image('first.png'),
+      title: 'Explain Instantly',
+      description: 'Use 3D animations to convey complex concepts in seconds.',
+    },
+    step2: {
+      img: image('second.png'),
+      title: 'Deep Understanding',
+      description: 'Help patients truly grasp their injury and treatment.',
+    },
+    step3: {
+      img: image('third.png'),
+      title: 'Confidently Share',
+      description: 'Patients explain their recovery clearly to family and friends.',
     },
   },
 };
