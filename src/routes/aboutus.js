@@ -28,29 +28,29 @@ export function loadAboutUs(app) {
 
               <!-- Step 1 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Fast</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Explain Instantly</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
                   <img src="../../public/images/first.png" alt="Share Fast" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Communicate complex information efficiently during consults.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Use 3D animations to convey complex concepts in seconds.</p>
               </div>
 
               <!-- Step 2 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Visual Clarity</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Deep Understanding</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
                   <img src="../../public/images/second.png" alt="Patient Understanding" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Enhance patient understanding through clear 3D visuals.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Help patients truly grasp their injury and treatment.</p>
               </div>
 
               <!-- Step 3 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Knowledge</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Confidently Share</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
                   <img src="../../public/images/third.png" alt="Share with Family" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Empower patients and families with accessible shared knowledge.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">Patients explain their recovery clearly to family and friends.</p>
               </div>
 
             </div>
