@@ -4,8 +4,7 @@ import { ABOUTUS_METADATA } from '../components/config.js';
 const FILE_LOG_LEVEL = 'ABOUTUS';
 
 export function loadAboutUs(app) {
-  const animations = ABOUTUS_METADATA.animations;
-  const videos = ABOUTUS_METADATA.videos;
+  const { animations, videos, howtouse } = ABOUTUS_METADATA;
   injectViewerHeadAssets();
 
   app.innerHTML = `
@@ -28,35 +27,35 @@ export function loadAboutUs(app) {
 
               <!-- Step 1 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Fast</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">${howtouse.step1.title}</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
-                  <img src="../../public/images/first.png" alt="Share Fast" class="w-full h-full object-cover" />
+                  <img src="${howtouse.step1.img}" alt="${howtouse.step1.title}" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Communicate complex information efficiently during consults.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">${howtouse.step1.description}</p>
               </div>
 
               <!-- Step 2 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Visual Clarity</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">${howtouse.step2.title}</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
-                  <img src="../../public/images/second.png" alt="Patient Understanding" class="w-full h-full object-cover" />
+                  <img src="${howtouse.step2.img}" alt="${howtouse.step2.title}" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Enhance patient understanding through clear 3D visuals.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">${howtouse.step2.description}</p>
               </div>
 
               <!-- Step 3 -->
               <div class="flex flex-col items-center">
-                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Share Knowledge</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">${howtouse.step3.title}</h3>
                 <div class="w-56 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
-                  <img src="../../public/images/third.png" alt="Share with Family" class="w-full h-full object-cover" />
+                  <img src="${howtouse.step3.img}" alt="${howtouse.step3.title}" class="w-full h-full object-cover" />
                 </div>
-                <p class="text-sm sm:text-base text-gray-700 font-sans">Empower patients and families with accessible shared knowledge.</p>
+                <p class="text-sm sm:text-base text-gray-700 font-sans">${howtouse.step3.description}</p>
               </div>
 
             </div>
           </div>
 
-
+          <!-- Our Product -->
           <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Our Product</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
@@ -64,77 +63,80 @@ export function loadAboutUs(app) {
             </p>
           </div>
 
-        <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+          <!-- Why We Built It -->
+          <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Why We Built It</h2>
             <p class="text-sm sm:text-base text-gray-700 font-sans mb-4">
-                PhysioEase reduces repetitive explanations and helps structure consults. It makes it easier to explain conditions, exercises, and recovery plans.
+              PhysioEase reduces repetitive explanations and helps structure consults. It makes it easier to explain conditions, exercises, and recovery plans.
             </p>
             <p class="text-sm sm:text-base text-gray-700 font-sans">
-                Visual tools help patients understand key points faster—saving time and improving communication during sessions, especially when there's a language barrier.
+              Visual tools help patients understand key points faster—saving time and improving communication during sessions, especially when there's a language barrier.
             </p>
-        </div>
-
-        <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
-          <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Animations</h2>
-          <div class="grid grid-cols-1 gap-8">
-
-            <!-- Animation 1 -->
-            <div class="flex flex-col items-center">
-              <video
-                src="${animations.video1.src}"
-                autoplay
-                muted
-                loop
-                playsinline
-                class="w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded border border-gray-300 bg-gray-200 shadow-sm"
-              ></video>
-              <span class="text-base text-gray-600 mt-2 font-sans text-center">${animations.video1.caption}</span>
-            </div>
-
-            <!-- Animation 2 -->
-            <div class="flex flex-col items-center">
-              <video
-                src="${animations.video2.src}"
-                autoplay
-                muted
-                loop
-                playsinline
-                class="w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded border border-gray-300 bg-gray-200 shadow-sm"
-              ></video>
-              <span class="text-base text-gray-600 mt-2 font-sans text-center">${animations.video2.caption}</span>
-            </div>
-
           </div>
-        </div>
 
-        <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+          <!-- Animations -->
+          <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
+            <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Animations</h2>
+            <div class="grid grid-cols-1 gap-8">
+
+              <!-- Animation 1 -->
+              <div class="flex flex-col items-center">
+                <video
+                  src="${animations.video1.src}"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  class="w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded border border-gray-300 bg-gray-200 shadow-sm"
+                ></video>
+                <span class="text-base text-gray-600 mt-2 font-sans text-center">${animations.video1.caption}</span>
+              </div>
+
+              <!-- Animation 2 -->
+              <div class="flex flex-col items-center">
+                <video
+                  src="${animations.video2.src}"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  class="w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded border border-gray-300 bg-gray-200 shadow-sm"
+                ></video>
+                <span class="text-base text-gray-600 mt-2 font-sans text-center">${animations.video2.caption}</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Demo Videos -->
+          <div class="mb-4 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
             <h2 class="text-base sm:text-lg font-bold mb-4 font-mono">Demo Videos</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                <!-- Video 1 -->
-                <div>
+              <!-- Video 1 -->
+              <div>
                 <div class="aspect-video bg-black rounded flex items-center justify-center border border-gray-300 overflow-hidden">
-                    <video class="w-full h-full" controls preload="metadata">
+                  <video class="w-full h-full" controls preload="metadata">
                     <source src="${videos.demo1.src}" type="video/mp4">
                     ${videos.demo1.title}
-                    </video>
+                  </video>
                 </div>
                 <div class="text-base text-gray-600 mt-2 font-sans">${videos.demo1.description}</div>
-                </div>
+              </div>
 
-                <!-- Video 2 -->
-                <div>
+              <!-- Video 2 -->
+              <div>
                 <div class="aspect-video bg-black rounded flex items-center justify-center border border-gray-300 overflow-hidden">
-                    <video class="w-full h-full" controls preload="metadata">
+                  <video class="w-full h-full" controls preload="metadata">
                     <source src="${videos.demo2.src}" type="video/mp4">
                     ${videos.demo2.title}
-                    </video>
+                  </video>
                 </div>
                 <div class="text-base text-gray-600 mt-2 font-sans">${videos.demo2.description}</div>
-                </div>
+              </div>
 
             </div>
-        </div>
+          </div>
 
           <!-- Contact Us -->
           <div class="mt-8 border border-dashed border-gray-400 rounded-lg p-4 sm:p-5 bg-gray-50">
