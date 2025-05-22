@@ -56,18 +56,18 @@ export const ABOUTUS_METADATA = {
   howtouse: {
     step1: {
       img: image('first.png'),
-      title: 'Share Fast',
-      description: 'Communicate complex information efficiently during consults.',
+      title: 'Explain Instantly',
+      description: 'Use 3D animations to convey complex concepts in seconds.',
     },
     step2: {
       img: image('second.png'),
-      title: 'Visual Clarity',
-      description: 'Enhance patient understanding through clear 3D visuals.',
+      title: 'Deep Understanding',
+      description: 'Help patients truly grasp their injury and treatment.',
     },
     step3: {
       img: image('third.png'),
-      title: 'Share Knowledge',
-      description: 'Empower patients and families with accessible shared knowledge.',
+      title: 'Confidently Share',
+      description: 'Patients explain their recovery clearly to family and friends.',
     },
   },
 };
