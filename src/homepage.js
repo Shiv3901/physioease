@@ -49,19 +49,19 @@ export function loadHomepage(app) {
             <button id="launch-knee" class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
               <span class="text-lg sm:text-xl">🦵</span> Knee Viewer
             </button>
-            <span class="absolute bottom-2 right-4 text-xs text-gray-400">coming soon</span>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-400">paid</span>
           </div>
           <div class="relative">
             <button id="launch-elbow" class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
               <span class="text-lg sm:text-xl">💪</span> Elbow Viewer
             </button>
-            <span class="absolute bottom-2 right-4 text-xs text-gray-400">coming soon</span>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-400">paid</span>
           </div>
           <div class="relative">
             <button class="pe-btn flex items-center gap-2 text-sm sm:text-base" disabled>
               <span class="text-lg sm:text-xl">🧍‍♀️</span> Neck Viewer
             </button>
-            <span class="absolute bottom-2 right-4 text-xs text-gray-400">coming soon</span>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-400">paid</span>
           </div>
           <button id="launch-library" class="pe-btn flex items-center gap-2 text-sm sm:text-base">
             <span class="text-lg sm:text-xl">🎥</span> Video Library
