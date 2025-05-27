@@ -148,6 +148,37 @@ export function loadAboutUs(app) {
             </p>
           </div>
 
+          <!-- Upcoming Features -->
+            <div class="mb-6 mt-6 p-4 sm:p-6 border border-dashed border-gray-400 rounded-lg bg-gray-50">
+              <h2 class="text-xl sm:text-2xl font-bold mb-8 text-center font-mono text-gray-900">Upcoming Features</h2>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-center">
+
+                <!-- AI Agent -->
+                <div class="flex flex-col items-center">
+                  <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">AI Agent for Physios & Clients</h3>
+                  <div class="w-72 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
+                    <img src="${howtouse.step4.img}" alt="${howtouse.step4.title}" class="w-full h-full object-cover" />
+                  </div>
+                  <p class="text-sm sm:text-base text-gray-700 font-sans">
+                  ${howtouse.step4.description}
+                  </p>
+                </div>
+
+                <!-- Language Translation Feature -->
+                <div class="flex flex-col items-center">
+                  <h3 class="text-base sm:text-lg font-bold mb-3 font-mono">Multilingual Rehab Support</h3>
+                   <div class="w-72 h-56 rounded-xl overflow-hidden border border-gray-300 shadow mb-4 bg-white">
+                    <img src="${howtouse.step5.img}" alt="${howtouse.step5.title}" class="w-full h-full object-cover" />
+                  </div>
+                  <p class="text-sm sm:text-base text-gray-700 font-sans">
+                  ${howtouse.step5.description}
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
         </div>
       </div>
     </div>
