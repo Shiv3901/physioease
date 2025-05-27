@@ -72,12 +72,14 @@ export const ABOUTUS_METADATA = {
     step4: {
       img: image('fourth.png'),
       title: 'AI Agent',
-      description: 'Our upcoming AI agent will assist physios and clients by answering questions, offering injury insights, and guiding rehab planning in real time—so whenever clients face a problem, they’ll know to come straight back to your clinic.',
+      description:
+        'Our upcoming AI agent will assist physios and clients by answering questions, offering injury insights, and guiding rehab planning in real time—so whenever clients face a problem, they’ll know to come straight back to your clinic.',
     },
     step5: {
       img: image('fifth.png'),
       title: 'Multilingual Support',
-      description: 'Clients who speak different languages will soon receive videos and rehab instructions in their own language—making it easier to understand and share with family members.',
+      description:
+        'Clients who speak different languages will soon receive videos and rehab instructions in their own language—making it easier to understand and share with family members.',
     },
   },
 };
